@@ -1,5 +1,7 @@
+import { useState } from "react";
 import {
   AlertTriangle,
+  ChevronLeft,
   ClipboardList,
   Home,
   Lightbulb,
@@ -36,9 +38,11 @@ function LogoMark() {
 }
 
 function App() {
+  const [isCollapsed, setIsCollapsed] = useState(false);
+
   return (
     <div className="app">
-      <aside className="sidebar" aria-label="Navigation">
+      <aside className={`sidebar ${isCollapsed ? "sidebar-collapsed" : ""}`} aria-label="Navigacija">
         <div className="brand-header">
           <LogoMark />
           <div className="brand-copy">
@@ -47,6 +51,14 @@ function App() {
               Vytauto Didžiojo universiteto Šakių „Žiburio“ gimnazija
             </div>
           </div>
+          <button
+            className="collapse-button"
+            type="button"
+            aria-label={isCollapsed ? "Išskleisti meniu" : "Suskleisti meniu"}
+            onClick={() => setIsCollapsed((collapsed) => !collapsed)}
+          >
+            <ChevronLeft aria-hidden="true" />
+          </button>
         </div>
 
         {navigationItems.map(({ label, icon: Icon }) => (
