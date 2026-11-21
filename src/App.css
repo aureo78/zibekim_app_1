@@ -1,3 +1,5 @@
+@import url("https://fonts.googleapis.com/css2?family=Caveat:wght@500;600;700&display=swap");
+
 * {
   box-sizing: border-box;
 }
@@ -26,7 +28,7 @@ button {
 }
 
 .sidebar {
-  width: 92px;
+  width: 240px;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
@@ -38,11 +40,13 @@ button {
 }
 
 .navigation-button {
-  width: 52px;
-  height: 52px;
-  display: grid;
-  place-items: center;
-  padding: 0;
+  width: 184px;
+  min-height: 58px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 12px;
+  padding: 8px 12px;
   color: #fffaf0;
   background: #8f1d32;
   border: 3px solid #4a1320;
@@ -66,5 +70,14 @@ button {
 .navigation-button svg {
   width: 25px;
   height: 25px;
+  flex: 0 0 25px;
   stroke-width: 2.8;
+}
+
+.navigation-button span {
+  font-family: "Caveat", cursive;
+  font-size: 25px;
+  font-weight: 600;
+  line-height: 1;
+  letter-spacing: 0.02em;
 }

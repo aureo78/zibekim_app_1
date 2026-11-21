@@ -28,6 +28,7 @@ function App() {
         {navigationItems.map(({ label, icon: Icon }) => (
           <button className="navigation-button" type="button" aria-label={label} key={label}>
             <Icon aria-hidden="true" />
+            <span>{label}</span>
           </button>
         ))}
       </aside>
