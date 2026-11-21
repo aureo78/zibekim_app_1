@@ -15,8 +15,8 @@ const navigationItems = [
   { label: "Pagrindinis", icon: Home },
   { label: "Žinutės", icon: MessageCircle },
   { label: "Skelbimai", icon: Megaphone },
-  { label: "Idėjos", icon: Lightbulb },
   { label: "Problemos", icon: AlertTriangle },
+  { label: "Idėjos", icon: Lightbulb },
   { label: "Forumai", icon: Mail },
   { label: "Apklausos", icon: ClipboardList },
 ];
