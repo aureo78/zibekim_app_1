@@ -1,10 +1,11 @@
 import {
+  AlertTriangle,
   Bell,
-  CalendarDays,
   ChevronDown,
   ClipboardList,
   Home,
-  LayoutDashboard,
+  Lightbulb,
+  Mail,
   Menu,
   MessageCircle,
   MoreHorizontal,
@@ -12,20 +13,21 @@ import {
   Plus,
   Search,
   Settings,
-  Users,
+  Megaphone,
   X,
 } from "lucide-react";
 import { useState } from "react";
 import "./App.css";
 
 const navigationItems = [
-  { name: "Pagrindinis", icon: LayoutDashboard },
+  { name: "Pagrindinis", icon: Home },
   { name: "Žinutės", icon: MessageCircle },
-  { name: "Grupės", icon: Users },
-  { name: "Forumas", icon: Home },
-  { name: "Apklausos", icon: ClipboardList },
-  { name: "Skelbimai", icon: Newspaper },
-  { name: "Kalendorius", icon: CalendarDays },
+  { name: "Naujienos", icon: Newspaper },
+  { name: "Ataskaitos", icon: ClipboardList },
+  { name: "Idėjos", icon: Lightbulb },
+  { name: "Problemos", icon: AlertTriangle },
+  { name: "Forumas", icon: Mail },
+  { name: "Apklausos", icon: Megaphone },
 ];
 
 const discussions = [
@@ -143,7 +145,7 @@ const visualPages = {
 };
 
 function App() {
-  const [activePage, setActivePage] = useState("Pagrindinis");
+  const [activePage] = useState("Pagrindinis");
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const detail = visualPages[activePage] ?? visualPages["Žinutės"];
 
@@ -185,10 +187,6 @@ function App() {
               <button
                 key={item.name}
                 className={`nav-item ${isActive ? "active" : ""}`}
-                onClick={() => {
-                  setActivePage(item.name);
-                  setSidebarOpen(false);
-                }}
               >
                 <Icon size={19} />
                 <span>{item.name}</span>
