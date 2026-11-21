@@ -7,6 +7,7 @@ import {
   MessageCircle,
   Megaphone,
   Settings,
+  UserRound,
 } from "lucide-react";
 import "./App.css";
 
@@ -36,7 +37,7 @@ function LogoMark() {
 function App() {
   return (
     <div className="app">
-      <aside className="sidebar" aria-label="Navigacija">
+      <header className="topbar">
         <div className="brand-header">
           <LogoMark />
           <div className="brand-copy">
@@ -47,6 +48,26 @@ function App() {
           </div>
         </div>
 
+        <div className="profile-menu">
+          <details>
+            <summary className="profile-summary">
+              <span className="profile-avatar" aria-hidden="true">
+                <UserRound />
+              </span>
+              <span className="profile-copy">
+                <strong>GeltonpilveVarle</strong>
+                <small>Profilis</small>
+              </span>
+            </summary>
+            <div className="profile-details">
+              <span>GeltonpilveVarle</span>
+              <strong>Auksė Varlytė</strong>
+            </div>
+          </details>
+        </div>
+      </header>
+
+      <aside className="sidebar" aria-label="Navigacija">
         {navigationItems.map(({ label, icon: Icon }) => (
           <button className="navigation-button" type="button" aria-label={label} key={label}>
             <Icon aria-hidden="true" />

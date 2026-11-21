@@ -24,39 +24,32 @@ button {
 .app {
   min-height: 100vh;
   display: flex;
+  flex-direction: column;
   background: #f8f1df;
 }
 
-.sidebar {
-  position: relative;
-  width: 82px;
-  min-height: 100vh;
+.topbar {
+  min-height: 82px;
   display: flex;
-  flex-direction: column;
   align-items: center;
-  gap: 10px;
-  padding: 18px 0;
+  justify-content: space-between;
+  padding: 14px 24px 14px 20px;
   background: #fffaf0;
-  border-right: 2px solid #4a1320;
-  transition: width 180ms ease;
+  border-bottom: 2px solid #4a1320;
+  z-index: 2;
 }
 
 .brand-header {
-  width: 42px;
   display: flex;
   align-items: center;
-  justify-content: center;
-  gap: 9px;
-  margin-bottom: 8px;
-  overflow: visible;
-  min-height: 58px;
-  transition: width 180ms ease;
+  gap: 10px;
+  min-width: 0;
 }
 
 .logo-mark {
-  width: 42px;
-  height: 42px;
-  flex: 0 0 42px;
+  width: 48px;
+  height: 48px;
+  flex: 0 0 48px;
   fill: #4a1320;
 }
 
@@ -67,62 +60,122 @@ button {
 .brand-name {
   color: #4a1320;
   font-family: "Caveat", cursive;
-  font-size: 28px;
+  font-size: 30px;
   font-weight: 700;
   line-height: 0.9;
 }
 
 .brand-school {
+  max-width: 360px;
   margin-top: 5px;
   color: #4a1320;
   font-family: "Caveat", cursive;
-  font-size: 10px;
+  font-size: 12px;
   font-weight: 500;
   line-height: 1.05;
 }
 
-.brand-copy,
-.navigation-button span,
-.sidebar-version {
+.profile-menu details {
+  position: relative;
+}
+
+.profile-summary {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  color: #4a1320;
+  cursor: pointer;
+  list-style: none;
+}
+
+.profile-summary::-webkit-details-marker {
   display: none;
 }
 
+.profile-avatar {
+  width: 40px;
+  height: 40px;
+  display: grid;
+  place-items: center;
+  color: #fffaf0;
+  background: #8f1d32;
+  border: 2px solid #4a1320;
+  border-radius: 50%;
+  box-shadow: 2px 2px 0 #4a1320;
+}
+
+.profile-avatar svg {
+  width: 21px;
+  height: 21px;
+}
+
+.profile-copy {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  font-family: "Caveat", cursive;
+  line-height: 1;
+}
+
+.profile-copy strong {
+  font-size: 21px;
+  font-weight: 700;
+}
+
+.profile-copy small {
+  font-size: 14px;
+}
+
+.profile-details {
+  position: absolute;
+  top: calc(100% + 12px);
+  right: 0;
+  min-width: 180px;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  padding: 12px 14px;
+  color: #4a1320;
+  background: #fffaf0;
+  border: 2px solid #4a1320;
+  border-radius: 8px;
+  box-shadow: 3px 3px 0 #4a1320;
+  font-family: "Caveat", cursive;
+  font-size: 17px;
+  z-index: 3;
+}
+
+.profile-details strong {
+  font-size: 20px;
+}
+
+.sidebar {
+  width: 210px;
+  min-height: calc(100vh - 82px);
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 10px;
+  padding: 18px 16px;
+  background: #fffaf0;
+  border-right: 2px solid #4a1320;
+}
+
 .navigation-button {
-  width: 46px;
+  width: 100%;
   min-height: 46px;
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
   gap: 10px;
-  padding: 6px;
+  padding: 6px 10px;
   color: #fffaf0;
   background: #8f1d32;
   border: 2px solid #4a1320;
   border-radius: 8px;
   box-shadow: 2px 2px 0 #4a1320;
   cursor: pointer;
-  transition: width 180ms ease, transform 120ms ease, box-shadow 120ms ease, background 120ms ease;
-}
-
-.sidebar:hover {
-  width: 210px;
-}
-
-.sidebar:hover .brand-header {
-  width: 184px;
-  justify-content: flex-start;
-}
-
-.sidebar:hover .brand-copy,
-.sidebar:hover .navigation-button span,
-.sidebar:hover .sidebar-version {
-  display: block;
-}
-
-.sidebar:hover .navigation-button {
-  width: 168px;
-  justify-content: flex-start;
-  padding: 6px 10px;
+  transition: transform 120ms ease, box-shadow 120ms ease, background 120ms ease;
 }
 
 .navigation-button:hover {
@@ -156,10 +209,42 @@ button {
 }
 
 .sidebar-version {
-  margin-top: auto;
+  margin-top: 2px;
   color: #4a1320;
   font-family: "Caveat", cursive;
   font-size: 10px;
   font-weight: 500;
   line-height: 1;
+  text-align: center;
+}
+
+@media (max-width: 600px) {
+  .topbar {
+    padding: 12px 14px;
+  }
+
+  .brand-school {
+    max-width: 190px;
+  }
+
+  .profile-copy {
+    display: none;
+  }
+
+  .sidebar {
+    width: 78px;
+    align-items: center;
+    padding: 18px 12px;
+  }
+
+  .navigation-button {
+    width: 46px;
+    justify-content: center;
+    padding: 6px;
+  }
+
+  .navigation-button span,
+  .sidebar-version {
+    display: none;
+  }
 }
