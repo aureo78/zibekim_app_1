@@ -79,7 +79,7 @@ button {
   max-width: 560px;
   margin-top: 0;
   color: #4a1320;
-  font-family: Arial, sans-serif;
+  font-family: "Caveat", cursive;
   font-size: 20px;
   font-weight: 500;
   line-height: 1;
@@ -128,12 +128,12 @@ button {
 }
 
 .profile-copy strong {
-  font-size: 21px;
+  font-size: 18px;
   font-weight: 700;
 }
 
 .profile-copy small {
-  font-size: 14px;
+  font-size: 12px;
 }
 
 .profile-details {
@@ -239,7 +239,7 @@ button {
 }
 
 .navigation-button span {
-  font-family: Arial, sans-serif;
+  font-family: "Caveat", cursive;
   font-size: 21px;
   font-weight: 500;
   line-height: 1;
@@ -299,8 +299,8 @@ button {
   max-width: 620px;
   margin: 0;
   font-family: Arial, sans-serif;
-  font-size: 22px;
-  line-height: 1.1;
+  font-size: 17px;
+  line-height: 1.4;
 }
 
 .primary-action,
@@ -317,7 +317,7 @@ button {
   box-shadow: 2px 2px 0 #4a1320;
   cursor: pointer;
   font-family: Arial, sans-serif;
-  font-size: 20px;
+  font-size: 15px;
   padding: 8px 13px;
 }
 
@@ -393,8 +393,8 @@ button {
 .idea-row p {
   margin: 0;
   font-family: Arial, sans-serif;
-  font-size: 19px;
-  line-height: 1.15;
+  font-size: 16px;
+  line-height: 1.4;
 }
 
 .text-action {
@@ -408,7 +408,7 @@ button {
   border: 0;
   cursor: pointer;
   font-family: Arial, sans-serif;
-  font-size: 20px;
+  font-size: 14px;
 }
 
 .text-action svg,
@@ -449,7 +449,7 @@ button {
 .idea-row small,
 .listing-card small {
   font-family: Arial, sans-serif;
-  font-size: 16px;
+  font-size: 13px;
 }
 
 .stat-card small,
@@ -521,8 +521,8 @@ button {
 .issue-row strong,
 .idea-row strong {
   font-family: Arial, sans-serif;
-  font-size: 24px;
-  line-height: 1;
+  font-size: 18px;
+  line-height: 1.2;
 }
 
 .message-dot {
@@ -620,7 +620,7 @@ button {
 }
 
 .forum-card h2 { margin-top: 32px; }
-.forum-card strong { font-family: Arial, sans-serif; font-size: 17px; }
+.forum-card strong { font-family: Arial, sans-serif; font-size: 14px; }
 
 .poll-card {
   display: grid;
@@ -631,7 +631,7 @@ button {
 
 .poll-card h2 { margin: 18px 0 8px; }
 .poll-options { display: flex; flex-direction: column; gap: 10px; justify-content: center; }
-.poll-options button { display: flex; justify-content: space-between; padding: 12px 14px; color: #4a1320; background: #f8f1df; border: 1px solid #4a1320; border-radius: 7px; cursor: pointer; font-family: Arial, sans-serif; font-size: 19px; }
+.poll-options button { display: flex; justify-content: space-between; padding: 10px 12px; color: #4a1320; background: #f8f1df; border: 1px solid #4a1320; border-radius: 7px; cursor: pointer; font-family: Arial, sans-serif; font-size: 14px; }
 .poll-options button:hover { background: #e7c96b; }
 .poll-options span { font-weight: 700; }
 
