@@ -57,8 +57,9 @@ button {
 .brand-copy {
   min-width: 0;
   display: flex;
-  align-items: center;
-  gap: 18px;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 3px;
 }
 
 .brand-name {
@@ -71,11 +72,11 @@ button {
 }
 
 .brand-school {
-  max-width: none;
+  max-width: 560px;
   margin-top: 0;
   color: #4a1320;
   font-family: "Caveat", cursive;
-  font-size: 15px;
+  font-size: 20px;
   font-weight: 500;
   line-height: 1;
 }
