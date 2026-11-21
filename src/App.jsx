@@ -14,11 +14,11 @@ import "./App.css";
 const navigationItems = [
   { label: "Pagrindinis", icon: Home },
   { label: "Žinutės", icon: MessageCircle },
-  { label: "Apklausos", icon: ClipboardList },
+  { label: "Skelbimai", icon: Megaphone },
   { label: "Idėjos", icon: Lightbulb },
   { label: "Problemos", icon: AlertTriangle },
   { label: "Forumai", icon: Mail },
-  { label: "Skelbimai", icon: Megaphone },
+  { label: "Apklausos", icon: ClipboardList },
 ];
 
 function LogoMark() {
