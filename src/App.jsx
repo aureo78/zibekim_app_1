@@ -12,14 +12,14 @@ import {
 import "./App.css";
 
 const navigationItems = [
-  { label: "Home", icon: Home },
-  { label: "Messages", icon: MessageCircle },
-  { label: "News", icon: Newspaper },
-  { label: "Reports", icon: ClipboardList },
-  { label: "Ideas", icon: Lightbulb },
-  { label: "Problems", icon: AlertTriangle },
-  { label: "Forums", icon: Mail },
-  { label: "Surveys", icon: Megaphone },
+  { label: "Pagrindinis", icon: Home },
+  { label: "Žinutės", icon: MessageCircle },
+  { label: "Naujienos", icon: Newspaper },
+  { label: "Ataskaitos", icon: ClipboardList },
+  { label: "Idėjos", icon: Lightbulb },
+  { label: "Problemos", icon: AlertTriangle },
+  { label: "Forumai", icon: Mail },
+  { label: "Apklausos", icon: Megaphone },
 ];
 
 function LogoMark() {
@@ -56,10 +56,12 @@ function App() {
           </button>
         ))}
 
-        <button className="navigation-button settings-button" type="button" aria-label="Settings">
+        <button className="navigation-button settings-button" type="button" aria-label="Nustatymai">
           <Settings aria-hidden="true" />
-          <span>Settings</span>
+          <span>Nustatymai</span>
         </button>
+
+        <div className="sidebar-version">v.RETRO.2026.11.21.01</div>
       </aside>
     </div>
   );

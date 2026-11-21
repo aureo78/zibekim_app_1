@@ -121,3 +121,12 @@ button {
 .settings-button {
   margin-top: 12px;
 }
+
+.sidebar-version {
+  margin-top: auto;
+  color: #4a1320;
+  font-family: "Caveat", cursive;
+  font-size: 10px;
+  font-weight: 500;
+  line-height: 1;
+}
