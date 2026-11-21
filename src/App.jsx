@@ -6,7 +6,6 @@ import {
   Mail,
   MessageCircle,
   Megaphone,
-  Newspaper,
   Settings,
 } from "lucide-react";
 import "./App.css";
@@ -14,7 +13,6 @@ import "./App.css";
 const navigationItems = [
   { label: "Pagrindinis", icon: Home },
   { label: "Žinutės", icon: MessageCircle },
-  { label: "Naujienos", icon: Newspaper },
   { label: "Apklausos", icon: ClipboardList },
   { label: "Idėjos", icon: Lightbulb },
   { label: "Problemos", icon: AlertTriangle },
