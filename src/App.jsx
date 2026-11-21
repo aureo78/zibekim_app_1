@@ -15,11 +15,11 @@ const navigationItems = [
   { label: "Pagrindinis", icon: Home },
   { label: "Žinutės", icon: MessageCircle },
   { label: "Naujienos", icon: Newspaper },
-  { label: "Ataskaitos", icon: ClipboardList },
+  { label: "Apklausos", icon: ClipboardList },
   { label: "Idėjos", icon: Lightbulb },
   { label: "Problemos", icon: AlertTriangle },
   { label: "Forumai", icon: Mail },
-  { label: "Apklausos", icon: Megaphone },
+  { label: "Skelbimai", icon: Megaphone },
 ];
 
 function LogoMark() {
