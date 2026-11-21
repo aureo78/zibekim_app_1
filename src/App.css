@@ -117,3 +117,7 @@ button {
   line-height: 1;
   letter-spacing: 0.01em;
 }
+
+.settings-button {
+  margin-top: 12px;
+}

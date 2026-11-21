@@ -7,6 +7,7 @@ import {
   MessageCircle,
   Megaphone,
   Newspaper,
+  Settings,
 } from "lucide-react";
 import "./App.css";
 
@@ -54,6 +55,11 @@ function App() {
             <span>{label}</span>
           </button>
         ))}
+
+        <button className="navigation-button settings-button" type="button" aria-label="Settings">
+          <Settings aria-hidden="true" />
+          <span>Settings</span>
+        </button>
       </aside>
     </div>
   );
