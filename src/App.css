@@ -28,56 +28,56 @@ button {
 }
 
 .sidebar {
-  width: 240px;
+  width: 210px;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 16px;
-  padding: 24px 0;
+  gap: 10px;
+  padding: 18px 0;
   background: #fffaf0;
-  border-right: 4px solid #4a1320;
+  border-right: 2px solid #4a1320;
 }
 
 .navigation-button {
-  width: 184px;
-  min-height: 58px;
+  width: 168px;
+  min-height: 46px;
   display: flex;
   align-items: center;
   justify-content: flex-start;
-  gap: 12px;
-  padding: 8px 12px;
+  gap: 10px;
+  padding: 6px 10px;
   color: #fffaf0;
   background: #8f1d32;
-  border: 3px solid #4a1320;
-  border-radius: 6px;
-  box-shadow: 4px 4px 0 #4a1320;
+  border: 2px solid #4a1320;
+  border-radius: 8px;
+  box-shadow: 2px 2px 0 #4a1320;
   cursor: pointer;
   transition: transform 120ms ease, box-shadow 120ms ease, background 120ms ease;
 }
 
 .navigation-button:hover {
   background: #a82a40;
-  transform: translate(2px, 2px);
-  box-shadow: 2px 2px 0 #4a1320;
+  transform: translate(1px, 1px);
+  box-shadow: 1px 1px 0 #4a1320;
 }
 
 .navigation-button:active {
-  transform: translate(4px, 4px);
+  transform: translate(2px, 2px);
   box-shadow: none;
 }
 
 .navigation-button svg {
-  width: 25px;
-  height: 25px;
-  flex: 0 0 25px;
-  stroke-width: 2.8;
+  width: 20px;
+  height: 20px;
+  flex: 0 0 20px;
+  stroke-width: 2.4;
 }
 
 .navigation-button span {
   font-family: "Caveat", cursive;
-  font-size: 25px;
-  font-weight: 600;
+  font-size: 21px;
+  font-weight: 500;
   line-height: 1;
-  letter-spacing: 0.02em;
+  letter-spacing: 0.01em;
 }
