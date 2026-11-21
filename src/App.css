@@ -56,24 +56,28 @@ button {
 
 .brand-copy {
   min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: 18px;
 }
 
 .brand-name {
+  flex: 0 0 auto;
   color: #4a1320;
   font-family: "Caveat", cursive;
   font-size: 30px;
   font-weight: 700;
-  line-height: 0.9;
+  line-height: 1;
 }
 
 .brand-school {
-  max-width: 360px;
-  margin-top: 5px;
+  max-width: none;
+  margin-top: 0;
   color: #4a1320;
   font-family: "Caveat", cursive;
-  font-size: 12px;
+  font-size: 15px;
   font-weight: 500;
-  line-height: 1.05;
+  line-height: 1;
 }
 
 .profile-menu details {
@@ -249,8 +253,15 @@ button {
     padding: 12px 14px;
   }
 
+  .brand-copy {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 2px;
+  }
+
   .brand-school {
     max-width: 190px;
+    font-size: 12px;
   }
 
   .profile-copy {

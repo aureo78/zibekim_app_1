@@ -43,7 +43,7 @@ function App() {
           <div className="brand-copy">
             <div className="brand-name">Žibėkim</div>
             <div className="brand-school">
-              Vytauto Didžiojo universiteto Šakių „Žiburio“ gimnazija
+              | Vytauto Didžiojo universiteto Šakių „Žiburio“ gimnazija|
             </div>
           </div>
         </div>
