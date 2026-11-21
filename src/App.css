@@ -28,7 +28,8 @@ button {
 }
 
 .sidebar {
-  width: 210px;
+  position: relative;
+  width: 82px;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
@@ -37,70 +38,18 @@ button {
   padding: 18px 0;
   background: #fffaf0;
   border-right: 2px solid #4a1320;
+  transition: width 180ms ease;
 }
 
 .brand-header {
-  position: relative;
-  width: 184px;
+  width: 42px;
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: 9px;
   margin-bottom: 8px;
-}
-
-.collapse-button {
-  position: absolute;
-  right: -9px;
-  top: -5px;
-  width: 24px;
-  height: 24px;
-  display: grid;
-  place-items: center;
-  padding: 0;
-  color: #4a1320;
-  background: #fffaf0;
-  border: 1px solid #4a1320;
-  border-radius: 50%;
-  cursor: pointer;
-}
-
-.collapse-button svg {
-  width: 15px;
-  height: 15px;
-  transition: transform 160ms ease;
-}
-
-.sidebar-collapsed {
-  width: 82px;
-}
-
-.sidebar-collapsed .brand-header {
-  width: 42px;
-  justify-content: center;
-}
-
-.sidebar-collapsed .brand-copy,
-.sidebar-collapsed .navigation-button span,
-.sidebar-collapsed .sidebar-version {
-  display: none;
-}
-
-.sidebar-collapsed .collapse-button {
-  right: -14px;
-}
-
-.sidebar-collapsed .collapse-button svg {
-  transform: rotate(180deg);
-}
-
-.sidebar-collapsed .navigation-button {
-  width: 46px;
-  justify-content: center;
-  padding: 6px;
-}
-
-.sidebar-collapsed .settings-button {
-  margin-top: 12px;
+  overflow: visible;
+  transition: width 180ms ease;
 }
 
 .logo-mark {
@@ -131,21 +80,48 @@ button {
   line-height: 1.05;
 }
 
+.brand-copy,
+.navigation-button span,
+.sidebar-version {
+  display: none;
+}
+
 .navigation-button {
-  width: 168px;
+  width: 46px;
   min-height: 46px;
   display: flex;
   align-items: center;
-  justify-content: flex-start;
+  justify-content: center;
   gap: 10px;
-  padding: 6px 10px;
+  padding: 6px;
   color: #fffaf0;
   background: #8f1d32;
   border: 2px solid #4a1320;
   border-radius: 8px;
   box-shadow: 2px 2px 0 #4a1320;
   cursor: pointer;
-  transition: transform 120ms ease, box-shadow 120ms ease, background 120ms ease;
+  transition: width 180ms ease, transform 120ms ease, box-shadow 120ms ease, background 120ms ease;
+}
+
+.sidebar:hover {
+  width: 210px;
+}
+
+.sidebar:hover .brand-header {
+  width: 184px;
+  justify-content: flex-start;
+}
+
+.sidebar:hover .brand-copy,
+.sidebar:hover .navigation-button span,
+.sidebar:hover .sidebar-version {
+  display: block;
+}
+
+.sidebar:hover .navigation-button {
+  width: 168px;
+  justify-content: flex-start;
+  padding: 6px 10px;
 }
 
 .navigation-button:hover {
