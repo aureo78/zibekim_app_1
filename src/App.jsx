@@ -1,13 +1,23 @@
+import { useState } from "react";
 import {
   AlertTriangle,
+  ArrowUpRight,
+  CheckCircle2,
   ClipboardList,
+  Clock3,
   Home,
   Lightbulb,
   Mail,
-  MessageCircle,
   Megaphone,
+  MessageCircle,
+  MessageSquareText,
+  Plus,
+  Search,
   Settings,
+  ShieldCheck,
   UserRound,
+  Users,
+  Vote,
 } from "lucide-react";
 import "./App.css";
 
@@ -20,6 +30,44 @@ const navigationItems = [
   { label: "Forumai", icon: Mail },
   { label: "Apklausos", icon: ClipboardList },
 ];
+
+const pageContent = {
+  Pagrindinis: {
+    eyebrow: "MOKYKLOS BENDRUOMENĖ",
+    title: "Kas vyksta mokykloje",
+    description: "Viena vieta problemoms, idėjoms ir sprendimams matyti.",
+  },
+  Žinutės: {
+    eyebrow: "TIESIOGINĖ INFORMACIJA",
+    title: "Žinutės",
+    description: "Svarbūs pranešimai, kuriuos verta rasti ir vėliau.",
+  },
+  Skelbimai: {
+    eyebrow: "MOKYKLOS LENTA",
+    title: "Skelbimai",
+    description: "Renginiai, klubai, veiklos ir galimybės prisijungti.",
+  },
+  Problemos: {
+    eyebrow: "MATOMA IR SEKAMA",
+    title: "Problemos",
+    description: "Pranešk apie bendrą mokyklos problemą ir matyk, kas vyksta toliau.",
+  },
+  Idėjos: {
+    eyebrow: "BENDRAI KURIAME",
+    title: "Idėjos",
+    description: "Siūlyk pokyčius, paaiškink jų naudą ir balsuok už svarbiausius.",
+  },
+  Forumai: {
+    eyebrow: "MOKYKLOS BENDRUOMENĖ",
+    title: "Forumai",
+    description: "Moderuojamos diskusijos apie mokyklos gyvenimą ir bendrus klausimus.",
+  },
+  Apklausos: {
+    eyebrow: "TAVO NUOMONĖ",
+    title: "Apklausos",
+    description: "Trumpi klausimai, padedantys mokyklai priimti geresnius sprendimus.",
+  },
+};
 
 function LogoMark() {
   return (
@@ -34,7 +82,76 @@ function LogoMark() {
   );
 }
 
+function PageContent({ activePage }) {
+  const page = pageContent[activePage];
+
+  if (activePage === "Pagrindinis") {
+    return (
+      <main className="content-area">
+        <section className="page-intro">
+          <div>
+            <span className="page-eyebrow">{page.eyebrow}</span>
+            <h1>{page.title}</h1>
+            <p>{page.description}</p>
+          </div>
+          <button className="primary-action" type="button"><Plus /> Pradėti</button>
+        </section>
+        <section className="dashboard-grid">
+          <article className="feature-card feature-card--burgundy">
+            <span className="card-kicker">SVARBIAUSIA</span>
+            <h2>Studentų balsas turi matytis veiksme.</h2>
+            <p>Čia rasi, kas pasiūlyta, kas sprendžiama ir kas jau pasikeitė.</p>
+            <button className="text-action" type="button">Peržiūrėti veiklą <ArrowUpRight /></button>
+          </article>
+          <article className="stat-card"><AlertTriangle /><strong>12</strong><span>aktyvių problemų</span><small>3 sprendžiamos dabar</small></article>
+          <article className="stat-card"><Lightbulb /><strong>28</strong><span>idėjos bendruomenėje</span><small>5 laukia atsako</small></article>
+          <article className="activity-card">
+            <div className="card-heading"><h2>Naujausia veikla</h2><Clock3 /></div>
+            <div className="activity-row"><CheckCircle2 /><span><strong>Bibliotekos darbo laikas</strong><small>Problema išspręsta · prieš 2 val.</small></span></div>
+            <div className="activity-row"><Vote /><span><strong>Daugiau vietų dviračiams</strong><small>Idėja gavo 24 balsus · prieš 5 val.</small></span></div>
+          </article>
+        </section>
+      </main>
+    );
+  }
+
+  const pageViews = {
+    Žinutės: (
+      <div className="list-card"><div className="card-heading"><h2>Naujausios žinutės</h2><MessageSquareText /></div>
+        <div className="message-row"><span className="message-dot" /><div><strong>Studentų atstovybės susitikimas</strong><p>Susitikimas vyks ketvirtadienį 14:30 aktų salėje.</p><small>Studentų atstovybė · šiandien</small></div></div>
+        <div className="message-row"><span className="message-dot" /><div><strong>Savaitės priminimas</strong><p>Iki penktadienio balsuok už idėją, kurią norėtum matyti mokykloje.</p><small>Administracija · vakar</small></div></div>
+      </div>
+    ),
+    Skelbimai: (
+      <div className="listing-grid"><article className="listing-card"><span className="tag">RENGINYS</span><h2>Žiemos vakaras mokykloje</h2><p>Susitikime bendruomenės vakare. Laukiami visi mokiniai.</p><small>Gruodžio 12 d. · Aktų salė</small></article><article className="listing-card"><span className="tag tag--gold">GALIMYBĖ</span><h2>Savanorių komanda</h2><p>Padėk organizuoti mokyklos pavasario iniciatyvas.</p><small>Registracija iki gruodžio 8 d.</small></article><article className="listing-card"><span className="tag tag--green">KLUBAS</span><h2>Atvira stalo žaidimų popietė</h2><p>Prisijunk, net jei dar nepažįsti kitų dalyvių.</p><small>Trečiadieniais · 15:00</small></article></div>
+    ),
+    Problemos: (
+      <div className="list-card"><div className="card-heading"><h2>Aktyvios problemos</h2><button className="small-action" type="button"><Plus /> Pranešti</button></div>
+        <div className="issue-row"><span className="status status--progress">Sprendžiama</span><div><strong>Šviesa trečiame aukšte</strong><p>Koridoriuje neveikia dalis apšvietimo.</p><small>Pastatas · pateikta prieš 2 d.</small></div><ArrowUpRight /></div>
+        <div className="issue-row"><span className="status status--review">Nagrinėjama</span><div><strong>Per mažai vietų valgykloje</strong><p>Pertraukų metu mokiniams trūksta sėdimų vietų.</p><small>Bendros erdvės · pateikta prieš 4 d.</small></div><ArrowUpRight /></div>
+        <div className="issue-row"><span className="status status--done">Išspręsta</span><div><strong>Bibliotekos darbo laikas</strong><p>Darbo laikas pratęstas iki 16:30.</p><small>Paslaugos · išspręsta vakar</small></div><CheckCircle2 /></div>
+      </div>
+    ),
+    Idėjos: (
+      <div className="list-card"><div className="card-heading"><h2>Idėjos, kurioms reikia tavo balso</h2><button className="small-action" type="button"><Plus /> Pasiūlyti idėją</button></div>
+        <div className="idea-row"><div className="vote-box"><Vote /><strong>24</strong><small>balsai</small></div><div><strong>Daugiau vietų dviračiams</strong><p>Įrengti saugią, uždengtą vietą dviračiams prie sporto salės.</p><small>Siūlo Mantas · nagrinėjama</small></div><button className="vote-button" type="button">Balsuoti</button></div>
+        <div className="idea-row"><div className="vote-box"><Vote /><strong>18</strong><small>balsų</small></div><div><strong>Ramesnė poilsio erdvė</strong><p>Skirti nedidelį kampą mokiniams, kuriems reikia ramybės pertraukų metu.</p><small>Siūlo Aistė · nagrinėjama</small></div><button className="vote-button" type="button">Balsuoti</button></div>
+      </div>
+    ),
+    Forumai: (
+      <div className="forum-grid"><article className="forum-card"><Users /><h2>Mokyklos gyvenimas</h2><p>Idėjos ir klausimai apie kasdienę mokyklos aplinką.</p><strong>18 temų · 42 dalyviai</strong></article><article className="forum-card"><ShieldCheck /><h2>Saugus dalyvavimas</h2><p>Moderuojama erdvė kalbėtis pagarbiai ir konstruktyviai.</p><strong>7 temos · 19 dalyvių</strong></article><article className="forum-card"><MessageSquareText /><h2>Studentų atstovybė</h2><p>Klausimai atstovams ir naujienos apie sprendimus.</p><strong>11 temų · 35 dalyviai</strong></article></div>
+    ),
+    Apklausos: (
+      <div className="list-card"><div className="card-heading"><h2>Aktyvios apklausos</h2><ClipboardList /></div><div className="poll-card"><div><span className="tag">AKTYVI</span><h2>Kaip pagerinti mokyklos bendras erdves?</h2><p>Pasirink vieną variantą. Apklausa baigsis po 3 dienų.</p></div><div className="poll-options"><button type="button">Daugiau sėdimų vietų <span>42%</span></button><button type="button">Daugiau žalumos <span>31%</span></button><button type="button">Ramesnės zonos <span>27%</span></button></div></div></div>
+    ),
+  };
+
+  return <main className="content-area"><section className="page-intro"><div><span className="page-eyebrow">{page.eyebrow}</span><h1>{page.title}</h1><p>{page.description}</p></div><button className="primary-action" type="button"><Search /> Ieškoti</button></section>{pageViews[activePage]}</main>;
+}
+
 function App() {
+  const [activePage, setActivePage] = useState("Pagrindinis");
+
   return (
     <div className="app">
       <header className="topbar">
@@ -69,7 +186,14 @@ function App() {
 
       <aside className="sidebar" aria-label="Navigacija">
         {navigationItems.map(({ label, icon: Icon }) => (
-          <button className="navigation-button" type="button" aria-label={label} key={label}>
+          <button
+            className={`navigation-button ${activePage === label ? "navigation-button--active" : ""}`}
+            type="button"
+            aria-label={label}
+            aria-current={activePage === label ? "page" : undefined}
+            key={label}
+            onClick={() => setActivePage(label)}
+          >
             <Icon aria-hidden="true" />
             <span>{label}</span>
           </button>
@@ -82,6 +206,8 @@ function App() {
 
         <div className="sidebar-version">v.RETRO.2026.11.21.01</div>
       </aside>
+
+      <PageContent activePage={activePage} />
     </div>
   );
 }

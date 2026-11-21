@@ -23,12 +23,15 @@ button {
 
 .app {
   min-height: 100vh;
-  display: flex;
-  flex-direction: column;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  grid-template-rows: auto 1fr;
+  align-items: start;
   background: #f8f1df;
 }
 
 .topbar {
+  grid-column: 1 / -1;
   min-height: 82px;
   display: flex;
   align-items: center;
@@ -156,6 +159,8 @@ button {
 }
 
 .sidebar {
+  grid-column: 1;
+  grid-row: 2;
   width: 78px;
   min-height: calc(100vh - 82px);
   display: flex;
@@ -174,7 +179,6 @@ button {
   align-items: stretch;
   padding: 18px 16px;
 }
-
 
 .navigation-button {
   width: 46px;
@@ -215,6 +219,12 @@ button {
   box-shadow: 1px 1px 0 #4a1320;
 }
 
+.navigation-button--active,
+.navigation-button--active:hover {
+  color: #4a1320;
+  background: #e7c96b;
+}
+
 .navigation-button:active {
   transform: translate(2px, 2px);
   box-shadow: none;
@@ -247,6 +257,390 @@ button {
   font-weight: 500;
   line-height: 1;
   text-align: center;
+}
+
+.content-area {
+  grid-column: 2;
+  grid-row: 2;
+  min-width: 0;
+  min-height: calc(100vh - 82px);
+  padding: 34px clamp(22px, 4vw, 64px) 64px;
+  color: #4a1320;
+}
+
+.page-intro {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 24px;
+  max-width: 1100px;
+  margin: 0 auto 28px;
+}
+
+.page-eyebrow,
+.card-kicker,
+.tag {
+  color: #8f1d32;
+  font-family: Arial, sans-serif;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.13em;
+}
+
+.page-intro h1 {
+  margin: 7px 0 4px;
+  font-family: "Caveat", cursive;
+  font-size: clamp(38px, 5vw, 62px);
+  line-height: 0.95;
+}
+
+.page-intro p {
+  max-width: 620px;
+  margin: 0;
+  font-family: "Caveat", cursive;
+  font-size: 22px;
+  line-height: 1.1;
+}
+
+.primary-action,
+.small-action,
+.vote-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  color: #fffaf0;
+  background: #8f1d32;
+  border: 2px solid #4a1320;
+  border-radius: 8px;
+  box-shadow: 2px 2px 0 #4a1320;
+  cursor: pointer;
+  font-family: "Caveat", cursive;
+  font-size: 20px;
+  padding: 8px 13px;
+}
+
+.primary-action:hover,
+.small-action:hover,
+.vote-button:hover {
+  background: #a82a40;
+}
+
+.primary-action svg,
+.small-action svg {
+  width: 18px;
+  height: 18px;
+}
+
+.dashboard-grid,
+.listing-grid,
+.forum-grid {
+  max-width: 1100px;
+  display: grid;
+  gap: 16px;
+  margin: 0 auto;
+}
+
+.dashboard-grid {
+  grid-template-columns: 1.5fr 1fr 1fr;
+}
+
+.feature-card,
+.stat-card,
+.activity-card,
+.list-card,
+.listing-card,
+.forum-card {
+  background: #fffaf0;
+  border: 2px solid #4a1320;
+  border-radius: 16px;
+  box-shadow: 3px 3px 0 rgba(74, 19, 32, 0.85);
+}
+
+.feature-card {
+  grid-row: span 2;
+  min-height: 290px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 28px;
+}
+
+.feature-card--burgundy {
+  color: #fffaf0;
+  background: #8f1d32;
+}
+
+.feature-card--burgundy .card-kicker {
+  color: #f2d88a;
+}
+
+.feature-card h2 {
+  max-width: 390px;
+  margin: auto 0 14px;
+  font-family: "Caveat", cursive;
+  font-size: 42px;
+  line-height: 0.95;
+}
+
+.feature-card p,
+.listing-card p,
+.forum-card p,
+.poll-card p,
+.message-row p,
+.issue-row p,
+.idea-row p {
+  margin: 0;
+  font-family: "Caveat", cursive;
+  font-size: 19px;
+  line-height: 1.15;
+}
+
+.text-action {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 22px;
+  padding: 0;
+  color: #f2d88a;
+  background: transparent;
+  border: 0;
+  cursor: pointer;
+  font-family: "Caveat", cursive;
+  font-size: 20px;
+}
+
+.text-action svg,
+.activity-row svg,
+.card-heading > svg,
+.issue-row > svg,
+.forum-card > svg {
+  width: 20px;
+  height: 20px;
+  flex: 0 0 auto;
+}
+
+.stat-card {
+  min-height: 137px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 18px;
+}
+
+.stat-card svg {
+  width: 22px;
+  height: 22px;
+  color: #8f1d32;
+}
+
+.stat-card strong {
+  font-family: "Caveat", cursive;
+  font-size: 36px;
+  line-height: 0.9;
+}
+
+.stat-card span,
+.stat-card small,
+.activity-row small,
+.message-row small,
+.issue-row small,
+.idea-row small,
+.listing-card small {
+  font-family: "Caveat", cursive;
+  font-size: 16px;
+}
+
+.stat-card small,
+.activity-row small,
+.message-row small,
+.issue-row small,
+.idea-row small,
+.listing-card small {
+  color: rgba(74, 19, 32, 0.68);
+}
+
+.activity-card,
+.list-card {
+  padding: 22px;
+}
+
+.activity-card {
+  grid-column: 2 / -1;
+}
+
+.card-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+
+.card-heading h2,
+.listing-card h2,
+.forum-card h2,
+.poll-card h2 {
+  margin: 0;
+  font-family: "Caveat", cursive;
+  font-size: 30px;
+  line-height: 1;
+}
+
+.activity-row,
+.message-row,
+.issue-row,
+.idea-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 13px 0;
+  border-top: 1px solid rgba(74, 19, 32, 0.16);
+}
+
+.activity-row > svg {
+  color: #4a8b59;
+}
+
+.activity-row span,
+.message-row > div,
+.issue-row > div,
+.idea-row > div:not(.vote-box) {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.list-card {
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.message-row strong,
+.issue-row strong,
+.idea-row strong {
+  font-family: "Caveat", cursive;
+  font-size: 24px;
+  line-height: 1;
+}
+
+.message-dot {
+  width: 10px;
+  height: 10px;
+  flex: 0 0 auto;
+  margin-top: 8px;
+  background: #e7c96b;
+  border: 1px solid #4a1320;
+  border-radius: 50%;
+}
+
+.listing-grid,
+.forum-grid {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.listing-card,
+.forum-card {
+  min-height: 220px;
+  padding: 22px;
+}
+
+.listing-card h2,
+.forum-card h2 {
+  margin: 22px 0 10px;
+}
+
+.listing-card p,
+.forum-card p {
+  margin-bottom: 22px;
+}
+
+.tag {
+  display: inline-block;
+  padding: 5px 8px;
+  color: #fffaf0;
+  background: #8f1d32;
+  border-radius: 4px;
+}
+
+.tag--gold {
+  color: #4a1320;
+  background: #e7c96b;
+}
+
+.tag--green {
+  background: #4a8b59;
+}
+
+.status {
+  flex: 0 0 auto;
+  min-width: 84px;
+  padding: 6px 8px;
+  border-radius: 5px;
+  font-family: Arial, sans-serif;
+  font-size: 10px;
+  font-weight: 800;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+.status--progress { color: #fffaf0; background: #8f1d32; }
+.status--review { color: #4a1320; background: #e7c96b; }
+.status--done { color: #fffaf0; background: #4a8b59; }
+
+.issue-row > svg {
+  margin-left: auto;
+  color: #8f1d32;
+}
+
+.vote-box {
+  width: 62px;
+  min-width: 62px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 7px;
+  color: #4a1320;
+  background: #f2d88a;
+  border: 1px solid #4a1320;
+  border-radius: 7px;
+}
+
+.vote-box svg { width: 17px; height: 17px; }
+.vote-box strong { font-size: 25px; }
+.vote-box small { font-size: 13px; }
+
+.vote-button { margin-left: auto; align-self: center; font-size: 18px; }
+
+.forum-card > svg {
+  width: 30px;
+  height: 30px;
+  color: #8f1d32;
+}
+
+.forum-card h2 { margin-top: 32px; }
+.forum-card strong { font-family: "Caveat", cursive; font-size: 17px; }
+
+.poll-card {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 28px;
+  padding-top: 12px;
+}
+
+.poll-card h2 { margin: 18px 0 8px; }
+.poll-options { display: flex; flex-direction: column; gap: 10px; justify-content: center; }
+.poll-options button { display: flex; justify-content: space-between; padding: 12px 14px; color: #4a1320; background: #f8f1df; border: 1px solid #4a1320; border-radius: 7px; cursor: pointer; font-family: "Caveat", cursive; font-size: 19px; }
+.poll-options button:hover { background: #e7c96b; }
+.poll-options span { font-weight: 700; }
+
+@media (max-width: 900px) {
+  .dashboard-grid { grid-template-columns: 1fr 1fr; }
+  .feature-card { grid-column: 1 / -1; grid-row: auto; }
+  .activity-card { grid-column: 1 / -1; }
+  .listing-grid,
+  .forum-grid { grid-template-columns: 1fr; }
+  .poll-card { grid-template-columns: 1fr; }
 }
 
 @media (max-width: 600px) {
@@ -294,4 +688,25 @@ button {
   .sidebar:hover .sidebar-version {
     display: none;
   }
+
+  .content-area {
+    padding: 24px 16px 44px;
+  }
+
+  .page-intro {
+    align-items: flex-start;
+    flex-direction: column;
+    margin-bottom: 22px;
+  }
+
+  .page-intro h1 { font-size: 44px; }
+  .page-intro p { font-size: 19px; }
+  .dashboard-grid { grid-template-columns: 1fr; }
+  .feature-card { min-height: 250px; }
+  .feature-card h2 { font-size: 36px; }
+  .stat-card,
+  .activity-card { grid-column: auto; }
+  .issue-row,
+  .idea-row { flex-wrap: wrap; }
+  .vote-button { margin-left: 74px; }
 }
