@@ -39,6 +39,42 @@ button {
   border-right: 2px solid #4a1320;
 }
 
+.brand-header {
+  width: 184px;
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  margin-bottom: 8px;
+}
+
+.logo-mark {
+  width: 42px;
+  height: 42px;
+  flex: 0 0 42px;
+  fill: #4a1320;
+}
+
+.brand-copy {
+  min-width: 0;
+}
+
+.brand-name {
+  color: #4a1320;
+  font-family: "Caveat", cursive;
+  font-size: 28px;
+  font-weight: 700;
+  line-height: 0.9;
+}
+
+.brand-school {
+  margin-top: 5px;
+  color: #4a1320;
+  font-family: "Caveat", cursive;
+  font-size: 10px;
+  font-weight: 500;
+  line-height: 1.05;
+}
+
 .navigation-button {
   width: 168px;
   min-height: 46px;
