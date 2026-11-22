@@ -15,8 +15,8 @@ import {
   Plus,
   Search,
   Settings,
+  SlidersHorizontal,
   UserRound,
-  Users,
   ShieldQuestion,
   Send,
   Vote,
@@ -144,8 +144,10 @@ function MessagesView({ initialConversationId }) {
   const [filter, setFilter] = useState("Visi");
   const [composer, setComposer] = useState("");
   const [showNewMessage, setShowNewMessage] = useState(false);
-  const [showGroupForm, setShowGroupForm] = useState(false);
   const [groupName, setGroupName] = useState("");
+  const [groupDescription, setGroupDescription] = useState("");
+  const [groupType, setGroupType] = useState("Grupė");
+  const [showGroupPage, setShowGroupPage] = useState(false);
   const [topics, setTopics] = useState([{ id: "visi", label: "Visi pokalbiai" }, { id: "projektai", label: "# projektai" }, { id: "mokslai", label: "# mokslai" }, { id: "bendri", label: "# bendri" }]);
   const [activeTopic, setActiveTopic] = useState("visi");
   const [newTopic, setNewTopic] = useState("");
@@ -188,12 +190,15 @@ function MessagesView({ initialConversationId }) {
   const createGroup = (event) => {
     event.preventDefault();
     const name = groupName.trim();
-    if (!name) return;
+    const description = groupDescription.trim();
+    if (!name || !description) return;
     const id = `group-${Date.now()}`;
-    setConversations((current) => [{ id, name, type: "Grupė", preview: "Grupė sukurta", time: "dabar", avatar: "GR", messages: [] }, ...current]);
+    setConversations((current) => [{ id, name, type: groupType, description, preview: "Grupė sukurta", time: "dabar", avatar: "GR", messages: [] }, ...current]);
     setSelectedId(id);
     setGroupName("");
-    setShowGroupForm(false);
+    setGroupDescription("");
+    setGroupType("Grupė");
+    setShowGroupPage(false);
     setShowNewMessage(false);
   };
   const startConversation = (person) => {
@@ -203,13 +208,15 @@ function MessagesView({ initialConversationId }) {
     setShowNewMessage(false);
   };
 
+  if (showGroupPage) return <section className="messages-app messages-app--profile"><div className="profile-page group-create-page"><button className="profile-back" type="button" onClick={() => setShowGroupPage(false)}>← Grįžti į pokalbius</button><h1>Sukurti grupę</h1><p className="profile-username">Sukurk erdvę bendram mokinių pokalbiui.</p><form className="group-create-form" onSubmit={createGroup}><label>Grupės pavadinimas<input autoFocus value={groupName} onChange={(event) => setGroupName(event.target.value)} placeholder="Pvz. 3A klasė" required /></label><label>Aprašymas<textarea value={groupDescription} onChange={(event) => setGroupDescription(event.target.value)} placeholder="Kam skirta ši grupė?" rows="4" required /></label><label>Grupės tipas<select value={groupType} onChange={(event) => setGroupType(event.target.value)}><option value="Grupė">Grupė</option><option value="Pamoka">Pamoka</option></select></label><button className="primary-action" type="submit"><Plus /> Sukurti grupę</button></form></div></section>;
+
   if (profileConversation) return <section className="messages-app messages-app--profile"><div className="profile-page"><button className="profile-back" type="button" onClick={() => setProfileConversation(null)}>← Grįžti į pokalbį</button><div className={`profile-avatar message-avatar ${profileConversation.anonymous ? "message-avatar--anonymous" : ""}`}>{profileConversation.anonymous ? <ShieldQuestion /> : profileConversation.avatar}</div><h1>{profileConversation.name}</h1>{profileConversation.username && <p className="profile-username">@{profileConversation.username.replace(/^@/, "")}</p>}<div className="profile-details"><div><span>Tipas</span><strong>{profileConversation.type === "Asmeninis" ? "1v1 pokalbis" : profileConversation.type}</strong></div><div><span>Pokalbio istorija</span><strong>{profileConversation.messages.length} žinutės</strong></div></div>{profileConversation.type === "Grupė" || profileConversation.type === "Klasė" || profileConversation.type === "Pamoka" ? <div className="profile-card"><h2>Apie grupę</h2><p>Ši erdvė skirta bendram pokalbiui ir mokyklos bendruomenei.</p></div> : <div className="profile-card"><h2>Apie žmogų</h2><p>Šis profilis priklauso pokalbio dalyviui.</p></div>}</div></section>;
 
   return <section className="messages-app">
     <aside className="messages-sidebar">
-      <label className="messages-search"><Search aria-hidden="true" /><span className="sr-only">Ieškoti pokalbių ir žmonių</span><input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Ieškoti pokalbių ar žmonių" /></label>
-      <div className="message-filter-bar">{["Visi", "Grupės", "Pamokos", "1v1", "Anoniminiai"].map((item) => <button className={filter === item ? "message-filter--active" : ""} type="button" key={item} onClick={() => setFilter(item)}>{item}</button>)}{canCreateGroup && <button className="icon-action message-create-group" type="button" aria-label="Sukurti grupę" onClick={() => { setShowNewMessage(true); setShowGroupForm(true); }}><Users /></button>}</div>
-      {showNewMessage && <div className="new-message-panel"><strong>{showGroupForm ? "Sukurti grupę" : "Rasti žmogų"}</strong>{!showGroupForm && peopleToStart.map((person) => <button className="person-result" type="button" key={person.id} onClick={() => startConversation(person)}><span className="message-avatar">{person.name.split(" ").map((part) => part[0]).join("")}</span><span><strong>{person.name}</strong><small>{person.username} · {person.detail}</small></span></button>)}{!showGroupForm && peopleToStart.length === 0 && query && <p className="messages-empty">Žmonių nerasta.</p>}{showGroupForm && <form className="group-form" onSubmit={createGroup}><input autoFocus value={groupName} onChange={(event) => setGroupName(event.target.value)} placeholder="Grupės pavadinimas" required /><button className="primary-action" type="submit">Sukurti</button></form>}</div>}
+      <label className="messages-search"><Search aria-hidden="true" /><span className="sr-only">Paieška</span><input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Paieška" /></label>
+      <div className="message-filter-wrap"><button className="message-filter-toggle" type="button" aria-label="Filtras"><SlidersHorizontal /> <span>Filtras</span></button><div className="message-filter-sheet">{["Visi", "Grupės", "Pamokos", "1v1", "Anoniminiai"].map((item) => <button className={filter === item ? "message-filter--active" : ""} type="button" key={item} onClick={() => setFilter(item)}>{item}</button>)}</div></div>{canCreateGroup && <button className="icon-action message-create-group" type="button" aria-label="Sukurti grupę" onClick={() => setShowGroupPage(true)}><Plus /></button>}
+      {showNewMessage && <div className="new-message-panel"><strong>Rasti žmogų</strong>{peopleToStart.map((person) => <button className="person-result" type="button" key={person.id} onClick={() => startConversation(person)}><span className="message-avatar">{person.name.split(" ").map((part) => part[0]).join("")}</span><span><strong>{person.name}</strong><small>{person.username} · {person.detail}</small></span></button>)}</div>}
       <div className="conversation-list">{visibleConversations.map((conversation) => <button className={`conversation-row ${conversation.id === selectedId ? "conversation-row--active" : ""}`} type="button" key={conversation.id} onClick={() => setSelectedId(conversation.id)}><span className={`message-avatar ${conversation.anonymous ? "message-avatar--anonymous" : ""}`}>{conversation.anonymous ? <ShieldQuestion /> : conversation.avatar}</span><span className="conversation-copy"><strong>{conversation.name}</strong></span><time>{conversation.time}</time></button>)}{query && peopleToStart.map((person) => <button className="conversation-row conversation-row--new" type="button" key={`new-${person.id}`} onClick={() => startConversation(person)}><span className="message-avatar">{person.name.split(" ").map((part) => part[0]).join("")}</span><span className="conversation-copy"><strong>{person.name}</strong><small>{person.username} · Naujas pokalbis</small></span></button>)}{visibleConversations.length === 0 && peopleToStart.length === 0 && <p className="messages-empty">Pokalbių ar žmonių nerasta.</p>}</div>
     </aside>
     <section className="conversation-view"><header className="conversation-header"><button className="conversation-profile-link" type="button" onClick={() => setProfileConversation(selectedConversation)}><span className={`message-avatar ${selectedConversation.anonymous ? "message-avatar--anonymous" : ""}`}>{selectedConversation.anonymous ? <ShieldQuestion /> : selectedConversation.avatar}</span><div><h2>{selectedConversation.name}</h2>{selectedConversation.username && <small>@{selectedConversation.username.replace(/^@/, "")}</small>}</div></button><button className="conversation-more" type="button" aria-label="Pokalbio informacija">•••</button></header><div className="message-history">{selectedConversation.messages.map((message, index) => <div className={`chat-bubble-row chat-bubble-row--${message.from}`} key={`${message.time}-${index}`}><div className="chat-bubble"><p>{message.text}</p><time>{message.time}</time></div></div>)}{selectedConversation.messages.length === 0 && <p className="messages-empty">Pradėk šį pokalbį parašydamas pirmą žinutę.</p>}</div><form className="message-composer" onSubmit={sendMessage}><textarea value={composer} onChange={(event) => setComposer(event.target.value)} placeholder="Parašyk žinutę..." rows="1" aria-label="Žinutė" /><button className="primary-action" type="submit" disabled={!composer.trim()}><Send /> Siųsti</button></form></section>
