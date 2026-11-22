@@ -113,11 +113,11 @@ const pageContent = {
 };
 
 const messageConversations = [
-  { id: "austeja", name: "Austėja M.", username: "AustejaM", type: "Asmeninis", preview: "Gal galėtume prie bibliotekos...", time: "10:42", avatar: "AM", messages: [{ from: "them", text: "Gal galėtume prie bibliotekos įrengti daugiau vietų mokytis?", time: "10:40" }, { from: "me", text: "Pritariu, galime pasiūlyti tai forume.", time: "10:42" }] },
-  { id: "economics", name: "Ekonomika", type: "Pamoka", preview: "Rytoj aptarsime infliaciją", time: "09:18", avatar: "EK", messages: [{ from: "them", text: "Rytoj aptarsime infliaciją. Nepamirškite pasiimti užrašų.", time: "09:18" }] },
-  { id: "3a", name: "3A klasė", type: "Klasė", preview: "Mantas: Dėl išvykos...", time: "vakar", avatar: "3A", messages: [{ from: "them", text: "Dėl išvykos susitinkame prie pagrindinio įėjimo.", time: "vakar" }] },
-  { id: "robotics", name: "Robotikos komanda", type: "Grupė", preview: "Greta: Įkėliau idėjas", time: "pirmadienį", avatar: "RK", messages: [{ from: "them", text: "Įkėliau idėjas mūsų projektui.", time: "pirmadienį" }] },
-  { id: "anonymous-school", name: "Anoniminis dalyvis", type: "Anoniminis", preview: "Ačiū, kad parašei", time: "sekmadienį", avatar: "?", anonymous: true, messages: [{ from: "them", text: "Ačiū, kad parašei po mano komentaru.", time: "sekmadienį" }] },
+  { id: "austeja", name: "Austėja M.", username: "AustejaM", type: "Asmeninis", topic: "projektai", preview: "Gal galėtume prie bibliotekos...", time: "10:42", avatar: "AM", messages: [{ from: "them", text: "Gal galėtume prie bibliotekos įrengti daugiau vietų mokytis?", time: "10:40" }, { from: "me", text: "Pritariu, galime pasiūlyti tai forume.", time: "10:42" }] },
+  { id: "economics", name: "Ekonomika", type: "Pamoka", topic: "mokslai", preview: "Rytoj aptarsime infliaciją", time: "09:18", avatar: "EK", messages: [{ from: "them", text: "Rytoj aptarsime infliaciją. Nepamirškite pasiimti užrašų.", time: "09:18" }] },
+  { id: "3a", name: "3A klasė", type: "Klasė", topic: "bendri", preview: "Mantas: Dėl išvykos...", time: "vakar", avatar: "3A", messages: [{ from: "them", text: "Dėl išvykos susitinkame prie pagrindinio įėjimo.", time: "vakar" }] },
+  { id: "robotics", name: "Robotikos komanda", type: "Grupė", topic: "projektai", preview: "Greta: Įkėliau idėjas", time: "pirmadienį", avatar: "RK", messages: [{ from: "them", text: "Įkėliau idėjas mūsų projektui.", time: "pirmadienį" }] },
+  { id: "anonymous-school", name: "Anoniminis dalyvis", type: "Anoniminis", topic: "bendri", preview: "Ačiū, kad parašei", time: "sekmadienį", avatar: "?", anonymous: true, messages: [{ from: "them", text: "Ačiū, kad parašei po mano komentaru.", time: "sekmadienį" }] },
 ];
 
 const messagePeople = [
@@ -148,10 +148,23 @@ function MessagesView({ initialConversationId }) {
   const [newMessageQuery, setNewMessageQuery] = useState("");
   const [showGroupForm, setShowGroupForm] = useState(false);
   const [groupName, setGroupName] = useState("");
+  const [topics, setTopics] = useState([{ id: "visi", label: "Visi pokalbiai" }, { id: "projektai", label: "# projektai" }, { id: "mokslai", label: "# mokslai" }, { id: "bendri", label: "# bendri" }]);
+  const [activeTopic, setActiveTopic] = useState("visi");
+  const [newTopic, setNewTopic] = useState("");
   const selectedConversation = conversations.find((conversation) => conversation.id === selectedId) || conversations[0];
-  const visibleConversations = conversations.filter((conversation) => (filter === "Visi" || conversation.type === filter) && `${conversation.name} ${conversation.preview}`.toLocaleLowerCase().includes(query.toLocaleLowerCase()));
+  const visibleConversations = conversations.filter((conversation) => (activeTopic === "visi" || conversation.topic === activeTopic) && (filter === "Visi" || conversation.type === filter) && `${conversation.name} ${conversation.preview}`.toLocaleLowerCase().includes(query.toLocaleLowerCase()));
   const peopleToStart = messagePeople.filter((person) => `${person.name} ${person.username}`.toLocaleLowerCase().includes(newMessageQuery.toLocaleLowerCase()));
 
+  const createTopic = (event) => {
+    event.preventDefault();
+    const label = newTopic.trim().replace(/^#\s*/, "");
+    if (!label) return;
+    const id = label.toLocaleLowerCase().replace(/\s+/g, "-");
+    if (topics.some((topic) => topic.id === id)) return;
+    setTopics((current) => [...current, { id, label: `# ${label}` }]);
+    setActiveTopic(id);
+    setNewTopic("");
+  };
   const sendMessage = (event) => {
     event.preventDefault();
     const text = composer.trim();
@@ -185,6 +198,7 @@ function MessagesView({ initialConversationId }) {
       <label className="messages-search"><Search aria-hidden="true" /><span className="sr-only">Ieškoti pokalbių</span><input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Ieškoti pokalbių" /></label>
       <div className="message-filters" role="tablist" aria-label="Pokalbių tipai">{["Visi", "Asmeninis", "Grupė", "Pamoka", "Klasė", "Anoniminis"].map((item) => <button className={filter === item ? "message-filter--active" : ""} type="button" role="tab" aria-selected={filter === item} key={item} onClick={() => setFilter(item)}>{item}</button>)}</div>
       {showNewMessage && <div className="new-message-panel"><strong>Pradėti pokalbį</strong><label className="messages-search"><Search aria-hidden="true" /><span className="sr-only">Ieškoti žmogaus</span><input autoFocus value={newMessageQuery} onChange={(event) => setNewMessageQuery(event.target.value)} placeholder="Ieškoti žmogaus" /></label>{peopleToStart.map((person) => <button className="person-result" type="button" key={person.id} onClick={() => startConversation(person)}><span className="message-avatar">{person.name.split(" ").map((part) => part[0]).join("")}</span><span><strong>{person.name}</strong><small>{person.username} · {person.detail}</small></span></button>)}<button className="create-group-link" type="button" onClick={() => setShowGroupForm((current) => !current)}><Users /> Sukurti grupę</button>{showGroupForm && <form className="group-form" onSubmit={createGroup}><input value={groupName} onChange={(event) => setGroupName(event.target.value)} placeholder="Grupės pavadinimas" required /><button className="primary-action" type="submit">Sukurti</button></form>}</div>}
+      <div className="message-topics"><div className="message-topics-heading"><strong>Temos</strong><button type="button" aria-label="Sukurti temą" onClick={() => document.getElementById("new-message-topic")?.focus()}><Plus /></button></div>{topics.map((topic) => <button className={`message-topic ${activeTopic === topic.id ? "message-topic--active" : ""}`} type="button" key={topic.id} onClick={() => setActiveTopic(topic.id)}>{topic.label}</button>)}<form className="new-topic-form" onSubmit={createTopic}><input id="new-message-topic" value={newTopic} onChange={(event) => setNewTopic(event.target.value)} placeholder="# nauja tema" aria-label="Nauja žinučių tema" /><button type="submit" aria-label="Pridėti temą"><Plus /></button></form></div>
       <div className="conversation-list">{visibleConversations.map((conversation) => <button className={`conversation-row ${conversation.id === selectedId ? "conversation-row--active" : ""}`} type="button" key={conversation.id} onClick={() => setSelectedId(conversation.id)}><span className={`message-avatar ${conversation.anonymous ? "message-avatar--anonymous" : ""}`}>{conversation.anonymous ? <ShieldQuestion /> : conversation.avatar}</span><span className="conversation-copy"><strong>{conversation.name}</strong><small>{conversation.type} · {conversation.preview}</small></span><time>{conversation.time}</time></button>)}{visibleConversations.length === 0 && <p className="messages-empty">Pokalbių nerasta.</p>}</div>
     </aside>
     <section className="conversation-view"><header className="conversation-header"><span className={`message-avatar ${selectedConversation.anonymous ? "message-avatar--anonymous" : ""}`}>{selectedConversation.anonymous ? <ShieldQuestion /> : selectedConversation.avatar}</span><div><h2>{selectedConversation.name}</h2><p>{selectedConversation.anonymous ? "Tapatybės paslėptos abiem pusėms" : `${selectedConversation.type} pokalbis`}</p></div><button className="conversation-more" type="button" aria-label="Pokalbio informacija">•••</button></header><div className="conversation-notice">{selectedConversation.anonymous ? "Šis anoniminis pokalbis pradėtas nuo forumo komentaro. Gerbk kito žmogaus privatumą." : "Rašyk pagarbiai — čia susitinka mokyklos bendruomenė."}</div><div className="message-history">{selectedConversation.messages.map((message, index) => <div className={`chat-bubble-row chat-bubble-row--${message.from}`} key={`${message.time}-${index}`}><div className="chat-bubble"><p>{message.text}</p><time>{message.time}</time></div></div>)}{selectedConversation.messages.length === 0 && <p className="messages-empty">Pradėk šį pokalbį parašydamas pirmą žinutę.</p>}</div><form className="message-composer" onSubmit={sendMessage}><textarea value={composer} onChange={(event) => setComposer(event.target.value)} placeholder="Parašyk žinutę..." rows="1" aria-label="Žinutė" /><button className="primary-action" type="submit" disabled={!composer.trim()}><Send /> Siųsti</button></form></section>
@@ -330,7 +344,7 @@ function PageContent({ activePage, onOpenMessages }) {
     ),
   };
 
-  return <main className="content-area"><section className={`page-intro ${activePage === "Forumai" ? "page-intro--forumai" : ""}`}><div><h1>{page.title}</h1>{page.description && <p>{page.description}</p>}</div>{activePage !== "Forumai" && <button className="primary-action" type="button"><Search /> Ieškoti</button>}</section>{pageViews[activePage]}</main>;
+  return <main className={`content-area ${activePage === "Žinutės" ? "content-area--messages" : ""}`}>{activePage !== "Žinutės" && <section className={`page-intro ${activePage === "Forumai" ? "page-intro--forumai" : ""}`}><div><h1>{page.title}</h1>{page.description && <p>{page.description}</p>}</div>{activePage !== "Forumai" && <button className="primary-action" type="button"><Search /> Ieškoti</button>}</section>}{pageViews[activePage]}</main>;
 }
 
 function App() {
