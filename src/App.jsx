@@ -152,7 +152,14 @@ function MessagesView({ initialConversationId }) {
   const [activeTopic, setActiveTopic] = useState("visi");
   const [newTopic, setNewTopic] = useState("");
   const selectedConversation = conversations.find((conversation) => conversation.id === selectedId) || conversations[0];
-  const visibleConversations = conversations.filter((conversation) => (filter === "Visi" || conversation.type === filter) && `${conversation.name} ${conversation.preview}`.toLocaleLowerCase().includes(query.toLocaleLowerCase()));
+  const matchesFilter = (conversation) => {
+    if (filter === "Visi") return true;
+    if (filter === "Grupės") return conversation.type === "Grupė";
+    if (filter === "Pamokos") return conversation.type === "Pamoka" || conversation.type === "Klasė";
+    if (filter === "1v1") return conversation.type === "Asmeninis";
+    return conversation.type === "Anoniminis";
+  };
+  const visibleConversations = conversations.filter((conversation) => matchesFilter(conversation) && `${conversation.name} ${conversation.preview}`.toLocaleLowerCase().includes(query.toLocaleLowerCase()));
   const peopleToStart = messagePeople.filter((person) => `${person.name} ${person.username}`.toLocaleLowerCase().includes(newMessageQuery.toLocaleLowerCase()));
 
   const createTopic = (event) => {
@@ -201,7 +208,7 @@ function MessagesView({ initialConversationId }) {
     <aside className="messages-sidebar">
       <div className="messages-sidebar-top"><button className="icon-action" type="button" aria-label="Pradėti naują pokalbį" onClick={() => setShowNewMessage((current) => !current)}><UserPlus /></button></div>
       <label className="messages-search"><Search aria-hidden="true" /><span className="sr-only">Ieškoti pokalbių</span><input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Ieškoti pokalbių" /></label>
-      <div className="message-filters" role="tablist" aria-label="Pokalbių tipai">{["Visi", "Asmeninis", "Grupė", "Pamoka", "Klasė", "Anoniminis"].map((item) => <button className={filter === item ? "message-filter--active" : ""} type="button" role="tab" aria-selected={filter === item} key={item} onClick={() => setFilter(item)}>{item}</button>)}</div>
+      <div className="message-filters" role="tablist" aria-label="Pokalbių tipai">{["Visi", "Grupės", "Pamokos", "1v1", "Anoniminiai"].map((item) => <button className={filter === item ? "message-filter--active" : ""} type="button" role="tab" aria-selected={filter === item} key={item} onClick={() => setFilter(item)}>{item}</button>)}</div>
       {showNewMessage && <div className="new-message-panel"><strong>Pradėti pokalbį</strong><label className="messages-search"><Search aria-hidden="true" /><span className="sr-only">Ieškoti žmogaus</span><input autoFocus value={newMessageQuery} onChange={(event) => setNewMessageQuery(event.target.value)} placeholder="Ieškoti žmogaus" /></label>{peopleToStart.map((person) => <button className="person-result" type="button" key={person.id} onClick={() => startConversation(person)}><span className="message-avatar">{person.name.split(" ").map((part) => part[0]).join("")}</span><span><strong>{person.name}</strong><small>{person.username} · {person.detail}</small></span></button>)}<button className="create-group-link" type="button" onClick={() => setShowGroupForm((current) => !current)}><Users /> Sukurti grupę</button>{showGroupForm && <form className="group-form" onSubmit={createGroup}><input value={groupName} onChange={(event) => setGroupName(event.target.value)} placeholder="Grupės pavadinimas" required /><button className="primary-action" type="submit">Sukurti</button></form>}</div>}
       <div className="conversation-list">{visibleConversations.map((conversation) => <button className={`conversation-row ${conversation.id === selectedId ? "conversation-row--active" : ""}`} type="button" key={conversation.id} onClick={() => setSelectedId(conversation.id)}><span className={`message-avatar ${conversation.anonymous ? "message-avatar--anonymous" : ""}`}>{conversation.anonymous ? <ShieldQuestion /> : conversation.avatar}</span><span className="conversation-copy"><strong>{conversation.name}</strong></span><time>{conversation.time}</time></button>)}{visibleConversations.length === 0 && <p className="messages-empty">Pokalbių nerasta.</p>}</div>
     </aside>
