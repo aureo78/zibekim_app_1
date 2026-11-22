@@ -149,9 +149,17 @@ function MessagesView({ initialConversationId }) {
   const [groupDescription, setGroupDescription] = useState("");
   const [groupType, setGroupType] = useState("Grupė");
   const [showGroupPage, setShowGroupPage] = useState(false);
-  const [topics, setTopics] = useState([{ id: "visi", label: "Visi pokalbiai" }, { id: "projektai", label: "# projektai" }, { id: "mokslai", label: "# mokslai" }, { id: "bendri", label: "# bendri" }]);
-  const [activeTopic, setActiveTopic] = useState("visi");
+  const [topics, setTopics] = useState({
+    austeja: [{ id: "austeja-bendri", label: "# bendri" }, { id: "austeja-mokslai", label: "# mokslai" }],
+    tomas: [{ id: "tomas-projektai", label: "# projektai" }],
+    economics: [{ id: "economics-mokslai", label: "# mokslai" }, { id: "economics-bendri", label: "# bendri" }],
+    "3a": [{ id: "3a-bendri", label: "# bendri" }, { id: "3a-isvyka", label: "# išvyka" }],
+    robotics: [{ id: "robotics-projektai", label: "# projektai" }],
+    "anonymous-school": [{ id: "anonymous-bendri", label: "# bendri" }],
+  });
+  const [activeTopic, setActiveTopic] = useState("");
   const [newTopic, setNewTopic] = useState("");
+  const [showTopicForm, setShowTopicForm] = useState(false);
   const [profileConversation, setProfileConversation] = useState(null);
   const selectedConversation = conversations.find((conversation) => conversation.id === selectedId) || conversations[0];
   const matchesFilter = (conversation) => {
@@ -165,20 +173,21 @@ function MessagesView({ initialConversationId }) {
   const peopleToStart = messagePeople.filter((person) => !conversations.some((conversation) => conversation.id === person.id) && `${person.name} ${person.username}`.toLocaleLowerCase().includes(query.toLocaleLowerCase()));
   const canCreateGroup = filter === "Visi" || filter === "Grupės" || filter === "Pamokos";
 
+  const selectedTopics = topics[selectedConversation.id] || [];
+
   const createTopic = (event) => {
     event.preventDefault();
     const label = newTopic.trim().replace(/^#\s*/, "");
     if (!label) return;
-    const id = label.toLocaleLowerCase().replace(/\s+/g, "-");
-    if (topics.some((topic) => topic.id === id)) return;
-    setTopics((current) => [...current, { id, label: `# ${label}` }]);
+    const id = `${selectedConversation.id}-${label.toLocaleLowerCase().replace(/\s+/g, "-")}`;
+    if (selectedTopics.some((topic) => topic.id === id)) return;
+    setTopics((current) => ({ ...current, [selectedConversation.id]: [...(current[selectedConversation.id] || []), { id, label: `# ${label}` }] }));
     setActiveTopic(id);
     setNewTopic("");
+    setShowTopicForm(false);
   };
   const openRoom = (topicId) => {
     setActiveTopic(topicId);
-    const roomConversation = conversations.find((conversation) => conversation.topic === topicId);
-    if (roomConversation) setSelectedId(roomConversation.id);
   };
   const sendMessage = (event) => {
     event.preventDefault();
@@ -218,10 +227,10 @@ function MessagesView({ initialConversationId }) {
       <label className="messages-search"><Search aria-hidden="true" /><span className="search-divider" aria-hidden="true" /><span className="sr-only">Paieška</span><input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Paieška" /></label>
       <div className="messages-actions-row"><div className="message-create-row">{canCreateGroup && <button className="icon-action message-create-group" type="button" aria-label="Sukurti grupę" onClick={() => setShowGroupPage(true)}><Plus /></button>}</div><div className="message-filter-wrap"><button className="message-filter-toggle" type="button" aria-label="Filtras"><SlidersHorizontal /> <span>Filtras</span><ChevronDown className="message-filter-chevron" /></button><div className="message-filter-sheet">{["Visi", "Grupės", "Pamokos", "1v1", "Anoniminiai"].map((item) => <button className={filter === item ? "message-filter--active" : ""} type="button" key={item} onClick={() => setFilter(item)}>{item}</button>)}</div></div></div>
       {showNewMessage && <div className="new-message-panel"><strong>Rasti žmogų</strong>{peopleToStart.map((person) => <button className="person-result" type="button" key={person.id} onClick={() => startConversation(person)}><span className="message-avatar">{person.name.split(" ").map((part) => part[0]).join("")}</span><span><strong>{person.name}</strong><small>{person.username} · {person.detail}</small></span></button>)}</div>}
-      <div className="conversation-list">{visibleConversations.map((conversation) => <button className={`conversation-row ${conversation.id === selectedId ? "conversation-row--active" : ""}`} type="button" key={conversation.id} onClick={() => setSelectedId(conversation.id)}><span className={`message-avatar ${conversation.anonymous ? "message-avatar--anonymous" : ""}`}>{conversation.anonymous ? <ShieldQuestion /> : conversation.avatar}</span><span className="conversation-copy"><strong>{conversation.name}</strong></span><time>{conversation.time}</time></button>)}{query && peopleToStart.map((person) => <button className="conversation-row conversation-row--new" type="button" key={`new-${person.id}`} onClick={() => startConversation(person)}><span className="message-avatar">{person.name.split(" ").map((part) => part[0]).join("")}</span><span className="conversation-copy"><strong>{person.name}</strong><small>{person.username} · Naujas pokalbis</small></span></button>)}{visibleConversations.length === 0 && peopleToStart.length === 0 && <p className="messages-empty">Pokalbių ar žmonių nerasta.</p>}</div>
+      <div className="conversation-list">{visibleConversations.map((conversation) => <button className={`conversation-row ${conversation.id === selectedId ? "conversation-row--active" : ""}`} type="button" key={conversation.id} onClick={() => { setSelectedId(conversation.id); setActiveTopic(""); }}><span className={`message-avatar ${conversation.anonymous ? "message-avatar--anonymous" : ""}`}>{conversation.anonymous ? <ShieldQuestion /> : conversation.avatar}</span><span className="conversation-copy"><strong>{conversation.name}</strong></span><time>{conversation.time}</time></button>)}{query && peopleToStart.map((person) => <button className="conversation-row conversation-row--new" type="button" key={`new-${person.id}`} onClick={() => startConversation(person)}><span className="message-avatar">{person.name.split(" ").map((part) => part[0]).join("")}</span><span className="conversation-copy"><strong>{person.name}</strong><small>{person.username} · Naujas pokalbis</small></span></button>)}{visibleConversations.length === 0 && peopleToStart.length === 0 && <p className="messages-empty">Pokalbių ar žmonių nerasta.</p>}</div>
     </aside>
     <section className="conversation-view"><header className="conversation-header"><div className="conversation-heading"><span className={`message-avatar ${selectedConversation.anonymous ? "message-avatar--anonymous" : ""}`}>{selectedConversation.anonymous ? <ShieldQuestion /> : selectedConversation.avatar}</span><div><h2>{selectedConversation.name}</h2>{selectedConversation.username && <small>@{selectedConversation.username.replace(/^@/, "")}</small>}</div></div></header><div className="message-history">{selectedConversation.messages.map((message, index) => <div className={`chat-bubble-row chat-bubble-row--${message.from}`} key={`${message.time}-${index}`}><div className="chat-bubble"><p>{message.text}</p><time>{message.time}</time></div></div>)}{selectedConversation.messages.length === 0 && <p className="messages-empty">Pradėk šį pokalbį parašydamas pirmą žinutę.</p>}</div><form className="message-composer" onSubmit={sendMessage}><textarea value={composer} onChange={(event) => setComposer(event.target.value)} placeholder="Parašyk žinutę..." rows="1" aria-label="Žinutė" /><button className="primary-action" type="submit" disabled={!composer.trim()}><Send /> Siųsti</button></form></section>
-    <aside className="message-rooms"><div className="message-topics-heading"><strong># Kambariai</strong><button type="button" aria-label="Sukurti kambarį" onClick={() => document.getElementById("new-message-topic")?.focus()}><Plus /></button></div>{topics.filter((topic) => topic.id !== "visi").map((topic) => <button className={`message-topic ${activeTopic === topic.id ? "message-topic--active" : ""}`} type="button" key={topic.id} onClick={() => openRoom(topic.id)}>{topic.label}</button>)}<form className="new-topic-form" onSubmit={createTopic}><input id="new-message-topic" value={newTopic} onChange={(event) => setNewTopic(event.target.value)} placeholder="# naujas kambarys" aria-label="Naujas pokalbių kambarys" /><button type="submit" aria-label="Pridėti kambarį"><Plus /></button></form></aside>
+    <aside className="message-rooms"><div className="message-topics-heading"><strong># Kambariai</strong><button type="button" aria-label="Sukurti kambarį" onClick={() => setShowTopicForm((current) => !current)}><Plus /></button></div>{showTopicForm && <form className="new-topic-popover" onSubmit={createTopic}><input autoFocus value={newTopic} onChange={(event) => setNewTopic(event.target.value)} placeholder="# kambario pavadinimas" aria-label="Kambario pavadinimas" /><button type="submit" aria-label="Išsaugoti kambarį"><Plus /></button></form>}<div className="message-topic-list">{selectedTopics.map((topic) => <button className={`message-topic ${activeTopic === topic.id ? "message-topic--active" : ""}`} type="button" key={topic.id} onClick={() => openRoom(topic.id)}>{topic.label}</button>)}{selectedTopics.length === 0 && <p className="message-topics-empty">Kambarių dar nėra.</p>}</div></aside>
   </section>;
 }
 function PageContent({ activePage, onOpenMessages }) {
