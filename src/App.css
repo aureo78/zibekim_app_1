@@ -560,9 +560,15 @@ a {
 .new-topic-form { display: flex; gap: 5px; margin-top: 5px; }
 .new-topic-form input { min-width: 0; flex: 1; padding: 6px 8px; color: #4a1320; background: #fffaf0; border: 1px solid #d7c5b1; border-radius: 5px; font: inherit; font-size: 12px; }
 .content-area--messages .conversation-view { min-height: calc(100vh - 96px); }
+.conversation-header h2 { font-size: 26px; }
 
 .messages-app { display: grid; grid-template-columns: minmax(280px, 360px) minmax(0, 1fr); min-height: 650px; max-width: 1180px; margin: 0 auto; background: #fffaf0; border: 2px solid #4a1320; box-shadow: 5px 5px 0 #4a1320; }
+.content-area--messages .messages-app { grid-template-columns: minmax(250px, 300px) minmax(0, 1fr) minmax(170px, 220px); }
 .messages-sidebar { border-right: 1px solid #d7c5b1; min-width: 0; }
+.message-rooms { min-width: 0; padding: 20px 14px; border-left: 1px solid #d7c5b1; background: #f8f1df; }
+.message-rooms .message-topic { margin-bottom: 3px; }
+.message-rooms .new-topic-form { margin-top: 12px; }
+
 .messages-sidebar-top { display: flex; align-items: flex-start; justify-content: space-between; padding: 22px 20px 14px; }
 .messages-sidebar-top h2, .conversation-header h2 { margin: 3px 0 0; color: #4a1320; font-family: "Caveat", cursive; font-size: 32px; }
 .messages-kicker { color: #b3213a; font-size: 10px; font-weight: 800; letter-spacing: .16em; }
@@ -1043,7 +1049,8 @@ a {
     position: static;
     width: 100%;
   }
-  .messages-app { display: block; min-height: 0; }
+  .message-rooms { border-top: 1px solid #d7c5b1; border-left: 0; padding: 16px; }
+  .content-area--messages .messages-app { display: block; min-height: 0; }
   .messages-sidebar { border-right: 0; border-bottom: 1px solid #d7c5b1; }
   .conversation-list { max-height: 310px; }
   .conversation-view { min-height: 560px; }
