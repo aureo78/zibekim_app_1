@@ -16,6 +16,10 @@ import {
   Search,
   Settings,
   UserRound,
+  UserPlus,
+  Users,
+  ShieldQuestion,
+  Send,
   Vote,
 } from "lucide-react";
 import "./App.css";
@@ -108,6 +112,19 @@ const pageContent = {
   },
 };
 
+const messageConversations = [
+  { id: "austeja", name: "Austėja M.", username: "AustejaM", type: "Asmeninis", preview: "Gal galėtume prie bibliotekos...", time: "10:42", avatar: "AM", messages: [{ from: "them", text: "Gal galėtume prie bibliotekos įrengti daugiau vietų mokytis?", time: "10:40" }, { from: "me", text: "Pritariu, galime pasiūlyti tai forume.", time: "10:42" }] },
+  { id: "economics", name: "Ekonomika", type: "Pamoka", preview: "Rytoj aptarsime infliaciją", time: "09:18", avatar: "EK", messages: [{ from: "them", text: "Rytoj aptarsime infliaciją. Nepamirškite pasiimti užrašų.", time: "09:18" }] },
+  { id: "3a", name: "3A klasė", type: "Klasė", preview: "Mantas: Dėl išvykos...", time: "vakar", avatar: "3A", messages: [{ from: "them", text: "Dėl išvykos susitinkame prie pagrindinio įėjimo.", time: "vakar" }] },
+  { id: "robotics", name: "Robotikos komanda", type: "Grupė", preview: "Greta: Įkėliau idėjas", time: "pirmadienį", avatar: "RK", messages: [{ from: "them", text: "Įkėliau idėjas mūsų projektui.", time: "pirmadienį" }] },
+  { id: "anonymous-school", name: "Anoniminis dalyvis", type: "Anoniminis", preview: "Ačiū, kad parašei", time: "sekmadienį", avatar: "?", anonymous: true, messages: [{ from: "them", text: "Ačiū, kad parašei po mano komentaru.", time: "sekmadienį" }] },
+];
+
+const messagePeople = [
+  { id: "austeja", name: "Austėja M.", username: "@AustejaM", detail: "Mokinė" },
+  { id: "tomas", name: "Tomas K.", username: "@TomasK", detail: "Mokinys" },
+  { id: "greta", name: "Greta V.", username: "@GretaV", detail: "Mokinė" },
+];
 function LogoMark() {
   return (
     <svg className="logo-mark" viewBox="0 0 323 321" role="img" aria-label="Žibėkim logo">
@@ -121,8 +138,61 @@ function LogoMark() {
   );
 }
 
-function PageContent({ activePage }) {
+function MessagesView({ initialConversationId }) {
+  const [conversations, setConversations] = useState(messageConversations);
+  const [selectedId, setSelectedId] = useState(initialConversationId || messageConversations[0].id);
+  const [query, setQuery] = useState("");
+  const [filter, setFilter] = useState("Visi");
+  const [composer, setComposer] = useState("");
+  const [showNewMessage, setShowNewMessage] = useState(false);
+  const [newMessageQuery, setNewMessageQuery] = useState("");
+  const [showGroupForm, setShowGroupForm] = useState(false);
+  const [groupName, setGroupName] = useState("");
+  const selectedConversation = conversations.find((conversation) => conversation.id === selectedId) || conversations[0];
+  const visibleConversations = conversations.filter((conversation) => (filter === "Visi" || conversation.type === filter) && `${conversation.name} ${conversation.preview}`.toLocaleLowerCase().includes(query.toLocaleLowerCase()));
+  const peopleToStart = messagePeople.filter((person) => `${person.name} ${person.username}`.toLocaleLowerCase().includes(newMessageQuery.toLocaleLowerCase()));
+
+  const sendMessage = (event) => {
+    event.preventDefault();
+    const text = composer.trim();
+    if (!text) return;
+    setConversations((current) => current.map((conversation) => conversation.id === selectedId ? { ...conversation, preview: text, time: "ką tik", messages: [...conversation.messages, { from: "me", text, time: "ką tik" }] } : conversation));
+    setComposer("");
+  };
+
+  const createGroup = (event) => {
+    event.preventDefault();
+    const name = groupName.trim();
+    if (!name) return;
+    const id = `group-${Date.now()}`;
+    setConversations((current) => [{ id, name, type: "Grupė", preview: "Grupė sukurta", time: "dabar", avatar: "GR", messages: [] }, ...current]);
+    setSelectedId(id);
+    setGroupName("");
+    setShowGroupForm(false);
+    setShowNewMessage(false);
+  };
+  const startConversation = (person) => {
+    const existing = conversations.find((conversation) => conversation.id === person.id);
+    if (!existing) setConversations((current) => [{ id: person.id, name: person.name, username: person.username.replace("@", ""), type: "Asmeninis", preview: "Naujas pokalbis", time: "dabar", avatar: person.name.split(" ").map((part) => part[0]).join(""), messages: [] }, ...current]);
+    setSelectedId(person.id);
+    setShowNewMessage(false);
+    setNewMessageQuery("");
+  };
+
+  return <section className="messages-app">
+    <aside className="messages-sidebar">
+      <div className="messages-sidebar-top"><div><span className="messages-kicker">SUSIRAŠINĖJIMAI</span><h2>Pokalbiai</h2></div><button className="icon-action" type="button" aria-label="Pradėti naują pokalbį" onClick={() => setShowNewMessage((current) => !current)}><UserPlus /></button></div>
+      <label className="messages-search"><Search aria-hidden="true" /><span className="sr-only">Ieškoti pokalbių</span><input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Ieškoti pokalbių" /></label>
+      <div className="message-filters" role="tablist" aria-label="Pokalbių tipai">{["Visi", "Asmeninis", "Grupė", "Pamoka", "Klasė", "Anoniminis"].map((item) => <button className={filter === item ? "message-filter--active" : ""} type="button" role="tab" aria-selected={filter === item} key={item} onClick={() => setFilter(item)}>{item}</button>)}</div>
+      {showNewMessage && <div className="new-message-panel"><strong>Pradėti pokalbį</strong><label className="messages-search"><Search aria-hidden="true" /><span className="sr-only">Ieškoti žmogaus</span><input autoFocus value={newMessageQuery} onChange={(event) => setNewMessageQuery(event.target.value)} placeholder="Ieškoti žmogaus" /></label>{peopleToStart.map((person) => <button className="person-result" type="button" key={person.id} onClick={() => startConversation(person)}><span className="message-avatar">{person.name.split(" ").map((part) => part[0]).join("")}</span><span><strong>{person.name}</strong><small>{person.username} · {person.detail}</small></span></button>)}<button className="create-group-link" type="button" onClick={() => setShowGroupForm((current) => !current)}><Users /> Sukurti grupę</button>{showGroupForm && <form className="group-form" onSubmit={createGroup}><input value={groupName} onChange={(event) => setGroupName(event.target.value)} placeholder="Grupės pavadinimas" required /><button className="primary-action" type="submit">Sukurti</button></form>}</div>}
+      <div className="conversation-list">{visibleConversations.map((conversation) => <button className={`conversation-row ${conversation.id === selectedId ? "conversation-row--active" : ""}`} type="button" key={conversation.id} onClick={() => setSelectedId(conversation.id)}><span className={`message-avatar ${conversation.anonymous ? "message-avatar--anonymous" : ""}`}>{conversation.anonymous ? <ShieldQuestion /> : conversation.avatar}</span><span className="conversation-copy"><strong>{conversation.name}</strong><small>{conversation.type} · {conversation.preview}</small></span><time>{conversation.time}</time></button>)}{visibleConversations.length === 0 && <p className="messages-empty">Pokalbių nerasta.</p>}</div>
+    </aside>
+    <section className="conversation-view"><header className="conversation-header"><span className={`message-avatar ${selectedConversation.anonymous ? "message-avatar--anonymous" : ""}`}>{selectedConversation.anonymous ? <ShieldQuestion /> : selectedConversation.avatar}</span><div><h2>{selectedConversation.name}</h2><p>{selectedConversation.anonymous ? "Tapatybės paslėptos abiem pusėms" : `${selectedConversation.type} pokalbis`}</p></div><button className="conversation-more" type="button" aria-label="Pokalbio informacija">•••</button></header><div className="conversation-notice">{selectedConversation.anonymous ? "Šis anoniminis pokalbis pradėtas nuo forumo komentaro. Gerbk kito žmogaus privatumą." : "Rašyk pagarbiai — čia susitinka mokyklos bendruomenė."}</div><div className="message-history">{selectedConversation.messages.map((message, index) => <div className={`chat-bubble-row chat-bubble-row--${message.from}`} key={`${message.time}-${index}`}><div className="chat-bubble"><p>{message.text}</p><time>{message.time}</time></div></div>)}{selectedConversation.messages.length === 0 && <p className="messages-empty">Pradėk šį pokalbį parašydamas pirmą žinutę.</p>}</div><form className="message-composer" onSubmit={sendMessage}><textarea value={composer} onChange={(event) => setComposer(event.target.value)} placeholder="Parašyk žinutę..." rows="1" aria-label="Žinutė" /><button className="primary-action" type="submit" disabled={!composer.trim()}><Send /> Siųsti</button></form></section>
+  </section>;
+}
+function PageContent({ activePage, onOpenMessages }) {
   const page = pageContent[activePage];
+  const [messageStartId, setMessageStartId] = useState(null);
   const [selectedForum, setSelectedForum] = useState(null);
   const [forumQuery, setForumQuery] = useState("");
   const [newPost, setNewPost] = useState("");
@@ -147,6 +217,11 @@ function PageContent({ activePage }) {
     setNewPost("");
     setRecentForumTitle(forum.title);
     localStorage.setItem("zibekim-recent-forum", forum.title);
+  };
+
+  const startAnonymousConversation = () => {
+    setMessageStartId("anonymous-school");
+    onOpenMessages();
   };
 
   const publishPost = (event) => {
@@ -213,12 +288,7 @@ function PageContent({ activePage }) {
   }
 
   const pageViews = {
-    Žinutės: (
-      <div className="list-card"><div className="card-heading"><h2>Naujausios žinutės</h2><MessageSquareText /></div>
-        <div className="message-row"><span className="message-dot" /><div><strong>Studentų atstovybės susitikimas</strong><p>Susitikimas vyks ketvirtadienį 14:30 aktų salėje.</p><small>Studentų atstovybė · šiandien</small></div></div>
-        <div className="message-row"><span className="message-dot" /><div><strong>Savaitės priminimas</strong><p>Iki penktadienio balsuok už idėją, kurią norėtum matyti mokykloje.</p><small>Administracija · vakar</small></div></div>
-      </div>
-    ),
+    Žinutės: <MessagesView initialConversationId={messageStartId} />,
     Skelbimai: (
       <div className="listing-grid"><article className="listing-card"><span className="tag">RENGINYS</span><h2>Žiemos vakaras mokykloje</h2><p>Susitikime bendruomenės vakare. Laukiami visi mokiniai.</p><small>Gruodžio 12 d. · Aktų salė</small></article><article className="listing-card"><span className="tag tag--gold">GALIMYBĖ</span><h2>Savanorių komanda</h2><p>Padėk organizuoti mokyklos pavasario iniciatyvas.</p><small>Registracija iki gruodžio 8 d.</small></article><article className="listing-card"><span className="tag tag--green">KLUBAS</span><h2>Atvira stalo žaidimų popietė</h2><p>Prisijunk, net jei dar nepažįsti kitų dalyvių.</p><small>Trečiadieniais · 15:00</small></article></div>
     ),
@@ -241,7 +311,7 @@ function PageContent({ activePage }) {
         <section className="forum-subpage-header"><h1>{selectedForum.title}</h1><p>{selectedForum.description}</p></section>
         <section className="discussion-list" aria-label={`Diskusija: ${selectedForum.title}`}>
           {(forumPosts[selectedForum.title] || []).map((post, index) => (
-            <article className="discussion-post" key={`${post.username}-${index}`}><div className="post-avatar" aria-hidden="true"><UserRound /></div><div className="post-content"><div className="post-author"><strong>{post.name}</strong><span>@{post.username}</span><time>{post.time}</time></div><p>{post.text}</p></div></article>
+            <article className="discussion-post" key={`${post.username}-${index}`}><div className="post-avatar" aria-hidden="true"><UserRound /></div><div className="post-content"><div className="post-author"><strong>{post.name}</strong><span>@{post.username}</span><time>{post.time}</time></div><p>{post.text}</p><button className="post-message-action" type="button" onClick={startAnonymousConversation}><ShieldQuestion /> Parašyti anonimiškai</button></div></article>
           ))}
           {!(forumPosts[selectedForum.title] || []).length && <p className="forum-empty">Šioje temoje dar nėra įrašų.</p>}
         </section>
@@ -321,7 +391,7 @@ function App() {
         <div className="sidebar-version">v.RETRO.2026.11.21.01</div>
       </aside>
 
-      <PageContent activePage={activePage} />
+      <PageContent activePage={activePage} onOpenMessages={() => setActivePage("Žinutės")} />
     </div>
   );
 }
