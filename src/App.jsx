@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   AlertTriangle,
   ArrowUpRight,
@@ -30,6 +30,12 @@ const navigationItems = [
   { label: "Apklausos", icon: ClipboardList },
 ];
 
+const forumTopics = [
+  { title: "Mokyklos aplinka", description: "Kalbėkimės apie erdves, kasdienybę ir tai, ką galime pagerinti mokykloje.", comments: 34, time: "prieš 1 val." },
+  { title: "Tech naujienos", description: "Naujienos, įrankiai ir klausimai apie technologijas bei jų poveikį mokyklai.", comments: 27, time: "prieš 2 val." },
+  { title: "Pasaulio naujienos", description: "Dalinkimės svarbiausiomis pasaulio naujienomis ir savo požiūriu į jas.", comments: 64, time: "prieš 3 val." },
+  { title: "Lietuvos naujienos", description: "Kas vyksta Lietuvoje? Aptarkime aktualijas pagarbiai ir atsakingai.", comments: 19, time: "prieš 4 val." },
+];
 const pageContent = {
   Pagrindinis: {
     eyebrow: "MOKYKLOS BENDRUOMENĖ",
@@ -84,6 +90,21 @@ function LogoMark() {
 function PageContent({ activePage }) {
   const page = pageContent[activePage];
   const [selectedForum, setSelectedForum] = useState(null);
+  const [forumQuery, setForumQuery] = useState("");
+  const [recentForumTitle, setRecentForumTitle] = useState(() => localStorage.getItem("zibekim-recent-forum") || "");
+
+  useEffect(() => {
+    if (!selectedForum) return undefined;
+    const closeWithEscape = (event) => event.key === "Escape" && setSelectedForum(null);
+    document.addEventListener("keydown", closeWithEscape);
+    return () => document.removeEventListener("keydown", closeWithEscape);
+  }, [selectedForum]);
+
+  const openForum = (forum) => {
+    setSelectedForum(forum);
+    setRecentForumTitle(forum.title);
+    localStorage.setItem("zibekim-recent-forum", forum.title);
+  };
 
   if (activePage === "Pagrindinis") {
     return (
@@ -140,32 +161,43 @@ function PageContent({ activePage }) {
     ),
     Forumai: (
       <div className="forum-layout">
+        <div className="forum-toolbar">
+          <div>
+            <span className="page-eyebrow">TEMŲ SĄRAŠAS</span>
+            <h2>Pasirink diskusiją</h2>
+          </div>
+          <label className="forum-search">
+            <Search aria-hidden="true" />
+            <span className="sr-only">Ieškoti forumų temų</span>
+            <input value={forumQuery} onChange={(event) => setForumQuery(event.target.value)} placeholder="Ieškoti temų" />
+          </label>
+        </div>
         <section className="forum-list" aria-label="Forumų temos">
-          {[
-            { title: "Mokyklos aplinka", description: "Kalbėkimės apie erdves, kasdienybę ir tai, ką galime pagerinti mokykloje.", comments: 34, time: "prieš 1 val." },
-            { title: "Tech naujienos", description: "Naujienos, įrankiai ir klausimai apie technologijas bei jų poveikį mokyklai.", comments: 27, time: "prieš 2 val." },
-            { title: "Pasaulio naujienos", description: "Dalinkimės svarbiausiomis pasaulio naujienomis ir savo požiūriu į jas.", comments: 64, time: "prieš 3 val." },
-            { title: "Lietuvos naujienos", description: "Kas vyksta Lietuvoje? Aptarkime aktualijas pagarbiai ir atsakingai.", comments: 19, time: "prieš 4 val." },
-          ].map((forum) => (
-            <button className="forum-row" type="button" key={forum.title} onClick={() => setSelectedForum(forum)}>
+          {forumTopics.filter((forum) => `${forum.title} ${forum.description}`.toLocaleLowerCase().includes(forumQuery.toLocaleLowerCase())).map((forum) => (
+            <button className="forum-row" type="button" key={forum.title} onClick={() => openForum(forum)}>
               <span className="forum-row-copy"><strong>{forum.title}</strong><small>{forum.description}</small></span>
               <span className="forum-row-meta"><span><MessageSquareText /> {forum.comments}</span><small>{forum.time}</small></span>
               <Bookmark className="forum-bookmark" aria-hidden="true" />
             </button>
           ))}
+          {forumTopics.filter((forum) => `${forum.title} ${forum.description}`.toLocaleLowerCase().includes(forumQuery.toLocaleLowerCase())).length === 0 && (
+            <p className="forum-empty">Temų pagal šią paiešką nerasta.</p>
+          )}
         </section>
         <aside className="recent-forum" aria-label="Neseniai peržiūrėta">
           <span className="page-eyebrow">NESENIAI PERŽIŪRĖTA</span>
-          <button type="button" onClick={() => setSelectedForum({ title: "Mokyklos aplinka", description: "Kalbėkimės apie erdves, kasdienybę ir tai, ką galime pagerinti mokykloje.", comments: 34, time: "prieš 1 val." })}>Mokyklos aplinka <ArrowUpRight /></button>
+          {recentForumTitle ? (
+            <button type="button" onClick={() => openForum(forumTopics.find((forum) => forum.title === recentForumTitle) || forumTopics[0])}>{recentForumTitle} <ArrowUpRight /></button>
+          ) : <span className="recent-forum-empty">Dar nieko neperžiūrėjai</span>}
         </aside>
         {selectedForum && (
           <div className="forum-dialog-backdrop" role="presentation" onClick={() => setSelectedForum(null)}>
             <section className="forum-dialog" role="dialog" aria-modal="true" aria-labelledby="forum-dialog-title" onClick={(event) => event.stopPropagation()}>
-              <button className="forum-dialog-close" type="button" aria-label="Uždaryti diskusiją" onClick={() => setSelectedForum(null)}>×</button>
-              <span className="page-eyebrow">DISKUSIJA</span>
+              <button className="forum-dialog-close" type="button" aria-label="Uždaryti temos peržiūrą" onClick={() => setSelectedForum(null)}>×</button>
+              <span className="page-eyebrow">TEMOS PERŽIŪRA</span>
               <h2 id="forum-dialog-title">{selectedForum.title}</h2>
               <p>{selectedForum.description}</p>
-              <div className="forum-dialog-thread"><MessageSquareText /><strong>{selectedForum.comments} komentarai</strong><small>Prisijunk prie diskusijos ir pasidalink savo nuomone.</small></div>
+              <div className="forum-dialog-thread"><MessageSquareText /><strong>{selectedForum.comments} komentarai</strong><small>Diskusiją gali pradėti bet kuris mokyklos bendruomenės narys.</small></div>
             </section>
           </div>
         )}
@@ -176,7 +208,7 @@ function PageContent({ activePage }) {
     ),
   };
 
-  return <main className="content-area"><section className="page-intro"><div><span className="page-eyebrow">{page.eyebrow}</span><h1>{page.title}</h1><p>{page.description}</p></div><button className="primary-action" type="button"><Search /> Ieškoti</button></section>{pageViews[activePage]}</main>;
+  return <main className="content-area"><section className="page-intro"><div><span className="page-eyebrow">{page.eyebrow}</span><h1>{page.title}</h1><p>{page.description}</p></div>{activePage !== "Forumai" && <button className="primary-action" type="button"><Search /> Ieškoti</button>}</section>{pageViews[activePage]}</main>;
 }
 
 function App() {
