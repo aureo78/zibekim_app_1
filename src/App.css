@@ -804,8 +804,109 @@ button {
 .forum-bookmark { width: 18px; height: 18px; color: #8f1d32; }
 .forum-bookmark { grid-column: 2; grid-row: 2; justify-self: end; }
 
+.forum-columns {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 280px;
+  gap: 20px;
+  align-items: start;
+}
+.forum-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  overflow: visible;
+  background: transparent;
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+}
+.forum-row {
+  min-height: 124px;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 42px;
+  padding: 0;
+  overflow: hidden;
+}
+.forum-row-open {
+  min-width: 0;
+  display: grid;
+  grid-template-rows: 1fr auto;
+  gap: 12px;
+  padding: 18px 12px 18px 20px;
+  color: #4a1320;
+  background: transparent;
+  border: 0;
+  text-align: left;
+  cursor: pointer;
+}
+.forum-row-open:hover { background: rgba(255, 245, 229, 0.48); }
+.forum-row-open .forum-row-copy { grid-column: auto; }
+.forum-row-open .forum-row-meta { grid-column: auto; grid-row: auto; }
+.forum-bookmark-button {
+  width: 42px;
+  display: grid;
+  place-items: center;
+  align-self: stretch;
+  color: #8f1d32;
+  background: rgba(242, 216, 138, 0.26);
+  border: 0;
+  border-left: 1px solid rgba(74, 19, 32, 0.2);
+  cursor: pointer;
+}
+.forum-bookmark-button:hover { background: #f2d88a; }
+.forum-bookmark-button svg { width: 20px; height: 20px; }
+.forum-bookmark-button--saved { color: #fffaf0; background: #8f1d32; }
+.forum-bookmark-button--saved:hover { background: #a82a40; }
+.add-topic-button { white-space: nowrap; }
+.add-topic-form {
+  display: grid;
+  gap: 8px;
+  max-width: 700px;
+  margin: 0 0 18px;
+  padding: 20px;
+  color: #4a1320;
+  background: #fffaf0;
+  border: 1px solid #b99d89;
+  border-radius: 10px;
+  box-shadow: 3px 3px 0 rgba(74, 19, 32, 0.52);
+}
+.add-topic-heading { display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px; }
+.add-topic-heading h2 { margin: 0; font-family: "Caveat", cursive; font-size: 28px; }
+.add-topic-heading button { width: 36px; height: 36px; color: #4a1320; background: transparent; border: 0; cursor: pointer; font-size: 24px; }
+.add-topic-form label { margin-top: 4px; color: #806c61; font-size: 13px; font-weight: 700; }
+.add-topic-form input,
+.add-topic-form textarea,
+.add-topic-form select {
+  width: 100%;
+  padding: 10px 12px;
+  color: #4a1320;
+  background: #fff;
+  border: 1px solid #b99d89;
+  border-radius: 7px;
+  font: inherit;
+}
+.add-topic-form textarea { resize: vertical; }
+.add-topic-form input:focus,
+.add-topic-form textarea:focus,
+.add-topic-form select:focus { outline: 3px solid #e7c96b; outline-offset: 2px; }
+.add-topic-form .primary-action { justify-self: start; margin-top: 8px; }
+.popular-topics {
+  padding: 18px;
+  color: #4a1320;
+  background: #fffaf0;
+  border: 1px solid rgba(74, 19, 32, 0.48);
+  border-radius: 12px;
+  box-shadow: 3px 3px 0 rgba(74, 19, 32, 0.68);
+}
+.popular-heading { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding-bottom: 12px; border-bottom: 1px solid #eadcc8; }
+.popular-heading h2 { margin: 0; font-family: "Caveat", cursive; font-size: 25px; line-height: 1; }
+.popular-heading svg { width: 17px; height: 17px; color: #8f1d32; }
+.popular-topics > button { width: 100%; display: flex; flex-direction: column; gap: 5px; padding: 14px 0; color: #4a1320; background: transparent; border: 0; border-bottom: 1px solid #eadcc8; text-align: left; cursor: pointer; }
+.popular-topics > button:last-child { border-bottom: 0; padding-bottom: 0; }
+.popular-topics > button:hover span { color: #8f1d32; }
+.popular-topics > button span { font-size: 15px; font-weight: 700; }
+.popular-topics > button small { color: #806c61; font-size: 12px; }
 .recent-forum {
-  position: static;
   display: flex;
   align-items: center;
   justify-content: flex-start;
@@ -917,10 +1018,12 @@ button {
   .recent-forum .page-eyebrow { font-size: 9px; }
 }
 
-@media (min-width: 601px) and (max-width: 900px) {
-  .forum-list { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-  .recent-forum { position: static; margin: 0 0 12px; justify-content: flex-end; }
+@media (max-width: 900px) {
+  .forum-columns { grid-template-columns: 1fr; }
+  .popular-topics { order: 2; }
 }
+
+
 
 @media (forced-colors: active) {
   .forum-row:focus-visible,

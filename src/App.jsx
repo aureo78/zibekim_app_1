@@ -127,6 +127,12 @@ function PageContent({ activePage }) {
   const [forumQuery, setForumQuery] = useState("");
   const [newPost, setNewPost] = useState("");
   const [recentForumTitle, setRecentForumTitle] = useState(() => localStorage.getItem("zibekim-recent-forum") || "");
+  const [forumTopicsList, setForumTopicsList] = useState(forumTopics);
+  const [savedTopics, setSavedTopics] = useState(() => JSON.parse(localStorage.getItem("zibekim-saved-topics") || "[]"));
+  const [showAddTopic, setShowAddTopic] = useState(false);
+  const [newTopicTitle, setNewTopicTitle] = useState("");
+  const [newTopicDescription, setNewTopicDescription] = useState("");
+  const [newTopicCategory, setNewTopicCategory] = useState("Bendruomenė");
   const [forumPosts, setForumPosts] = useState(() => Object.fromEntries(forumTopics.map((forum) => [forum.title, forum.posts])));
 
   useEffect(() => {
@@ -152,6 +158,28 @@ function PageContent({ activePage }) {
       [selectedForum.title]: [...current[selectedForum.title], { username: "GeltonpilveVarle", name: "Auksė Varlytė", text, time: "ką tik" }],
     }));
     setNewPost("");
+  };
+
+  const toggleSavedTopic = (title) => {
+    setSavedTopics((current) => {
+      const next = current.includes(title) ? current.filter((item) => item !== title) : [...current, title];
+      localStorage.setItem("zibekim-saved-topics", JSON.stringify(next));
+      return next;
+    });
+  };
+
+  const addTopic = (event) => {
+    event.preventDefault();
+    const title = newTopicTitle.trim();
+    const description = newTopicDescription.trim();
+    if (!title || !description) return;
+    const topic = { title, description, comments: 0, time: "ką tik", category: newTopicCategory, posts: [] };
+    setForumTopicsList((current) => [topic, ...current]);
+    setForumPosts((current) => ({ ...current, [title]: [] }));
+    setNewTopicTitle("");
+    setNewTopicDescription("");
+    setNewTopicCategory("Bendruomenė");
+    setShowAddTopic(false);
   };
 
   if (activePage === "Pagrindinis") {
@@ -210,57 +238,21 @@ function PageContent({ activePage }) {
     Forumai: selectedForum ? (
       <main className="forum-subpage">
         <button className="back-to-forums" type="button" onClick={() => setSelectedForum(null)}>← Atgal į forumus</button>
-        <section className="forum-subpage-header">
-          <h1>{selectedForum.title}</h1>
-          <p>{selectedForum.description}</p>
-        </section>
+        <section className="forum-subpage-header"><h1>{selectedForum.title}</h1><p>{selectedForum.description}</p></section>
         <section className="discussion-list" aria-label={`Diskusija: ${selectedForum.title}`}>
           {(forumPosts[selectedForum.title] || []).map((post, index) => (
-            <article className="discussion-post" key={`${post.username}-${index}`}>
-              <div className="post-avatar" aria-hidden="true"><UserRound /></div>
-              <div className="post-content">
-                <div className="post-author"><strong>{post.name}</strong><span>@{post.username}</span><time>{post.time}</time></div>
-                <p>{post.text}</p>
-              </div>
-            </article>
+            <article className="discussion-post" key={`${post.username}-${index}`}><div className="post-avatar" aria-hidden="true"><UserRound /></div><div className="post-content"><div className="post-author"><strong>{post.name}</strong><span>@{post.username}</span><time>{post.time}</time></div><p>{post.text}</p></div></article>
           ))}
+          {!(forumPosts[selectedForum.title] || []).length && <p className="forum-empty">Šioje temoje dar nėra įrašų.</p>}
         </section>
-        <form className="new-post-form" onSubmit={publishPost}>
-          <div className="post-avatar post-avatar--current" aria-hidden="true"><UserRound /></div>
-          <div className="new-post-fields">
-            <label htmlFor="new-forum-post">Rašyti kaip <strong>@GeltonpilveVarle</strong></label>
-            <textarea id="new-forum-post" value={newPost} onChange={(event) => setNewPost(event.target.value)} placeholder="Parašyk ką nors diskusijoje..." rows="3" />
-            <div className="new-post-actions"><small>Būk pagarbus kitiems bendruomenės nariams.</small><button className="primary-action" type="submit" disabled={!newPost.trim()}><MessageCircle /> Siųsti</button></div>
-          </div>
-        </form>
+        <form className="new-post-form" onSubmit={publishPost}><div className="post-avatar post-avatar--current" aria-hidden="true"><UserRound /></div><div className="new-post-fields"><label htmlFor="new-forum-post">Rašyti kaip <strong>@GeltonpilveVarle</strong></label><textarea id="new-forum-post" value={newPost} onChange={(event) => setNewPost(event.target.value)} placeholder="Parašyk ką nors diskusijoje..." rows="3" /><div className="new-post-actions"><small>Būk pagarbus kitiems bendruomenės nariams.</small><button className="primary-action" type="submit" disabled={!newPost.trim()}><MessageCircle /> Siųsti</button></div></div></form>
       </main>
     ) : (
       <div className="forum-layout">
-        <div className="forum-toolbar">
-          <label className="forum-search">
-            <Search aria-hidden="true" />
-            <span className="sr-only">Ieškoti forumų temų</span>
-            <input value={forumQuery} onChange={(event) => setForumQuery(event.target.value)} placeholder="Ieškoti temų" />
-          </label>
-        </div>
-        <aside className="recent-forum" aria-label="Neseniai peržiūrėta">
-          <span className="page-eyebrow">NESENIAI PERŽIŪRĖTA</span>
-          {recentForumTitle ? (
-            <button type="button" onClick={() => openForum(forumTopics.find((forum) => forum.title === recentForumTitle) || forumTopics[0])}>{recentForumTitle} <ArrowUpRight /></button>
-          ) : <span className="recent-forum-empty">Dar nieko neperžiūrėjai</span>}
-        </aside>
-        <section className="forum-list" aria-label="Forumų temos">
-          {forumTopics.filter((forum) => `${forum.title} ${forum.description}`.toLocaleLowerCase().includes(forumQuery.toLocaleLowerCase())).map((forum) => (
-            <button className="forum-row" type="button" key={forum.title} onClick={() => openForum(forum)}>
-              <span className="forum-row-copy"><strong>{forum.title}</strong><small>{forum.description}</small></span>
-              <span className="forum-row-meta"><span><MessageSquareText /> {forumPosts[forum.title].length}</span><small>{forum.time}</small></span>
-              <Bookmark className="forum-bookmark" aria-hidden="true" />
-            </button>
-          ))}
-          {forumTopics.filter((forum) => `${forum.title} ${forum.description}`.toLocaleLowerCase().includes(forumQuery.toLocaleLowerCase())).length === 0 && (
-            <p className="forum-empty">Temų pagal šią paiešką nerasta.</p>
-          )}
-        </section>
+        <div className="forum-toolbar"><label className="forum-search"><Search aria-hidden="true" /><span className="sr-only">Ieškoti forumų temų</span><input value={forumQuery} onChange={(event) => setForumQuery(event.target.value)} placeholder="Ieškoti temų" /></label><button className="primary-action add-topic-button" type="button" onClick={() => setShowAddTopic((current) => !current)}><Plus /> Pridėti temą</button></div>
+        {showAddTopic && <form className="add-topic-form" onSubmit={addTopic}><div className="add-topic-heading"><h2>Pridėti naują temą</h2><button type="button" aria-label="Uždaryti temos formą" onClick={() => setShowAddTopic(false)}>×</button></div><label htmlFor="topic-title">Temos pavadinimas</label><input id="topic-title" value={newTopicTitle} onChange={(event) => setNewTopicTitle(event.target.value)} placeholder="Pvz., Mokyklos renginiai" required /><label htmlFor="topic-description">Trumpas aprašymas</label><textarea id="topic-description" value={newTopicDescription} onChange={(event) => setNewTopicDescription(event.target.value)} placeholder="Apie ką bus ši diskusija?" rows="3" required /><label htmlFor="topic-category">Kategorija</label><select id="topic-category" value={newTopicCategory} onChange={(event) => setNewTopicCategory(event.target.value)}><option>Bendruomenė</option><option>Mokykla</option><option>Naujienos</option><option>Idėjos</option></select><button className="primary-action" type="submit"><Plus /> Sukurti temą</button></form>}
+        <aside className="recent-forum" aria-label="Neseniai peržiūrėta"><span className="page-eyebrow">NESENIAI PERŽIŪRĖTA</span>{recentForumTitle ? <button type="button" onClick={() => openForum(forumTopicsList.find((forum) => forum.title === recentForumTitle) || forumTopicsList[0])}>{recentForumTitle} <ArrowUpRight /></button> : <span className="recent-forum-empty">Dar nieko neperžiūrėjai</span>}</aside>
+        <div className="forum-columns"><section className="forum-list" aria-label="Forumų temos">{forumTopicsList.filter((forum) => `${forum.title} ${forum.description}`.toLocaleLowerCase().includes(forumQuery.toLocaleLowerCase())).map((forum) => <article className="forum-row" key={forum.title}><button className="forum-row-open" type="button" onClick={() => openForum(forum)}><span className="forum-row-copy"><strong>{forum.title}</strong><small>{forum.description}</small></span><span className="forum-row-meta"><span><MessageSquareText /> {forumPosts[forum.title]?.length || 0}</span><small>{forum.time}</small></span></button><button className={`forum-bookmark-button ${savedTopics.includes(forum.title) ? "forum-bookmark-button--saved" : ""}`} type="button" aria-label={savedTopics.includes(forum.title) ? `Pašalinti ${forum.title} iš išsaugotų` : `Išsaugoti ${forum.title}`} aria-pressed={savedTopics.includes(forum.title)} onClick={() => toggleSavedTopic(forum.title)}><Bookmark /></button></article>)}{forumTopicsList.filter((forum) => `${forum.title} ${forum.description}`.toLocaleLowerCase().includes(forumQuery.toLocaleLowerCase())).length === 0 && <p className="forum-empty">Temų pagal šią paiešką nerasta.</p>}</section><aside className="popular-topics"><div className="popular-heading"><h2>Populiariausios temos</h2><ArrowUpRight /></div>{[...forumTopicsList].sort((a, b) => (forumPosts[b.title]?.length || 0) - (forumPosts[a.title]?.length || 0)).slice(0, 3).map((forum) => <button type="button" key={forum.title} onClick={() => openForum(forum)}><span>{forum.title}</span><small>{forumPosts[forum.title]?.length || 0} komentarai</small></button>)}</aside></div>
       </div>
     ),
     Apklausos: (
