@@ -243,6 +243,12 @@ function PageContent({ activePage }) {
             <input value={forumQuery} onChange={(event) => setForumQuery(event.target.value)} placeholder="Ieškoti temų" />
           </label>
         </div>
+        <aside className="recent-forum" aria-label="Neseniai peržiūrėta">
+          <span className="page-eyebrow">NESENIAI PERŽIŪRĖTA</span>
+          {recentForumTitle ? (
+            <button type="button" onClick={() => openForum(forumTopics.find((forum) => forum.title === recentForumTitle) || forumTopics[0])}>{recentForumTitle} <ArrowUpRight /></button>
+          ) : <span className="recent-forum-empty">Dar nieko neperžiūrėjai</span>}
+        </aside>
         <section className="forum-list" aria-label="Forumų temos">
           {forumTopics.filter((forum) => `${forum.title} ${forum.description}`.toLocaleLowerCase().includes(forumQuery.toLocaleLowerCase())).map((forum) => (
             <button className="forum-row" type="button" key={forum.title} onClick={() => openForum(forum)}>
@@ -255,12 +261,6 @@ function PageContent({ activePage }) {
             <p className="forum-empty">Temų pagal šią paiešką nerasta.</p>
           )}
         </section>
-        <aside className="recent-forum" aria-label="Neseniai peržiūrėta">
-          <span className="page-eyebrow">NESENIAI PERŽIŪRĖTA</span>
-          {recentForumTitle ? (
-            <button type="button" onClick={() => openForum(forumTopics.find((forum) => forum.title === recentForumTitle) || forumTopics[0])}>{recentForumTitle} <ArrowUpRight /></button>
-          ) : <span className="recent-forum-empty">Dar nieko neperžiūrėjai</span>}
-        </aside>
       </div>
     ),
     Apklausos: (

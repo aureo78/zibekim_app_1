@@ -789,12 +789,12 @@ button {
 .forum-bookmark { grid-column: 2; grid-row: 2; justify-self: end; }
 
 .recent-forum {
-  position: absolute;
-  top: -58px;
-  right: 0;
+  position: static;
   display: flex;
   align-items: center;
+  justify-content: flex-start;
   gap: 12px;
+  margin: 0 0 16px;
 }
 .recent-forum button {
   min-height: 44px;
