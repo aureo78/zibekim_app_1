@@ -2,6 +2,7 @@ import { useState } from "react";
 import {
   AlertTriangle,
   ArrowUpRight,
+  Bookmark,
   CheckCircle2,
   ClipboardList,
   Clock3,
@@ -14,9 +15,7 @@ import {
   Plus,
   Search,
   Settings,
-  ShieldCheck,
   UserRound,
-  Users,
   Vote,
 } from "lucide-react";
 import "./App.css";
@@ -84,6 +83,7 @@ function LogoMark() {
 
 function PageContent({ activePage }) {
   const page = pageContent[activePage];
+  const [selectedForum, setSelectedForum] = useState(null);
 
   if (activePage === "Pagrindinis") {
     return (
@@ -139,7 +139,37 @@ function PageContent({ activePage }) {
       </div>
     ),
     Forumai: (
-      <div className="forum-grid"><article className="forum-card"><Users /><h2>Mokyklos gyvenimas</h2><p>Idėjos ir klausimai apie kasdienę mokyklos aplinką.</p><strong>18 temų · 42 dalyviai</strong></article><article className="forum-card"><ShieldCheck /><h2>Saugus dalyvavimas</h2><p>Moderuojama erdvė kalbėtis pagarbiai ir konstruktyviai.</p><strong>7 temos · 19 dalyvių</strong></article><article className="forum-card"><MessageSquareText /><h2>Studentų atstovybė</h2><p>Klausimai atstovams ir naujienos apie sprendimus.</p><strong>11 temų · 35 dalyviai</strong></article></div>
+      <div className="forum-layout">
+        <section className="forum-list" aria-label="Forumų temos">
+          {[
+            { title: "Mokyklos aplinka", description: "Kalbėkimės apie erdves, kasdienybę ir tai, ką galime pagerinti mokykloje.", comments: 34, time: "prieš 1 val." },
+            { title: "Tech naujienos", description: "Naujienos, įrankiai ir klausimai apie technologijas bei jų poveikį mokyklai.", comments: 27, time: "prieš 2 val." },
+            { title: "Pasaulio naujienos", description: "Dalinkimės svarbiausiomis pasaulio naujienomis ir savo požiūriu į jas.", comments: 64, time: "prieš 3 val." },
+            { title: "Lietuvos naujienos", description: "Kas vyksta Lietuvoje? Aptarkime aktualijas pagarbiai ir atsakingai.", comments: 19, time: "prieš 4 val." },
+          ].map((forum) => (
+            <button className="forum-row" type="button" key={forum.title} onClick={() => setSelectedForum(forum)}>
+              <span className="forum-row-copy"><strong>{forum.title}</strong><small>{forum.description}</small></span>
+              <span className="forum-row-meta"><span><MessageSquareText /> {forum.comments}</span><small>{forum.time}</small></span>
+              <Bookmark className="forum-bookmark" aria-hidden="true" />
+            </button>
+          ))}
+        </section>
+        <aside className="recent-forum" aria-label="Neseniai peržiūrėta">
+          <span className="page-eyebrow">NESENIAI PERŽIŪRĖTA</span>
+          <button type="button" onClick={() => setSelectedForum({ title: "Mokyklos aplinka", description: "Kalbėkimės apie erdves, kasdienybę ir tai, ką galime pagerinti mokykloje.", comments: 34, time: "prieš 1 val." })}>Mokyklos aplinka <ArrowUpRight /></button>
+        </aside>
+        {selectedForum && (
+          <div className="forum-dialog-backdrop" role="presentation" onClick={() => setSelectedForum(null)}>
+            <section className="forum-dialog" role="dialog" aria-modal="true" aria-labelledby="forum-dialog-title" onClick={(event) => event.stopPropagation()}>
+              <button className="forum-dialog-close" type="button" aria-label="Uždaryti diskusiją" onClick={() => setSelectedForum(null)}>×</button>
+              <span className="page-eyebrow">DISKUSIJA</span>
+              <h2 id="forum-dialog-title">{selectedForum.title}</h2>
+              <p>{selectedForum.description}</p>
+              <div className="forum-dialog-thread"><MessageSquareText /><strong>{selectedForum.comments} komentarai</strong><small>Prisijunk prie diskusijos ir pasidalink savo nuomone.</small></div>
+            </section>
+          </div>
+        )}
+      </div>
     ),
     Apklausos: (
       <div className="list-card"><div className="card-heading"><h2>Aktyvios apklausos</h2><ClipboardList /></div><div className="poll-card"><div><span className="tag">AKTYVI</span><h2>Kaip pagerinti mokyklos bendras erdves?</h2><p>Pasirink vieną variantą. Apklausa baigsis po 3 dienų.</p></div><div className="poll-options"><button type="button">Daugiau sėdimų vietų <span>42%</span></button><button type="button">Daugiau žalumos <span>31%</span></button><button type="button">Ramesnės zonos <span>27%</span></button></div></div></div>

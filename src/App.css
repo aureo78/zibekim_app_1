@@ -622,6 +622,62 @@ button {
 .forum-card h2 { margin-top: 32px; }
 .forum-card strong { font-family: Arial, sans-serif; font-size: 14px; }
 
+.forum-layout {
+  position: relative;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.forum-list {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  background: #fffaf0;
+  border: 2px solid #4a1320;
+  border-radius: 16px;
+  box-shadow: 3px 3px 0 rgba(74, 19, 32, 0.85);
+}
+
+.forum-row {
+  width: 100%;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 112px 28px;
+  align-items: center;
+  gap: 22px;
+  padding: 20px 22px;
+  color: #4a1320;
+  background: transparent;
+  border: 0;
+  border-bottom: 1px solid #eadcc8;
+  text-align: left;
+  cursor: pointer;
+}
+.forum-row:last-child { border-bottom: 0; }
+.forum-row:hover { background: #fff5e5; }
+.forum-row-copy,
+.forum-row-meta { display: flex; flex-direction: column; gap: 6px; }
+.forum-row-copy strong { font-size: 20px; line-height: 1.2; }
+.forum-row-copy small,
+.forum-row-meta small { color: #806c61; font-size: 13px; line-height: 1.35; }
+.forum-row-meta { align-items: flex-start; }
+.forum-row-meta span { display: flex; align-items: center; gap: 6px; font-weight: 700; }
+.forum-row-meta svg,
+.forum-bookmark { width: 19px; height: 19px; color: #8f1d32; }
+.forum-bookmark { justify-self: end; }
+
+.recent-forum { position: absolute; top: -58px; right: 0; display: flex; align-items: center; gap: 12px; }
+.recent-forum button { display: inline-flex; align-items: center; gap: 5px; padding: 5px 0; color: #4a1320; background: transparent; border: 0; border-bottom: 1px solid #8f1d32; cursor: pointer; font-weight: 700; }
+.recent-forum button svg { width: 15px; height: 15px; }
+
+.forum-dialog-backdrop { position: fixed; inset: 0; z-index: 10; display: grid; place-items: center; padding: 20px; background: rgba(74, 19, 32, 0.42); }
+.forum-dialog { position: relative; width: min(560px, 100%); padding: 32px; color: #4a1320; background: #fffaf0; border: 2px solid #4a1320; border-radius: 16px; box-shadow: 5px 5px 0 #4a1320; }
+.forum-dialog h2 { margin: 12px 0 8px; font-size: 30px; }
+.forum-dialog p { margin: 0; color: #806c61; line-height: 1.5; }
+.forum-dialog-close { position: absolute; top: 10px; right: 14px; color: #4a1320; background: transparent; border: 0; cursor: pointer; font-size: 28px; }
+.forum-dialog-thread { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin-top: 26px; padding-top: 18px; border-top: 1px solid #eadcc8; }
+.forum-dialog-thread svg { color: #8f1d32; }
+.forum-dialog-thread small { flex-basis: 100%; color: #806c61; }
+
 .poll-card {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -709,5 +765,11 @@ button {
   .activity-card { grid-column: auto; }
   .issue-row,
   .idea-row { flex-wrap: wrap; }
+  .forum-row { grid-template-columns: minmax(0, 1fr) 86px 22px; gap: 10px; padding: 16px 14px; }
+  .forum-row-copy strong { font-size: 17px; }
+  .forum-row-copy small { font-size: 12px; }
+  .forum-row-meta small { font-size: 11px; }
+  .recent-forum { position: static; margin: 0 0 12px; justify-content: flex-end; font-size: 12px; }
+  .recent-forum .page-eyebrow { font-size: 9px; }
   .vote-button { margin-left: 74px; }
 }
