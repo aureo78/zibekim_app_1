@@ -31,10 +31,44 @@ const navigationItems = [
 ];
 
 const forumTopics = [
-  { title: "Mokyklos aplinka", description: "Kalbėkimės apie erdves, kasdienybę ir tai, ką galime pagerinti mokykloje.", comments: 34, time: "prieš 1 val." },
-  { title: "Tech naujienos", description: "Naujienos, įrankiai ir klausimai apie technologijas bei jų poveikį mokyklai.", comments: 27, time: "prieš 2 val." },
-  { title: "Pasaulio naujienos", description: "Dalinkimės svarbiausiomis pasaulio naujienomis ir savo požiūriu į jas.", comments: 64, time: "prieš 3 val." },
-  { title: "Lietuvos naujienos", description: "Kas vyksta Lietuvoje? Aptarkime aktualijas pagarbiai ir atsakingai.", comments: 19, time: "prieš 4 val." },
+  {
+    title: "Mokyklos aplinka",
+    description: "Kalbėkimės apie erdves, kasdienybę ir tai, ką galime pagerinti mokykloje.",
+    comments: 34,
+    time: "prieš 1 val.",
+    posts: [
+      { username: "AustejaM", name: "Austėja M.", text: "Gal galėtume prie bibliotekos įrengti daugiau vietų mokytis pertraukų metu?", time: "prieš 1 val." },
+      { username: "TomasK", name: "Tomas K.", text: "Pritariu. Taip pat būtų naudinga turėti daugiau lizdų kompiuteriams įkrauti.", time: "prieš 42 min." },
+    ],
+  },
+  {
+    title: "Tech naujienos",
+    description: "Naujienos, įrankiai ir klausimai apie technologijas bei jų poveikį mokyklai.",
+    comments: 27,
+    time: "prieš 2 val.",
+    posts: [
+      { username: "LukasT", name: "Lukas T.", text: "Ar jau išbandėte naują mokyklos bibliotekos katalogą? Paieška tapo daug patogesnė.", time: "prieš 2 val." },
+      { username: "GretaV", name: "Greta V.", text: "Taip, ypač patinka, kad galima matyti, kada knyga grįš.", time: "prieš 1 val." },
+    ],
+  },
+  {
+    title: "Pasaulio naujienos",
+    description: "Dalinkimės svarbiausiomis pasaulio naujienomis ir savo požiūriu į jas.",
+    comments: 64,
+    time: "prieš 3 val.",
+    posts: [
+      { username: "EmilijaR", name: "Emilija R.", text: "Kurią šios savaitės pasaulio naujieną laikote svarbiausia?", time: "prieš 3 val." },
+    ],
+  },
+  {
+    title: "Lietuvos naujienos",
+    description: "Kas vyksta Lietuvoje? Aptarkime aktualijas pagarbiai ir atsakingai.",
+    comments: 19,
+    time: "prieš 4 val.",
+    posts: [
+      { username: "MatasP", name: "Matas P.", text: "Kokie sprendimai, jūsų nuomone, labiausiai paveiks mokinius šiais metais?", time: "prieš 4 val." },
+    ],
+  },
 ];
 const pageContent = {
   Pagrindinis: {
@@ -63,9 +97,9 @@ const pageContent = {
     description: "Siūlyk pokyčius, paaiškink jų naudą ir balsuok už svarbiausius.",
   },
   Forumai: {
-    eyebrow: "MOKYKLOS BENDRUOMENĖ",
+    eyebrow: "",
     title: "Forumai",
-    description: "Moderuojamos diskusijos apie mokyklos gyvenimą ir bendrus klausimus.",
+    description: "",
   },
   Apklausos: {
     eyebrow: "TAVO NUOMONĖ",
@@ -91,7 +125,9 @@ function PageContent({ activePage }) {
   const page = pageContent[activePage];
   const [selectedForum, setSelectedForum] = useState(null);
   const [forumQuery, setForumQuery] = useState("");
+  const [newPost, setNewPost] = useState("");
   const [recentForumTitle, setRecentForumTitle] = useState(() => localStorage.getItem("zibekim-recent-forum") || "");
+  const [forumPosts, setForumPosts] = useState(() => Object.fromEntries(forumTopics.map((forum) => [forum.title, forum.posts])));
 
   useEffect(() => {
     if (!selectedForum) return undefined;
@@ -102,8 +138,20 @@ function PageContent({ activePage }) {
 
   const openForum = (forum) => {
     setSelectedForum(forum);
+    setNewPost("");
     setRecentForumTitle(forum.title);
     localStorage.setItem("zibekim-recent-forum", forum.title);
+  };
+
+  const publishPost = (event) => {
+    event.preventDefault();
+    const text = newPost.trim();
+    if (!text || !selectedForum) return;
+    setForumPosts((current) => ({
+      ...current,
+      [selectedForum.title]: [...current[selectedForum.title], { username: "GeltonpilveVarle", name: "Auksė Varlytė", text, time: "ką tik" }],
+    }));
+    setNewPost("");
   };
 
   if (activePage === "Pagrindinis") {
@@ -159,13 +207,36 @@ function PageContent({ activePage }) {
         <div className="idea-row"><div className="vote-box"><Vote /><strong>18</strong><small>balsų</small></div><div><strong>Ramesnė poilsio erdvė</strong><p>Skirti nedidelį kampą mokiniams, kuriems reikia ramybės pertraukų metu.</p><small>Siūlo Aistė · nagrinėjama</small></div><button className="vote-button" type="button">Balsuoti</button></div>
       </div>
     ),
-    Forumai: (
+    Forumai: selectedForum ? (
+      <main className="forum-subpage">
+        <button className="back-to-forums" type="button" onClick={() => setSelectedForum(null)}>← Atgal į forumus</button>
+        <section className="forum-subpage-header">
+          <h1>{selectedForum.title}</h1>
+          <p>{selectedForum.description}</p>
+        </section>
+        <section className="discussion-list" aria-label={`Diskusija: ${selectedForum.title}`}>
+          {(forumPosts[selectedForum.title] || []).map((post, index) => (
+            <article className="discussion-post" key={`${post.username}-${index}`}>
+              <div className="post-avatar" aria-hidden="true"><UserRound /></div>
+              <div className="post-content">
+                <div className="post-author"><strong>{post.name}</strong><span>@{post.username}</span><time>{post.time}</time></div>
+                <p>{post.text}</p>
+              </div>
+            </article>
+          ))}
+        </section>
+        <form className="new-post-form" onSubmit={publishPost}>
+          <div className="post-avatar post-avatar--current" aria-hidden="true"><UserRound /></div>
+          <div className="new-post-fields">
+            <label htmlFor="new-forum-post">Rašyti kaip <strong>@GeltonpilveVarle</strong></label>
+            <textarea id="new-forum-post" value={newPost} onChange={(event) => setNewPost(event.target.value)} placeholder="Parašyk ką nors diskusijoje..." rows="3" />
+            <div className="new-post-actions"><small>Būk pagarbus kitiems bendruomenės nariams.</small><button className="primary-action" type="submit" disabled={!newPost.trim()}><MessageCircle /> Siųsti</button></div>
+          </div>
+        </form>
+      </main>
+    ) : (
       <div className="forum-layout">
         <div className="forum-toolbar">
-          <div>
-            <span className="page-eyebrow">TEMŲ SĄRAŠAS</span>
-            <h2>Pasirink diskusiją</h2>
-          </div>
           <label className="forum-search">
             <Search aria-hidden="true" />
             <span className="sr-only">Ieškoti forumų temų</span>
@@ -176,7 +247,7 @@ function PageContent({ activePage }) {
           {forumTopics.filter((forum) => `${forum.title} ${forum.description}`.toLocaleLowerCase().includes(forumQuery.toLocaleLowerCase())).map((forum) => (
             <button className="forum-row" type="button" key={forum.title} onClick={() => openForum(forum)}>
               <span className="forum-row-copy"><strong>{forum.title}</strong><small>{forum.description}</small></span>
-              <span className="forum-row-meta"><span><MessageSquareText /> {forum.comments}</span><small>{forum.time}</small></span>
+              <span className="forum-row-meta"><span><MessageSquareText /> {forumPosts[forum.title].length}</span><small>{forum.time}</small></span>
               <Bookmark className="forum-bookmark" aria-hidden="true" />
             </button>
           ))}
@@ -190,17 +261,6 @@ function PageContent({ activePage }) {
             <button type="button" onClick={() => openForum(forumTopics.find((forum) => forum.title === recentForumTitle) || forumTopics[0])}>{recentForumTitle} <ArrowUpRight /></button>
           ) : <span className="recent-forum-empty">Dar nieko neperžiūrėjai</span>}
         </aside>
-        {selectedForum && (
-          <div className="forum-dialog-backdrop" role="presentation" onClick={() => setSelectedForum(null)}>
-            <section className="forum-dialog" role="dialog" aria-modal="true" aria-labelledby="forum-dialog-title" onClick={(event) => event.stopPropagation()}>
-              <button className="forum-dialog-close" type="button" aria-label="Uždaryti temos peržiūrą" onClick={() => setSelectedForum(null)}>×</button>
-              <span className="page-eyebrow">TEMOS PERŽIŪRA</span>
-              <h2 id="forum-dialog-title">{selectedForum.title}</h2>
-              <p>{selectedForum.description}</p>
-              <div className="forum-dialog-thread"><MessageSquareText /><strong>{selectedForum.comments} komentarai</strong><small>Diskusiją gali pradėti bet kuris mokyklos bendruomenės narys.</small></div>
-            </section>
-          </div>
-        )}
       </div>
     ),
     Apklausos: (
@@ -208,7 +268,7 @@ function PageContent({ activePage }) {
     ),
   };
 
-  return <main className="content-area"><section className="page-intro"><div><span className="page-eyebrow">{page.eyebrow}</span><h1>{page.title}</h1><p>{page.description}</p></div>{activePage !== "Forumai" && <button className="primary-action" type="button"><Search /> Ieškoti</button>}</section>{pageViews[activePage]}</main>;
+  return <main className="content-area">{activePage !== "Forumai" && <section className="page-intro"><div><span className="page-eyebrow">{page.eyebrow}</span><h1>{page.title}</h1><p>{page.description}</p></div><button className="primary-action" type="button"><Search /> Ieškoti</button></section>}{pageViews[activePage]}</main>;
 }
 
 function App() {
