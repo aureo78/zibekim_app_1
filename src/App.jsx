@@ -287,6 +287,7 @@ function App() {
           </div>
         </div>
 
+        <div className="page-title" aria-live="polite">{activePage}</div>
         <div className="profile-menu">
           <details>
             <summary className="profile-summary">

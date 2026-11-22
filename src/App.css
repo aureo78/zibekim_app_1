@@ -44,6 +44,18 @@ button {
   z-index: 2;
 }
 
+.page-title {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  color: #4a1320;
+  font-family: "Caveat", cursive;
+  font-size: 30px;
+  font-weight: 700;
+  line-height: 1;
+  pointer-events: none;
+}
+
 .brand-header {
   display: flex;
   align-items: center;
@@ -162,15 +174,16 @@ button {
 .sidebar {
   grid-column: 1;
   grid-row: 2;
-  width: 210px;
+  width: 78px;
   min-height: calc(100vh - 82px);
   display: flex;
   flex-direction: column;
-  align-items: stretch;
+  align-items: center;
   gap: 10px;
-  padding: 18px 16px;
+  padding: 18px 12px;
   background: #fffaf0;
   border-right: 0;
+  transition: width 180ms ease, padding 180ms ease;
 }
 
 .sidebar:hover {
@@ -180,33 +193,36 @@ button {
 }
 
 .navigation-button {
-  width: 100%;
+  width: 46px;
   min-height: 46px;
   display: flex;
   align-items: center;
-  justify-content: flex-start;
+  justify-content: center;
   gap: 10px;
-  padding: 6px 10px;
+  padding: 6px;
   color: #fffaf0;
   background: #8f1d32;
   border: 2px solid #4a1320;
   border-radius: 8px;
   box-shadow: 2px 2px 0 #4a1320;
   cursor: pointer;
-  transition: transform 120ms ease, box-shadow 120ms ease, background 120ms ease;
+  transition: width 180ms ease, transform 120ms ease, box-shadow 120ms ease, background 120ms ease;
 }
 
 .sidebar .navigation-button span,
-.sidebar .sidebar-version,
-.sidebar:hover .navigation-button span,
-.sidebar:hover .sidebar-version {
-  display: block;
+.sidebar .sidebar-version {
+  display: none;
 }
 
 .sidebar:hover .navigation-button {
   width: 100%;
   justify-content: flex-start;
   padding: 6px 10px;
+}
+
+.sidebar:hover .navigation-button span,
+.sidebar:hover .sidebar-version {
+  display: block;
 }
 
 .navigation-button:hover {
@@ -849,6 +865,7 @@ button {
     position: static;
     width: 100%;
   }
+  .page-title { position: static; transform: none; margin: 0 auto; font-size: 26px; }
   .sidebar {
     position: static;
     width: 100%;
