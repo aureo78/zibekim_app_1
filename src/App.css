@@ -569,15 +569,18 @@ a {
 .message-rooms .message-topic { margin-bottom: 3px; }
 .message-rooms .new-topic-form { margin-top: 12px; }
 
-.message-filter-wrap { position: relative; display: inline-block; margin: 0 5px 12px 16px; }
-.message-filter-toggle { display: inline-flex; align-items: center; gap: 6px; padding: 7px 10px; color: #4a1320; background: #f3e4cc; border: 1px solid #c7ad91; border-radius: 6px; font: inherit; font-size: 11px; }
+.messages-tools-row { display: flex; align-items: stretch; gap: 8px; padding: 16px 16px 0; }
+.messages-tools-row .messages-search { min-width: 0; flex: 1; margin: 0; height: 34px; box-sizing: border-box; }
+.messages-tools-row .message-filter-wrap { flex: 0 0 auto; margin: 0; }
+.message-create-row { padding: 10px 16px 12px; }
+.message-create-group { display: inline-grid; width: 34px; height: 34px; margin: 0; padding: 0; place-items: center; }
+.message-create-group svg { width: 17px; }
+.message-filter-toggle { display: inline-flex; align-items: center; gap: 6px; padding: 0 10px; color: #4a1320; background: #f3e4cc; border: 1px solid #c7ad91; border-radius: 7px; font: inherit; font-size: 11px; }
 .message-filter-toggle svg { width: 15px; }
-.message-filter-sheet { position: absolute; z-index: 8; top: calc(100% + 4px); left: 0; display: none; min-width: 150px; padding: 5px; background: #fffaf0; border: 1px solid #4a1320; border-radius: 7px; box-shadow: 3px 3px 0 #4a1320; }
+.message-filter-sheet { position: absolute; z-index: 8; top: calc(100% + 4px); right: 0; display: none; min-width: 150px; padding: 5px; background: #fffaf0; border: 1px solid #4a1320; border-radius: 7px; box-shadow: 3px 3px 0 #4a1320; }
 .message-filter-wrap:hover .message-filter-sheet, .message-filter-wrap:focus-within .message-filter-sheet { display: grid; }
 .message-filter-sheet button { padding: 8px 10px; color: #4a1320; background: transparent; border: 0; border-radius: 4px; font: inherit; font-size: 12px; text-align: left; }
 .message-filter-sheet button:hover, .message-filter-sheet button.message-filter--active { color: #fffaf0; background: #4a1320; }
-.message-create-group { display: inline-grid; width: 30px; height: 30px; margin: 0 0 12px 0; padding: 0; place-items: center; vertical-align: top; }
-.message-create-group svg { width: 17px; }
 .group-create-form { display: grid; width: min(480px, 100%); gap: 14px; margin-top: 22px; text-align: left; }
 .group-create-form label { display: grid; gap: 6px; color: #4a1320; font-size: 12px; font-weight: 700; }
 .group-create-form input, .group-create-form textarea, .group-create-form select { width: 100%; box-sizing: border-box; padding: 10px 12px; color: #4a1320; background: #fffaf0; border: 1px solid #bfa994; border-radius: 6px; font: inherit; font-weight: 400; }
