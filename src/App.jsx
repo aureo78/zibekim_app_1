@@ -260,7 +260,7 @@ function PageContent({ activePage }) {
     ),
   };
 
-  return <main className="content-area">{activePage !== "Forumai" && <section className="page-intro"><div><span className="page-eyebrow">{page.eyebrow}</span><h1>{page.title}</h1><p>{page.description}</p></div><button className="primary-action" type="button"><Search /> Ieškoti</button></section>}{pageViews[activePage]}</main>;
+  return <main className="content-area"><section className={`page-intro ${activePage === "Forumai" ? "page-intro--forumai" : ""}`}><div><h1>{page.title}</h1>{page.description && <p>{page.description}</p>}</div>{activePage !== "Forumai" && <button className="primary-action" type="button"><Search /> Ieškoti</button>}</section>{pageViews[activePage]}</main>;
 }
 
 function App() {
@@ -279,7 +279,6 @@ function App() {
           </div>
         </div>
 
-        <div className="page-title" aria-live="polite">{activePage}</div>
         <div className="profile-menu">
           <details>
             <summary className="profile-summary">

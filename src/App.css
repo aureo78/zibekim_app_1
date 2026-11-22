@@ -302,6 +302,9 @@ button {
   letter-spacing: 0.13em;
 }
 
+.page-intro--forumai { margin-bottom: 22px; }
+.page-intro--forumai h1 { margin-top: 0; }
+
 .page-intro h1 {
   margin: 7px 0 4px;
   font-family: "Caveat", cursive;
