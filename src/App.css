@@ -841,7 +841,46 @@ button {
 }
 
 @media (max-width: 600px) {
-  .content-area { height: auto; min-height: calc(100vh - 82px); overflow: visible; }
+  .app {
+    display: block;
+    min-height: 100vh;
+  }
+  .topbar {
+    position: static;
+    width: 100%;
+  }
+  .sidebar {
+    position: static;
+    width: 100%;
+    min-height: auto;
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 8px;
+    padding: 12px;
+  }
+  .sidebar:hover {
+    width: 100%;
+    padding: 12px;
+  }
+  .sidebar .navigation-button,
+  .sidebar:hover .navigation-button {
+    width: 100%;
+    min-height: 44px;
+    justify-content: center;
+    padding: 6px;
+  }
+  .sidebar .navigation-button span,
+  .sidebar:hover .navigation-button span {
+    display: none;
+  }
+  .sidebar .settings-button,
+  .sidebar .sidebar-version { display: none; }
+  .content-area {
+    height: auto;
+    min-height: 0;
+    overflow: visible;
+    padding-top: 24px;
+  }
   .forum-layout { --forum-row-padding: 18px 16px; }
   .forum-toolbar { align-items: stretch; flex-direction: column; gap: 14px; }
   .forum-search { min-width: 0; }
