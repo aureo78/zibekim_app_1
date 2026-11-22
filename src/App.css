@@ -569,20 +569,18 @@ a {
 .message-rooms .message-topic { margin-bottom: 3px; }
 .message-rooms .new-topic-form { margin-top: 12px; }
 
-.messages-sidebar-top { display: flex; align-items: flex-start; justify-content: space-between; padding: 22px 20px 14px; }
-.messages-sidebar-top h2, .conversation-header h2 { margin: 3px 0 0; color: #4a1320; font-family: "Caveat", cursive; font-size: 32px; }
-.messages-kicker { color: #b3213a; font-size: 10px; font-weight: 800; letter-spacing: .16em; }
-.icon-action, .conversation-more { display: grid; width: 38px; height: 38px; place-items: center; color: #4a1320; background: #f3e4cc; border: 1px solid #4a1320; border-radius: 50%; }
-.icon-action svg { width: 18px; }
-.messages-search { display: flex; align-items: center; gap: 8px; margin: 0 16px 12px; padding: 9px 11px; color: #806c61; background: #f8f1df; border: 1px solid #d7c5b1; border-radius: 8px; }
+.messages-sidebar-top { display: flex; align-items: center; gap: 8px; padding: 0 16px 12px; }
+.messages-sidebar-top .icon-action { width: 32px; height: 32px; flex: 0 0 32px; }
+.messages-sidebar-top .icon-action svg { width: 15px; }
+.message-filter-menu { position: relative; flex: 1; margin: 0; }
+.message-filter-trigger { width: auto; min-width: 0; padding: 6px 8px; font-size: 11px; }
+.message-filter-trigger span { font-size: 14px; }
+.message-filter-options { left: 0; right: auto; width: 150px; }
+.message-filter-menu:hover .message-filter-options, .message-filter-menu:focus-within .message-filter-options { display: block; }
 .messages-search svg { width: 16px; }
 .messages-search input { width: 100%; min-width: 0; color: #4a1320; background: transparent; border: 0; outline: 0; font: inherit; }
-.message-filter-menu { position: relative; margin: 0 16px 12px; }
-.message-filter-trigger { display: flex; width: 100%; align-items: center; justify-content: space-between; gap: 8px; padding: 9px 11px; color: #4a1320; background: #f8f1df; border: 1px solid #d7c5b1; border-radius: 8px; font: inherit; font-size: 12px; text-align: left; }
-.message-filter-trigger span { color: #806c61; font-size: 16px; }
-.message-filter-options { position: absolute; z-index: 5; top: calc(100% + 4px); right: 0; left: 0; padding: 5px; background: #fffaf0; border: 1px solid #4a1320; border-radius: 8px; box-shadow: 3px 3px 0 #4a1320; }
-.message-filter-options button { display: block; width: 100%; padding: 8px 10px; color: #4a1320; background: transparent; border: 0; border-radius: 5px; font: inherit; font-size: 12px; text-align: left; }
-.message-filter-options button:hover, .message-filter-options button.message-filter--active { color: #fffaf0; background: #4a1320; }
+.message-filter-options { position: absolute; z-index: 5; top: calc(100% + 4px); right: 0; left: 0; padding: 5px; background: #fffaf0; border: 1px solid #4a1320; border-radius: 8px; box-shadow: 3px 3px 0 #4a1320; display: none; }
+.message-filter-options--open, .message-filter-menu:hover .message-filter-options, .message-filter-menu:focus-within .message-filter-options { display: block; }
 .new-message-panel { margin: 0 12px 12px; padding: 12px; background: #f3e4cc; border: 1px solid #c7ad91; border-radius: 8px; }
 .new-message-panel > strong { display: block; margin-bottom: 8px; color: #4a1320; }
 .new-message-panel .messages-search { margin: 0 0 8px; background: #fffaf0; }
@@ -613,7 +611,8 @@ a {
 .conversation-header h2 { font-size: 30px; }
 .profile-page { display: flex; width: min(720px, 100%); min-height: 650px; margin: 0 auto; padding: 42px 28px; align-items: center; flex-direction: column; color: #4a1320; text-align: center; }
 .profile-back { align-self: flex-start; padding: 8px 12px; color: #4a1320; background: #f3e4cc; border: 1px solid #4a1320; border-radius: 6px; font: inherit; }
-.profile-avatar { width: 86px; height: 86px; margin-top: 42px; font-size: 22px; }
+.profile-page .profile-avatar { width: 40px; height: 40px; margin-top: 42px; font-size: 12px; }
+.profile-page .profile-avatar svg { width: 20px; height: 20px; }
 .profile-page h1 { margin: 18px 0 0; font-family: "Caveat", cursive; font-size: 42px; }
 .profile-username { margin: 2px 0 24px; color: #806c61; }
 .profile-details { display: flex; width: min(460px, 100%); justify-content: center; gap: 12px; margin-bottom: 24px; }
