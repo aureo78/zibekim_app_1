@@ -312,30 +312,23 @@ function PageContent({ activePage, onOpenMessages }) {
   };
 
   if (activePage === "Pagrindinis") {
+    const landingWord = "ŽIBĖKIM";
     return (
-      <main className="content-area">
-        <section className="page-intro">
-          <div>
+      <main className="content-area content-area--home">
+        <section className="home-landing" aria-labelledby="home-landing-title">
+          <div className="home-landing-copy">
             <span className="page-eyebrow">{page.eyebrow}</span>
-            <h1>{page.title}</h1>
-            <p>{page.description}</p>
+            <h1 id="home-landing-title" className="home-landing-title" aria-label={landingWord}>
+              {Array.from(landingWord).map((letter, index) => <span className="home-letter" style={{ "--letter-index": index }} key={`${letter}-${index}`}>{letter}</span>)}
+            </h1>
+            <p className="home-landing-subtitle">{page.title}</p>
+            <p className="home-landing-description">{page.description}</p>
+            <button className="primary-action home-start-action" type="button"><Plus /> Pradėti</button>
           </div>
-          <button className="primary-action" type="button"><Plus /> Pradėti</button>
+          <span className="home-spark" aria-hidden="true">✦</span>
+          <span className="home-landing-note" aria-hidden="true">Mokyklos balsas juda pirmyn</span>
         </section>
-        <section className="weekly-summary-hero" aria-labelledby="weekly-summary-title">
-          <img src={`${import.meta.env.BASE_URL}weekly-summary.png`} alt="Mokyklos bendruomenė susibūrusi lauko renginyje" />
-          <div className="weekly-summary-overlay" aria-hidden="true">
-            <span className="weekly-summary-line weekly-summary-line--top" />
-            <span className="weekly-summary-word" data-word="ŽIBĖKIM">ŽIBĖKIM</span>
-            <span className="weekly-summary-line weekly-summary-line--bottom" />
-          </div>
-          <div className="weekly-summary-copy">
-            <span className="card-kicker">SAVAITĖS APŽVALGA</span>
-            <h2 id="weekly-summary-title">Šią savaitę kūrėme kartu</h2>
-            <p>Mokyklos balsai, veiklos ir žmonės vienoje vietoje.</p>
-          </div>
-        </section>
-        <section className="dashboard-grid">
+        <section className="dashboard-grid home-dashboard" aria-label="Savaitės veikla">
           <article className="feature-card feature-card--burgundy">
             <span className="card-kicker">SVARBIAUSIA</span>
             <h2>Studentų balsas turi matytis veiksme.</h2>
