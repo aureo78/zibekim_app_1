@@ -258,11 +258,38 @@ function PageContent({ activePage, onOpenMessages, reducedMotion, setReducedMoti
   const [newTopicCategory, setNewTopicCategory] = useState("Bendruomenė");
   const [forumPosts, setForumPosts] = useState(() => Object.fromEntries(forumTopics.map((forum) => [forum.title, forum.posts])));
   const [homeVisible, setHomeVisible] = useState(false);
+  const [isHomeScrolling, setIsHomeScrolling] = useState(false);
+  const [homeScrollProgress, setHomeScrollProgress] = useState(0);
 
   useEffect(() => {
     if (activePage !== "Pagrindinis") return undefined;
     const timer = window.setTimeout(() => setHomeVisible(true), 80);
     return () => window.clearTimeout(timer);
+  }, [activePage]);
+
+  useEffect(() => {
+    if (activePage !== "Pagrindinis") return undefined;
+    let stopTimer;
+    let ticking = false;
+    const updateScrollState = () => {
+      if (ticking) return;
+      ticking = true;
+      window.requestAnimationFrame(() => {
+        const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
+        const progress = maxScroll > 0 ? Math.min(1, Math.max(0, window.scrollY / maxScroll)) : 0;
+        setHomeScrollProgress(progress);
+        setIsHomeScrolling(window.scrollY > 18);
+        ticking = false;
+      });
+      window.clearTimeout(stopTimer);
+      stopTimer = window.setTimeout(() => setIsHomeScrolling(false), 750);
+    };
+    window.addEventListener("scroll", updateScrollState, { passive: true });
+    updateScrollState();
+    return () => {
+      window.removeEventListener("scroll", updateScrollState);
+      window.clearTimeout(stopTimer);
+    };
   }, [activePage]);
 
   useEffect(() => {
@@ -320,7 +347,9 @@ function PageContent({ activePage, onOpenMessages, reducedMotion, setReducedMoti
   if (activePage === "Pagrindinis") {
     const galleryPath = `${import.meta.env.BASE_URL}home-gallery/`;
     return (
-      <main className={`content-area content-area--home home-scroll ${homeVisible ? "home-scroll--visible" : ""}`}>
+      <main className={`content-area content-area--home home-scroll ${homeVisible ? "home-scroll--visible" : ""} ${isHomeScrolling ? "home-scroll--active" : ""}`} style={{ "--home-scroll-progress": homeScrollProgress }}>
+        <div className="home-falling-stars" aria-hidden="true">{[...Array(9)].map((_, index) => <span className={`home-falling-star home-falling-star--${index + 1}`} key={index}>✦</span>)}</div>
+        <div className="home-scroll-progress" aria-hidden="true"><span /></div>
         <section className="home-command" aria-labelledby="home-command-title">
           <div className="home-command-copy">
             <p className="home-eyebrow">PIRMADIENIS · 2026 M. LAPKRIČIO 23 D.</p>
