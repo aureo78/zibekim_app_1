@@ -332,7 +332,10 @@ function PageContent({ activePage, onOpenMessages }) {
           <div className="home-command-visual" aria-label="Mokyklos bendruomenės nuotraukos">
             <div className="home-command-photo home-command-photo--main"><img src={`${galleryPath}main.jpg`} alt="Mokyklos bendruomenė lauke" /></div>
             <div className="home-command-photo home-command-photo--small home-command-photo--left"><img src={`${galleryPath}photo-2.jpg`} alt="Mokiniai mokyklos renginyje" /></div>
-            <div className="home-command-photo home-command-photo--small home-command-photo--right"><img src={`${galleryPath}photo-3.jpg`} alt="Mokyklos bendruomenė kartu" /></div>
+            <div className="home-command-photo home-command-photo--right"><img src={`${galleryPath}photo-3.jpg`} alt="Mokyklos bendruomenė kartu" /></div>
+            <div className="home-command-photo home-command-photo--bottom"><img src={`${galleryPath}photo-4.jpg`} alt="Mokyklos bendruomenės veikla" /></div>
+            <div className="home-command-photo home-command-photo--top"><img src={`${galleryPath}photo-5.jpg`} alt="Mokinių kūrybinė veikla" /></div>
+            <div className="home-command-photo home-command-photo--edge"><img src={`${galleryPath}photo-6.jpg`} alt="Mokinių bendras darbas" /></div>
             <span className="home-command-mark" aria-hidden="true">✦</span>
           </div>
         </section>
