@@ -9,7 +9,6 @@ import {
   Home,
   Lightbulb,
   Mail,
-  Megaphone,
   MessageCircle,
   MessageSquareText,
   Plus,
@@ -28,7 +27,6 @@ import "./App.css";
 const navigationItems = [
   { label: "Pagrindinis", icon: Home },
   { label: "Žinutės", icon: MessageCircle },
-  { label: "Skelbimai", icon: Megaphone },
   { label: "Problemos", icon: AlertTriangle },
   { label: "Idėjos", icon: Lightbulb },
   { label: "Forumai", icon: Mail },
@@ -85,11 +83,6 @@ const pageContent = {
     eyebrow: "TIESIOGINĖ INFORMACIJA",
     title: "Žinutės",
     description: "Svarbūs pranešimai, kuriuos verta rasti ir vėliau.",
-  },
-  Skelbimai: {
-    eyebrow: "MOKYKLOS LENTA",
-    title: "Skelbimai",
-    description: "Renginiai, klubai, veiklos ir galimybės prisijungti.",
   },
   Problemos: {
     eyebrow: "MATOMA IR SEKAMA",
@@ -364,9 +357,6 @@ function PageContent({ activePage, onOpenMessages, reducedMotion, setReducedMoti
 
   const pageViews = {
     Žinutės: <MessagesView initialConversationId={messageStartId} />,
-    Skelbimai: (
-      <div className="listing-grid"><article className="listing-card"><span className="tag">RENGINYS</span><h2>Žiemos vakaras mokykloje</h2><p>Susitikime bendruomenės vakare. Laukiami visi mokiniai.</p><small>Gruodžio 12 d. · Aktų salė</small></article><article className="listing-card"><span className="tag tag--gold">GALIMYBĖ</span><h2>Savanorių komanda</h2><p>Padėk organizuoti mokyklos pavasario iniciatyvas.</p><small>Registracija iki gruodžio 8 d.</small></article><article className="listing-card"><span className="tag tag--green">KLUBAS</span><h2>Atvira stalo žaidimų popietė</h2><p>Prisijunk, net jei dar nepažįsti kitų dalyvių.</p><small>Trečiadieniais · 15:00</small></article></div>
-    ),
     Problemos: (
       <div className="list-card"><div className="card-heading"><h2>Aktyvios problemos</h2><button className="small-action" type="button"><Plus /> Pranešti</button></div>
         <div className="issue-row"><span className="status status--progress">Sprendžiama</span><div><strong>Šviesa trečiame aukšte</strong><p>Koridoriuje neveikia dalis apšvietimo.</p><small>Pastatas · pateikta prieš 2 d.</small></div><ArrowUpRight /></div>
@@ -404,11 +394,13 @@ function PageContent({ activePage, onOpenMessages, reducedMotion, setReducedMoti
       <div className="list-card"><div className="card-heading"><h2>Aktyvios apklausos</h2><ClipboardList /></div><div className="poll-card"><div><span className="tag">AKTYVI</span><h2>Kaip pagerinti mokyklos bendras erdves?</h2><p>Pasirink vieną variantą. Apklausa baigsis po 3 dienų.</p></div><div className="poll-options"><button type="button">Daugiau sėdimų vietų <span>42%</span></button><button type="button">Daugiau žalumos <span>31%</span></button><button type="button">Ramesnės zonos <span>27%</span></button></div></div></div>
     ),
     Nustatymai: (
-      <div className="settings-card">
-        <div className="card-heading"><div><span className="page-eyebrow">TAVO ERDVĖ</span><h2>Naudojimo nustatymai</h2></div><Settings aria-hidden="true" /></div>
-        <label className="settings-option"><span><strong>Rodyti pranešimų santrauką</strong><small>Matyk svarbiausius atnaujinimus pagrindiniame puslapyje.</small></span><input type="checkbox" defaultChecked /></label>
-        <label className="settings-option"><span><strong>Mažiau judesio</strong><small>Sumažina nuotraukų ir elementų animacijas.</small></span><input type="checkbox" checked={reducedMotion} onChange={(event) => setReducedMotion(event.target.checked)} /></label>
-      </div>
+    <div className="settings-page">
+      <section className="settings-group" aria-labelledby="settings-account-title"><div className="settings-group-heading"><UserRound /><div><h2 id="settings-account-title">Paskyra</h2><p>Valdyk savo viešą vardą ir mokyklos profilį.</p></div></div><button className="settings-row" type="button"><span><strong>GeltonpilveVarle</strong><small>@GeltonpilveVarle · mokinė</small></span><ArrowUpRight /></button></section>
+      <section className="settings-group" aria-labelledby="settings-notifications-title"><div className="settings-group-heading"><MessageCircle /><div><h2 id="settings-notifications-title">Pranešimai</h2><p>Pasirink, apie ką nori sužinoti.</p></div></div><label className="settings-row settings-toggle"><span><strong>Naujos žinutės</strong><small>Gauk pranešimą, kai tau parašo.</small></span><input type="checkbox" defaultChecked /></label><label className="settings-row settings-toggle"><span><strong>Forumų atsakymai</strong><small>Gauk pranešimą apie atsakymus tavo temose.</small></span><input type="checkbox" defaultChecked /></label></section>
+      <section className="settings-group" aria-labelledby="settings-accessibility-title"><div className="settings-group-heading"><SlidersHorizontal /><div><h2 id="settings-accessibility-title">Išvaizda ir prieinamumas</h2><p>Prisitaikyk naudojimą pagal save.</p></div></div><label className="settings-row settings-toggle"><span><strong>Rodyti pagrindinio puslapio santrauką</strong><small>Matyk savaitės naujienas ir svarbiausius atnaujinimus.</small></span><input type="checkbox" defaultChecked /></label><label className="settings-row settings-toggle"><span><strong>Mažiau judesio</strong><small>Sumažina nuotraukų ir elementų animacijas.</small></span><input type="checkbox" checked={reducedMotion} onChange={(event) => setReducedMotion(event.target.checked)} /></label></section>
+      <section className="settings-group" aria-labelledby="settings-privacy-title"><div className="settings-group-heading"><ShieldQuestion /><div><h2 id="settings-privacy-title">Privatumas ir saugumas</h2><p>Žinok, kaip tavo balsas matomas bendruomenėje.</p></div></div><button className="settings-row" type="button"><span><strong>Anoniminiai pranešimai</strong><small>Anonimiškai pateikti įrašai nerodo tavo vardo kitiems.</small></span><ArrowUpRight /></button><button className="settings-row" type="button"><span><strong>Moderavimo taisyklės</strong><small>Saugios ir pagarbios mokyklos bendruomenės gairės.</small></span><ArrowUpRight /></button></section>
+      <section className="settings-group settings-about" aria-labelledby="settings-about-title"><div className="settings-group-heading"><CheckCircle2 /><div><h2 id="settings-about-title">Apie Žibėkim</h2><p>Studentų balsas, kuris matomas veiksme.</p></div></div><small>Versija RETRO.2026.11.21.01</small></section>
+    </div>
     ),
   };
 
@@ -486,7 +478,7 @@ function App() {
           </button>
         ))}
 
-        <button className="navigation-button settings-button" type="button" aria-label="Nustatymai">
+        <button className="navigation-button settings-button" type="button" aria-label="Nustatymai" aria-current={activePage === "Nustatymai" ? "page" : undefined} onClick={() => selectPage("Nustatymai")}>
           <Settings aria-hidden="true" />
           <span>Nustatymai</span>
         </button>
