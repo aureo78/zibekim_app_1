@@ -322,6 +322,19 @@ function PageContent({ activePage, onOpenMessages }) {
           </div>
           <button className="primary-action" type="button"><Plus /> Pradėti</button>
         </section>
+        <section className="weekly-summary-hero" aria-labelledby="weekly-summary-title">
+          <img src={`${import.meta.env.BASE_URL}weekly-summary.png`} alt="Mokyklos bendruomenė susibūrusi lauko renginyje" />
+          <div className="weekly-summary-overlay" aria-hidden="true">
+            <span className="weekly-summary-line weekly-summary-line--top" />
+            <span className="weekly-summary-word" data-word="ŽIBĖKIM">ŽIBĖKIM</span>
+            <span className="weekly-summary-line weekly-summary-line--bottom" />
+          </div>
+          <div className="weekly-summary-copy">
+            <span className="card-kicker">SAVAITĖS APŽVALGA</span>
+            <h2 id="weekly-summary-title">Šią savaitę kūrėme kartu</h2>
+            <p>Mokyklos balsai, veiklos ir žmonės vienoje vietoje.</p>
+          </div>
+        </section>
         <section className="dashboard-grid">
           <article className="feature-card feature-card--burgundy">
             <span className="card-kicker">SVARBIAUSIA</span>
