@@ -17,6 +17,7 @@ import {
   Settings,
   SlidersHorizontal,
   ChevronDown,
+  MoreHorizontal,
   UserRound,
   ShieldQuestion,
   Send,
@@ -109,6 +110,11 @@ const pageContent = {
     eyebrow: "TAVO NUOMONĖ",
     title: "Apklausos",
     description: "Trumpi klausimai, padedantys mokyklai priimti geresnius sprendimus.",
+  },
+  Nustatymai: {
+    eyebrow: "TAVO ERDVĖ",
+    title: "Nustatymai",
+    description: "Pritaikyk Žibėkim savo kasdieniam naudojimui.",
   },
 };
 
@@ -244,7 +250,7 @@ function MessagesView({ initialConversationId }) {
     <aside className="message-rooms"><div className="message-topics-heading"><strong># Kambariai</strong><button type="button" aria-label="Sukurti kambarį" onClick={() => setShowTopicForm((current) => !current)}><Plus /></button></div>{showTopicForm && <form className="new-topic-popover" onSubmit={createTopic}><input autoFocus value={newTopic} onChange={(event) => setNewTopic(event.target.value)} placeholder="# kambario pavadinimas" aria-label="Kambario pavadinimas" /><button type="submit" aria-label="Išsaugoti kambarį"><Plus /></button></form>}<div className="message-topic-list">{selectedTopics.map((topic) => <button className={`message-topic ${activeTopic === topic.id ? "message-topic--active" : ""}`} type="button" key={topic.id} onClick={() => openRoom(topic.id)}>{topic.label}</button>)}{selectedTopics.length === 0 && <p className="message-topics-empty">Kambarių dar nėra.</p>}</div></aside>
   </section>;
 }
-function PageContent({ activePage, onOpenMessages }) {
+function PageContent({ activePage, onOpenMessages, reducedMotion, setReducedMotion }) {
   const page = pageContent[activePage];
   const [messageStartId, setMessageStartId] = useState(null);
   const [selectedForum, setSelectedForum] = useState(null);
@@ -397,6 +403,13 @@ function PageContent({ activePage, onOpenMessages }) {
     Apklausos: (
       <div className="list-card"><div className="card-heading"><h2>Aktyvios apklausos</h2><ClipboardList /></div><div className="poll-card"><div><span className="tag">AKTYVI</span><h2>Kaip pagerinti mokyklos bendras erdves?</h2><p>Pasirink vieną variantą. Apklausa baigsis po 3 dienų.</p></div><div className="poll-options"><button type="button">Daugiau sėdimų vietų <span>42%</span></button><button type="button">Daugiau žalumos <span>31%</span></button><button type="button">Ramesnės zonos <span>27%</span></button></div></div></div>
     ),
+    Nustatymai: (
+      <div className="settings-card">
+        <div className="card-heading"><div><span className="page-eyebrow">TAVO ERDVĖ</span><h2>Naudojimo nustatymai</h2></div><Settings aria-hidden="true" /></div>
+        <label className="settings-option"><span><strong>Rodyti pranešimų santrauką</strong><small>Matyk svarbiausius atnaujinimus pagrindiniame puslapyje.</small></span><input type="checkbox" defaultChecked /></label>
+        <label className="settings-option"><span><strong>Mažiau judesio</strong><small>Sumažina nuotraukų ir elementų animacijas.</small></span><input type="checkbox" checked={reducedMotion} onChange={(event) => setReducedMotion(event.target.checked)} /></label>
+      </div>
+    ),
   };
 
   return <main className={`content-area ${activePage === "Žinutės" ? "content-area--messages" : ""}`}>{activePage !== "Žinutės" && <section className={`page-intro ${activePage === "Forumai" ? "page-intro--forumai" : ""}`}><div><h1>{page.title}</h1>{page.description && <p>{page.description}</p>}</div>{activePage !== "Forumai" && <button className="primary-action" type="button"><Search /> Ieškoti</button>}</section>}{pageViews[activePage]}</main>;
@@ -404,6 +417,27 @@ function PageContent({ activePage, onOpenMessages }) {
 
 function App() {
   const [activePage, setActivePage] = useState("Pagrindinis");
+  const [moreMenuOpen, setMoreMenuOpen] = useState(false);
+  const [reducedMotion, setReducedMotion] = useState(false);
+
+  useEffect(() => {
+    if (!moreMenuOpen) return undefined;
+    const closeWithEscape = (event) => event.key === "Escape" && setMoreMenuOpen(false);
+    document.addEventListener("keydown", closeWithEscape);
+    return () => document.removeEventListener("keydown", closeWithEscape);
+  }, [moreMenuOpen]);
+
+  useEffect(() => {
+    document.documentElement.classList.toggle("user-reduced-motion", reducedMotion);
+    return () => document.documentElement.classList.remove("user-reduced-motion");
+  }, [reducedMotion]);
+
+  const selectPage = (label) => {
+    setActivePage(label);
+    setMoreMenuOpen(false);
+  };
+
+  const mobileMoreItems = navigationItems.slice(4);
 
   return (
     <div className="app">
@@ -445,7 +479,7 @@ function App() {
             aria-label={label}
             aria-current={activePage === label ? "page" : undefined}
             key={label}
-            onClick={() => setActivePage(label)}
+            onClick={() => selectPage(label)}
           >
             <Icon aria-hidden="true" />
             <span>{label}</span>
@@ -456,11 +490,33 @@ function App() {
           <Settings aria-hidden="true" />
           <span>Nustatymai</span>
         </button>
-
+        <div className="mobile-more-wrap">
+          <button
+            className={`navigation-button mobile-more-button ${moreMenuOpen || mobileMoreItems.some(({ label }) => label === activePage) ? "navigation-button--active" : ""}`}
+            type="button"
+            aria-label="Daugiau navigacijos pasirinkimų"
+            aria-expanded={moreMenuOpen}
+            aria-haspopup="menu"
+            onClick={() => setMoreMenuOpen((current) => !current)}
+          >
+            <MoreHorizontal aria-hidden="true" />
+            <span>Daugiau</span>
+          </button>
+          {moreMenuOpen && (
+            <div className="mobile-more-menu" role="menu" aria-label="Daugiau pasirinkimų">
+              {[...mobileMoreItems, { label: "Nustatymai", icon: Settings }].map(({ label, icon: Icon }) => (
+                <button className={activePage === label ? "mobile-more-item mobile-more-item--active" : "mobile-more-item"} key={label} type="button" role="menuitem" onClick={() => selectPage(label)}>
+                  <Icon aria-hidden="true" />
+                  <span>{label}</span>
+                </button>
+              ))}
+            </div>
+          )}
+        </div>
         <div className="sidebar-version">v.RETRO.2026.11.21.01</div>
       </aside>
 
-      <PageContent activePage={activePage} onOpenMessages={() => setActivePage("Žinutės")} />
+      <PageContent activePage={activePage} reducedMotion={reducedMotion} setReducedMotion={setReducedMotion} onOpenMessages={() => selectPage("Žinutės")} />
     </div>
   );
 }
