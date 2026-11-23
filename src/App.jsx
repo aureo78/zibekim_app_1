@@ -5,7 +5,6 @@ import {
   Bookmark,
   CheckCircle2,
   ClipboardList,
-  Clock3,
   Home,
   Lightbulb,
   Mail,
@@ -312,36 +311,22 @@ function PageContent({ activePage, onOpenMessages }) {
   };
 
   if (activePage === "Pagrindinis") {
-    const landingWord = "ŽIBĖKIM";
     return (
       <main className="content-area content-area--home">
         <section className="home-landing" aria-labelledby="home-landing-title">
+          <div className="home-photo-collage" aria-label="Žibėkim mokyklos bendruomenė">
+            <img className="home-photo home-photo--main" src={`${import.meta.env.BASE_URL}home-gallery/main.jpg`} alt="Mokyklos bendruomenė susibūrusi lauke" />
+            <img className="home-photo home-photo--two" src={`${import.meta.env.BASE_URL}home-gallery/photo-2.jpg`} alt="Mokyklos bendruomenė renginyje" />
+            <img className="home-photo home-photo--three" src={`${import.meta.env.BASE_URL}home-gallery/photo-3.jpg`} alt="Mokyklos bendruomenė kartu" />
+            <img className="home-photo home-photo--four" src={`${import.meta.env.BASE_URL}home-gallery/photo-4.jpg`} alt="Mokyklos bendruomenės veikla" />
+            <img className="home-photo home-photo--five" src={`${import.meta.env.BASE_URL}home-gallery/photo-5.jpg`} alt="Mokinių kūrybinė veikla" />
+            <img className="home-photo home-photo--six" src={`${import.meta.env.BASE_URL}home-gallery/photo-6.jpg`} alt="Mokinių bendras darbas" />
+          </div>
           <div className="home-landing-copy">
-            <span className="page-eyebrow">{page.eyebrow}</span>
-            <h1 id="home-landing-title" className="home-landing-title" aria-label={landingWord}>
-              {Array.from(landingWord).map((letter, index) => <span className="home-letter" style={{ "--letter-index": index }} key={`${letter}-${index}`}>{letter}</span>)}
-            </h1>
-            <p className="home-landing-subtitle">{page.title}</p>
-            <p className="home-landing-description">{page.description}</p>
-            <button className="primary-action home-start-action" type="button"><Plus /> Pradėti</button>
+            <h1 id="home-landing-title" className="home-landing-title" aria-label="ŽIBĖKIM">ŽIBĖKIM</h1>
+            <p className="home-school-name">Vytauto Didžiojo universiteto Šakių „Žiburio“ gimnazija</p>
           </div>
           <span className="home-spark" aria-hidden="true">✦</span>
-          <span className="home-landing-note" aria-hidden="true">Mokyklos balsas juda pirmyn</span>
-        </section>
-        <section className="dashboard-grid home-dashboard" aria-label="Savaitės veikla">
-          <article className="feature-card feature-card--burgundy">
-            <span className="card-kicker">SVARBIAUSIA</span>
-            <h2>Studentų balsas turi matytis veiksme.</h2>
-            <p>Čia rasi, kas pasiūlyta, kas sprendžiama ir kas jau pasikeitė.</p>
-            <button className="text-action" type="button">Peržiūrėti veiklą <ArrowUpRight /></button>
-          </article>
-          <article className="stat-card"><AlertTriangle /><strong>12</strong><span>aktyvių problemų</span><small>3 sprendžiamos dabar</small></article>
-          <article className="stat-card"><Lightbulb /><strong>28</strong><span>idėjos bendruomenėje</span><small>5 laukia atsako</small></article>
-          <article className="activity-card">
-            <div className="card-heading"><h2>Naujausia veikla</h2><Clock3 /></div>
-            <div className="activity-row"><CheckCircle2 /><span><strong>Bibliotekos darbo laikas</strong><small>Problema išspręsta · prieš 2 val.</small></span></div>
-            <div className="activity-row"><Vote /><span><strong>Daugiau vietų dviračiams</strong><small>Idėja gavo 24 balsus · prieš 5 val.</small></span></div>
-          </article>
         </section>
       </main>
     );

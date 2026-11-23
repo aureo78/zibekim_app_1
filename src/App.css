@@ -1315,15 +1315,113 @@ a {
   .home-landing-note { right: 16px; bottom: 18px; font-size: 9px; }
 }
 
+
+
+/* Home photo composition */
+.home-landing {
+  min-height: calc(100vh - 82px);
+  padding: 24px clamp(18px, 4vw, 64px);
+  background: #f8f1df;
+}
+
+.home-photo-collage {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.home-photo {
+  position: absolute;
+  display: block;
+  width: clamp(150px, 19vw, 286px);
+  aspect-ratio: 1.5;
+  object-fit: cover;
+  border: 7px solid #fffaf0;
+  box-shadow: 0 14px 28px rgba(74, 19, 32, .2);
+  opacity: 0;
+  animation: home-photo-arrives .9s var(--photo-delay) cubic-bezier(.16, 1, .3, 1) forwards;
+  --from-transform: scale(.25) rotate(0deg);
+  --to-transform: scale(.72) rotate(0deg);
+}
+
+.home-photo--main {
+  z-index: 3;
+  top: 50%;
+  left: 50%;
+  width: clamp(300px, 40vw, 620px);
+  --from-transform: translate(-50%, -50%) scale(.25) rotate(12deg);
+  --to-transform: translate(-50%, -50%) rotate(-2deg) scale(.88);
+  --photo-delay: .15s;
+}
+.home-photo--two { top: 8%; left: 8%; --from-transform: translate(-90px, -60px) scale(.2) rotate(-24deg); --to-transform: rotate(-9deg) scale(.72); --photo-delay: .55s; }
+.home-photo--three { top: 7%; right: 8%; --from-transform: translate(90px, -70px) scale(.2) rotate(24deg); --to-transform: rotate(8deg) scale(.72); --photo-delay: .78s; }
+.home-photo--four { right: 4%; bottom: 8%; --from-transform: translate(100px, 70px) scale(.2) rotate(22deg); --to-transform: rotate(-7deg) scale(.72); --photo-delay: 1.02s; }
+.home-photo--five { bottom: 7%; left: 9%; --from-transform: translate(-100px, 70px) scale(.2) rotate(-22deg); --to-transform: rotate(7deg) scale(.72); --photo-delay: 1.25s; }
+.home-photo--six { top: 45%; left: 4%; --from-transform: translate(-100px, 0) scale(.2) rotate(-18deg); --to-transform: rotate(-5deg) scale(.72); --photo-delay: 1.48s; }
+
+.home-landing-copy { z-index: 5; mix-blend-mode: normal; }
+.home-landing-title {
+  margin: 0;
+  color: #fffaf0;
+  font-size: clamp(86px, 14vw, 220px);
+  line-height: .72;
+  letter-spacing: .01em;
+  text-shadow: 4px 5px 0 #4a1320, 0 0 26px rgba(74, 19, 32, .24);
+  opacity: 0;
+  animation: home-word-reveal 1s 1.75s cubic-bezier(.16, 1, .3, 1) forwards;
+}
+
+.home-school-name {
+  max-width: 430px;
+  margin: 24px 0 0;
+  color: #4a1320;
+  font-family: Arial, sans-serif;
+  font-size: clamp(13px, 1.5vw, 19px);
+  font-weight: 700;
+  line-height: 1.22;
+  text-transform: uppercase;
+  opacity: 0;
+  animation: home-school-reveal .8s 2.45s ease-out forwards;
+}
+
+.home-spark {
+  top: calc(50% - clamp(120px, 13vw, 210px));
+  left: calc(50% + clamp(155px, 18vw, 290px));
+  z-index: 6;
+  animation-delay: 2.1s;
+}
+
+.home-landing::before,
+.home-landing::after { z-index: 1; }
+
+@keyframes home-photo-arrives {
+  from { opacity: 0; filter: blur(8px); transform: var(--from-transform); }
+  to { opacity: 1; filter: blur(0); transform: var(--to-transform); }
+}
+@keyframes home-word-reveal {
+  0% { opacity: 0; clip-path: inset(0 100% 0 0); transform: scale(.9); }
+  100% { opacity: 1; clip-path: inset(0 0 0 0); transform: scale(1); }
+}
+@keyframes home-school-reveal { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: translateY(0); } }
+
+@media (max-width: 700px) {
+  .home-landing { min-height: calc(100vh - 260px); padding: 16px; }
+  .home-photo { width: clamp(112px, 30vw, 164px); border-width: 4px; box-shadow: 0 8px 16px rgba(74, 19, 32, .18); }
+  .home-photo--main { width: min(78vw, 360px); }
+  .home-photo--two { top: 8%; left: -4%; }
+  .home-photo--three { top: 8%; right: -4%; }
+  .home-photo--four { right: -3%; bottom: 8%; }
+  .home-photo--five { bottom: 8%; left: -3%; }
+  .home-photo--six { top: 45%; left: -10%; }
+  .home-landing-title { font-size: clamp(68px, 21vw, 112px); }
+  .home-school-name { max-width: 260px; margin-top: 18px; font-size: 11px; }
+  .home-spark { top: 25%; left: 84%; font-size: 42px; }
+}
+
 @media (prefers-reduced-motion: reduce) {
-  .home-landing::before,
-  .home-landing::after,
-  .home-letter,
-  .home-landing-copy .page-eyebrow,
-  .home-landing-subtitle,
-  .home-landing-description,
-  .home-start-action,
-  .home-spark,
-  .home-landing-note,
-  .home-dashboard { animation: none; opacity: 1; transform: none; }
+  .home-photo,
+  .home-landing-title,
+  .home-school-name,
+  .home-spark { animation: none; opacity: 1; filter: none; clip-path: none; transform: none; }
 }
