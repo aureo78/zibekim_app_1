@@ -16,7 +16,6 @@ import {
   Settings,
   SlidersHorizontal,
   ChevronDown,
-  MoreHorizontal,
   UserRound,
   ShieldQuestion,
   Send,
@@ -438,15 +437,7 @@ function PageContent({ activePage, onOpenMessages, reducedMotion, setReducedMoti
 
 function App() {
   const [activePage, setActivePage] = useState("Pagrindinis");
-  const [moreMenuOpen, setMoreMenuOpen] = useState(false);
   const [reducedMotion, setReducedMotion] = useState(false);
-
-  useEffect(() => {
-    if (!moreMenuOpen) return undefined;
-    const closeWithEscape = (event) => event.key === "Escape" && setMoreMenuOpen(false);
-    document.addEventListener("keydown", closeWithEscape);
-    return () => document.removeEventListener("keydown", closeWithEscape);
-  }, [moreMenuOpen]);
 
   useEffect(() => {
     document.documentElement.classList.toggle("user-reduced-motion", reducedMotion);
@@ -455,10 +446,7 @@ function App() {
 
   const selectPage = (label) => {
     setActivePage(label);
-    setMoreMenuOpen(false);
   };
-
-  const mobileMoreItems = navigationItems.slice(4);
 
   return (
     <div className="app">
@@ -511,29 +499,6 @@ function App() {
           <Settings aria-hidden="true" />
           <span>Nustatymai</span>
         </button>
-        <div className="mobile-more-wrap">
-          <button
-            className={`navigation-button mobile-more-button ${moreMenuOpen || mobileMoreItems.some(({ label }) => label === activePage) ? "navigation-button--active" : ""}`}
-            type="button"
-            aria-label="Daugiau navigacijos pasirinkimų"
-            aria-expanded={moreMenuOpen}
-            aria-haspopup="menu"
-            onClick={() => setMoreMenuOpen((current) => !current)}
-          >
-            <MoreHorizontal aria-hidden="true" />
-            <span>Daugiau</span>
-          </button>
-          {moreMenuOpen && (
-            <div className="mobile-more-menu" role="menu" aria-label="Daugiau pasirinkimų">
-              {[...mobileMoreItems, { label: "Nustatymai", icon: Settings }].map(({ label, icon: Icon }) => (
-                <button className={activePage === label ? "mobile-more-item mobile-more-item--active" : "mobile-more-item"} key={label} type="button" role="menuitem" onClick={() => selectPage(label)}>
-                  <Icon aria-hidden="true" />
-                  <span>{label}</span>
-                </button>
-              ))}
-            </div>
-          )}
-        </div>
         <div className="sidebar-version">v.RETRO.2026.11.21.01</div>
       </aside>
 
