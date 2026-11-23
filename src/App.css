@@ -1487,3 +1487,43 @@ a {
 @media (max-width: 850px) { .home-command { grid-template-columns: 1fr; }.home-command-visual { min-height: 440px; }.home-command-photo--main { inset: 6% 8% 6% 8%; }.home-week-grid,.home-announcement-grid,.home-next-section { grid-template-columns: 1fr; }.home-announcement-grid { gap: 12px; }.home-next-section { gap: 36px; }.home-next-date strong { font-size: 160px; } }
 @media (max-width: 560px) { .home-command { min-height: auto; padding: 54px 20px 42px; }.home-command h1 { font-size: 44px; }.home-command-lede { font-size: 17px; }.home-command-visual { min-height: 320px; margin-top: 10px; }.home-command-photo--small { width: 37%; height: 29%; }.home-section { padding: 64px 20px; }.home-section-heading { display: block; }.home-section-date { display: block; margin-top: 16px; }.home-summary-card { min-height: 390px; border-radius: 18px; }.home-summary-card h3 { margin-top: 54px; font-size: 46px; }.home-mini-card { min-height: 160px; border-radius: 18px; }.home-announcement { min-height: 280px; padding: 24px; border-radius: 18px; }.home-footer { align-items: flex-start; flex-direction: column; }.home-next-copy h2 { font-size: 52px; } }
 @media (prefers-reduced-motion: reduce) { .home-command-photo,.home-command-mark { animation: none; }.home-command-photo img,.home-primary-button,.home-outline-button { transition: none; } }
+
+/* Softer Zibekim palette: airy surfaces, no near-black blocks */
+.home-scroll { background: #f4f1ec; color: #30423f; }
+.home-command { background: #627973; color: #fffaf4; }
+.home-command::after { background: #e8cf8b; opacity: .72; }
+.home-command .home-eyebrow { color: #f4dfad; }
+.home-command h1 em, .home-next-copy h2 em { color: #f4dfad; }
+.home-command-lede { color: rgba(255,250,244,.8); }
+.home-command-note { color: rgba(255,250,244,.74); }
+.home-command-note strong { color: #30423f; background: #f4dfad; }
+.home-command-photo { border-color: #fffaf4; box-shadow: 0 18px 42px rgba(53,73,68,.2); }
+.home-command-mark { color: #f4dfad; text-shadow: 0 0 20px rgba(244,223,173,.45); }
+.home-primary-button { color: #30423f; background: #f4dfad; box-shadow: 0 5px 0 #cdbb82; }
+.home-week-section { background: #f4f1ec; }
+.home-section-heading h2 { color: #30423f; }
+.home-section-date { color: #71817d; }
+.home-summary-card { background: #cfc5df; color: #30423f; box-shadow: 0 12px 32px rgba(91,76,111,.1); }
+.home-card-label { color: #53645f; }
+.home-summary-card h3 { color: #30423f; }
+.home-summary-card p { color: rgba(48,66,63,.76); }
+.home-text-button { color: #30423f; }
+.home-mini-card { border-color: #ded9d2; background: #fffaf4; }
+.home-mini-card--accent { color: #30423f; background: #e8cf8b; border-color: #e8cf8b; }
+.home-mini-card p { color: #71817d; }.home-mini-card--accent p { color: #53645f; }
+.home-updates-section { background: #fffaf4; }
+.home-outline-button { color: #53645f; border-color: #c8d0cc; }
+.home-announcement { border-color: #e1dcd5; background: #f4f1ec; }
+.home-announcement--featured { background: #e8cf8b; border-color: #e8cf8b; }
+.home-pill--red { color: #fffaf4; background: #a56d78; }
+.home-pill--yellow { color: #53645f; background: #e8cf8b; }
+.home-pill--green { color: #fffaf4; background: #77958a; }
+.home-announcement time { color: #71817d; }.home-announcement--featured time { color: #53645f; }
+.home-announcement h3 { color: #30423f; }.home-announcement--featured h3 { color: #53645f; }
+.home-announcement p { color: #71817d; }.home-announcement--featured p { color: rgba(83,100,95,.78); }
+.home-announcement a { color: #a56d78; }
+.home-next-section { background: #dbe7e1; color: #30423f; }
+.home-next-date { color: #728f84; }.home-next-copy h2 { color: #30423f; }.home-next-copy > p:not(.home-eyebrow) { color: rgba(48,66,63,.72); }.home-next-copy .home-eyebrow { color: #a56d78; }
+.home-primary-button--dark { color: #fffaf4; background: #627973; box-shadow: 0 5px 0 #4e625d; }
+.home-footer { background: #e8cf8b; color: #53645f; }
+.home-primary-button:focus-visible,.home-outline-button:focus-visible,.home-text-button:focus-visible,.home-announcement a:focus-visible { outline-color: #5e79b6; }
