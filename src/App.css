@@ -1827,9 +1827,23 @@ html.user-reduced-motion *, html.user-reduced-motion *::before, html.user-reduce
 .home-scroll-progress span { display: block; width: 100%; height: calc(12px + var(--home-scroll-progress) * 88px); min-height: 12px; max-height: 104px; border-radius: 999px; background: linear-gradient(180deg, #b35c68, #8f1d32); box-shadow: 0 0 0 2px rgba(255,250,240,.5); transition: height .16s ease-out; }
 @media (max-width: 700px) { .home-falling-stars { right: 72px; width: 70px; } .home-scroll-progress { right: 7px; width: 5px; height: 84px; } .home-scroll-progress span { height: calc(10px + var(--home-scroll-progress) * 66px); max-height: 76px; } }
 @media (prefers-reduced-motion: reduce) { .home-falling-stars, .home-scroll-progress span { animation: none !important; transition: none !important; } .home-falling-stars { display: none; } }
-html.user-reduced-motion .home-falling-stars, html.user-reduced-motion .home-scroll-progress span { animation: none !important; transition: none !important; }
+html, body, #root { max-width: 100%; overflow-x: hidden; }
+.app { max-width: 100%; overflow-x: clip; }
 
-/* Final homepage reference pass: cream hero and separated photo collage */
+html.user-reduced-motion .home-falling-stars, html.user-reduced-motion .home-scroll-progress span { animation: none !important; transition: none !important; }
+html { scrollbar-width: none; }
+html::-webkit-scrollbar { width: 0; height: 0; }
+
+/* No horizontal page scrolling; the right rail is an integrated edge accent. */
+.home-scroll-progress { top: 0; right: 0; width: 3px; height: 100vh; padding: 0; border: 0; border-radius: 0; background: rgba(74,19,32,.08); box-shadow: none; transform: none; }
+.home-scroll-progress span { position: absolute; top: 0; left: 0; width: 100%; height: calc(var(--home-scroll-progress) * 100%); min-height: 0; max-height: none; border-radius: 0 0 999px 999px; background: linear-gradient(180deg, #b35c68 0%, #8f1d32 55%, #681426 100%); box-shadow: none; transition: height .16s ease-out; }
+.home-scroll-progress::after { content: ""; position: absolute; top: calc(var(--home-scroll-progress) * 100% - 4px); left: 50%; width: 9px; height: 9px; border: 2px solid #f8f1df; border-radius: 50%; background: #8f1d32; box-shadow: 0 1px 6px rgba(74,19,32,.28); transform: translateX(-50%); }
+@media (max-width: 700px) {
+  .sidebar { overflow-x: hidden; }
+  .home-scroll-progress { right: 0; width: 2px; }
+  .home-scroll-progress::after { width: 7px; height: 7px; }
+}
+
 .home-scroll { background: #f8f1df; color: #4a1320; }
 .home-command { min-height: min(790px, calc(100vh - 82px)); grid-template-columns: minmax(320px, .82fr) minmax(560px, 1.18fr); gap: clamp(42px, 6vw, 92px); padding: clamp(56px, 7vw, 100px) clamp(28px, 6vw, 96px); background: #f8f1df; color: #4a1320; overflow: visible; }
 .home-command::before { content: "ŽIBĖKIM"; top: 19%; left: -5%; max-width: none; color: rgba(143,29,50,.09); font: 700 clamp(110px, 19vw, 290px)/.72 Arial, sans-serif; letter-spacing: -.1em; white-space: nowrap; pointer-events: none; }
