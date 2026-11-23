@@ -257,6 +257,13 @@ function PageContent({ activePage, onOpenMessages }) {
   const [newTopicDescription, setNewTopicDescription] = useState("");
   const [newTopicCategory, setNewTopicCategory] = useState("Bendruomenė");
   const [forumPosts, setForumPosts] = useState(() => Object.fromEntries(forumTopics.map((forum) => [forum.title, forum.posts])));
+  const [homeVisible, setHomeVisible] = useState(false);
+
+  useEffect(() => {
+    if (activePage !== "Pagrindinis") return undefined;
+    const timer = window.setTimeout(() => setHomeVisible(true), 80);
+    return () => window.clearTimeout(timer);
+  }, [activePage]);
 
   useEffect(() => {
     if (!selectedForum) return undefined;
@@ -311,23 +318,34 @@ function PageContent({ activePage, onOpenMessages }) {
   };
 
   if (activePage === "Pagrindinis") {
+    const galleryPath = `${import.meta.env.BASE_URL}home-gallery/`;
     return (
-      <main className="content-area content-area--home">
-        <section className="home-landing" aria-labelledby="home-landing-title">
-          <div className="home-photo-collage" aria-label="Žibėkim mokyklos bendruomenė">
-            <img className="home-photo home-photo--main" src={`${import.meta.env.BASE_URL}home-gallery/main.jpg`} alt="Mokyklos bendruomenė susibūrusi lauke" />
-            <img className="home-photo home-photo--two" src={`${import.meta.env.BASE_URL}home-gallery/photo-2.jpg`} alt="Mokyklos bendruomenė renginyje" />
-            <img className="home-photo home-photo--three" src={`${import.meta.env.BASE_URL}home-gallery/photo-3.jpg`} alt="Mokyklos bendruomenė kartu" />
-            <img className="home-photo home-photo--four" src={`${import.meta.env.BASE_URL}home-gallery/photo-4.jpg`} alt="Mokyklos bendruomenės veikla" />
-            <img className="home-photo home-photo--five" src={`${import.meta.env.BASE_URL}home-gallery/photo-5.jpg`} alt="Mokinių kūrybinė veikla" />
-            <img className="home-photo home-photo--six" src={`${import.meta.env.BASE_URL}home-gallery/photo-6.jpg`} alt="Mokinių bendras darbas" />
+      <main className={`content-area content-area--home home-scroll ${homeVisible ? "home-scroll--visible" : ""}`}>
+        <section className="home-hero-scene" aria-labelledby="home-landing-title">
+          <div className="home-hero-meta"><span>ŠAKIAI / 2026</span><span>slink žemyn ↓</span></div>
+          <div className="home-hero-word" aria-hidden="true">ŽIBĖKIM</div>
+          <div className="home-hero-gallery" aria-label="Žibėkim mokyklos bendruomenė">
+            <img className="home-hero-photo home-hero-photo--main" src={`${galleryPath}main.jpg`} alt="Mokyklos bendruomenė susibūrusi lauke" />
+            <img className="home-hero-photo home-hero-photo--two" src={`${galleryPath}photo-2.jpg`} alt="Mokyklos bendruomenė renginyje" />
+            <img className="home-hero-photo home-hero-photo--three" src={`${galleryPath}photo-3.jpg`} alt="Mokyklos bendruomenė kartu" />
+            <img className="home-hero-photo home-hero-photo--four" src={`${galleryPath}photo-4.jpg`} alt="Mokyklos bendruomenės veikla" />
+            <img className="home-hero-photo home-hero-photo--five" src={`${galleryPath}photo-5.jpg`} alt="Mokinių kūrybinė veikla" />
+            <img className="home-hero-photo home-hero-photo--six" src={`${galleryPath}photo-6.jpg`} alt="Mokinių bendras darbas" />
           </div>
-          <div className="home-landing-copy">
-            <h1 id="home-landing-title" className="home-landing-title" aria-label="ŽIBĖKIM">ŽIBĖKIM</h1>
-            <p className="home-school-name">Vytauto Didžiojo universiteto Šakių „Žiburio“ gimnazija</p>
-          </div>
-          <span className="home-spark" aria-hidden="true">✦</span>
+          <div className="home-hero-copy"><h1 id="home-landing-title">Vytauto Didžiojo universiteto Šakių „Žiburio“ gimnazija</h1><span>mokyklos balsas, kuris juda</span></div>
+          <span className="home-hero-star" aria-hidden="true">✦</span>
         </section>
+        <section className="home-feature home-feature--summary" aria-labelledby="summary-title">
+          <div className="home-feature-index">01 / 04</div><div className="home-feature-square"><span>SAVAITĖ</span><strong>APIBENDRINIMAS</strong><em>Kas liko po šios savaitės?</em></div>
+          <div className="home-feature-copy"><p className="home-kicker">SAVAITĖS APŽVALGA</p><h2 id="summary-title">Mokykla juda kartu.</h2><p>Vietos idėjoms, sprendimams ir žmonėms, kurie kasdien kuria mokyklos gyvenimą.</p><button type="button" onClick={() => document.getElementById("home-summary-target")?.scrollIntoView({ behavior: "smooth" })}>Skaityti apibendrinimą <ArrowUpRight /></button></div>
+        </section>
+        <section id="home-summary-target" className="home-feature home-feature--announcements" aria-labelledby="announcements-title">
+          <div className="home-feature-index">02 / 04</div><div className="home-feature-copy"><p className="home-kicker">SKELBIMAI</p><h2 id="announcements-title">Kas svarbu šiandien.</h2><p>Renginiai, galimybės ir naujienos vienoje vietoje.</p><button type="button" onClick={() => onOpenMessages()}>Atverti bendruomenę <ArrowUpRight /></button></div><div className="home-feature-tile"><span>SKELBIMAS</span><strong>Atvira mokyklos erdvė</strong><small>Prisijunk prie pokalbio</small></div>
+        </section>
+        <section className="home-feature home-feature--event" aria-labelledby="event-title">
+          <div className="home-feature-index">03 / 04</div><div className="home-event-date"><span>ARTIMIAUSIAS</span><strong>12</strong><small>GRUODŽIO<br />PENKTADIENIS</small></div><div className="home-feature-copy"><p className="home-kicker">RENGINYS</p><h2 id="event-title">Žiemos vakaras mokykloje.</h2><p>Susitikime bendruomenės vakare. Laukiami visi mokiniai.</p><button type="button" onClick={() => onOpenMessages()}>Sužinoti daugiau <ArrowUpRight /></button></div>
+        </section>
+        <section className="home-feature home-feature--close" aria-label="Žibėkim pabaiga"><span>ŽIBĖKIM</span><small>04 / 04</small></section>
       </main>
     );
   }
