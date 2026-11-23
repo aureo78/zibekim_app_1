@@ -1804,4 +1804,48 @@ button.settings-row:hover { color: #8f1d32; }
   .settings-row small { font-size: 12px; }
 }
 @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; scroll-behavior: auto !important; transition-duration: .01ms !important; } }
-html.user-reduced-motion *, html.user-reduced-motion *::before, html.user-reduced-motion *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
+html.user-reduced-motion *, html.user-reduced-motion *::before, html.user-reduced-motion *::after { animation: none !important; transition: none !important; }
+
+/* Final homepage reference pass: cream hero and separated photo collage */
+.home-scroll { background: #f8f1df; color: #4a1320; }
+.home-command { min-height: min(790px, calc(100vh - 82px)); grid-template-columns: minmax(320px, .82fr) minmax(560px, 1.18fr); gap: clamp(42px, 6vw, 92px); padding: clamp(56px, 7vw, 100px) clamp(28px, 6vw, 96px); background: #f8f1df; color: #4a1320; overflow: visible; }
+.home-command::before { content: "ŽIBĖKIM"; top: 19%; left: -5%; max-width: none; color: rgba(143,29,50,.09); font: 700 clamp(110px, 19vw, 290px)/.72 Arial, sans-serif; letter-spacing: -.1em; white-space: nowrap; }
+.home-command::after { background: #e7c96b; opacity: .42; }
+.home-command-copy { z-index: 5; }
+.home-command .home-eyebrow { color: #8f1d32; }
+.home-command h1 { color: #4a1320; }
+.home-command h1 em { color: #b35c68; }
+.home-command-lede { color: rgba(74,19,32,.72); }
+.home-command-note { color: rgba(74,19,32,.65); }
+.home-command-note strong { color: #fffaf0; background: #8f1d32; }
+.home-primary-button { color: #fffaf0; background: #8f1d32; box-shadow: 0 5px 0 #681426; }
+.home-command-visual { position: relative; z-index: 2; min-height: 600px; display: grid; grid-template-columns: .72fr 1.08fr 1.08fr .72fr; grid-template-rows: repeat(3, minmax(0, 1fr)); gap: 14px; }
+.home-command-photo { position: static; inset: auto !important; width: auto !important; height: auto !important; min-width: 0; min-height: 0; overflow: hidden; border: 5px solid #f8f1df; background: #eadcc8; box-shadow: 0 14px 30px rgba(74,19,32,.16); animation: home-calm-in .8s cubic-bezier(.2,.8,.2,1) both; }
+.home-command-photo img { display: block; width: 100%; height: 100%; min-height: 0; object-fit: cover; }
+.home-command-photo--main { grid-column: 2 / 4; grid-row: 1 / 4; }
+.home-command-photo--left { grid-column: 1; grid-row: 1; }
+.home-command-photo--right { grid-column: 4; grid-row: 1; }
+.home-command-photo--bottom { grid-column: 1; grid-row: 3; }
+.home-command-photo--top { grid-column: 4; grid-row: 3; }
+.home-command-photo--edge { grid-column: 1; grid-row: 2; }
+.home-command-mark { display: none; }
+.home-week-section { background: #8f1d32; color: #fffaf0; }
+.home-updates-section { background: #f8f1df; }
+.home-next-section { background: #e7c96b; color: #4a1320; }
+.home-footer { background: #f3dfad; color: #8f1d32; }
+
+@media (max-width: 1050px) and (min-width: 701px) {
+  .home-command { grid-template-columns: minmax(280px, .8fr) minmax(440px, 1.2fr); gap: 32px; padding-left: 36px; padding-right: 36px; }
+  .home-command-visual { min-height: 520px; gap: 10px; }
+}
+@media (max-width: 700px) {
+  .home-command { grid-template-columns: 1fr; gap: 28px; padding: 48px 20px 64px; }
+  .home-command-visual { min-height: 0; grid-template-columns: repeat(2, minmax(0, 1fr)); grid-template-rows: repeat(5, minmax(105px, 24vw)); gap: 10px; }
+  .home-command-photo { border-width: 4px; box-shadow: 0 8px 18px rgba(74,19,32,.14); }
+  .home-command-photo--main { grid-column: 1 / 3; grid-row: 1 / 3; }
+  .home-command-photo--left { grid-column: 1; grid-row: 3; }
+  .home-command-photo--right { grid-column: 2; grid-row: 3; }
+  .home-command-photo--bottom { grid-column: 1; grid-row: 4; }
+  .home-command-photo--top { grid-column: 2; grid-row: 4; }
+  .home-command-photo--edge { grid-column: 1 / 3; grid-row: 5; }
+}
