@@ -477,6 +477,9 @@ function App() {
               <strong>Auksė Varlytė</strong>
             </div>
           </details>
+          <button className="mobile-settings-button" type="button" aria-label="Nustatymai" aria-current={activePage === "Nustatymai" ? "page" : undefined} onClick={() => selectPage("Nustatymai")}>
+            <Settings aria-hidden="true" />
+          </button>
         </div>
       </header>
 
