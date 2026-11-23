@@ -325,7 +325,7 @@ function PageContent({ activePage, onOpenMessages }) {
         <section className="home-command" aria-labelledby="home-command-title">
           <div className="home-command-copy">
             <p className="home-eyebrow">PIRMADIENIS · 2026 M. LAPKRIČIO 23 D.</p>
-            <h1 id="home-command-title">Mokyklos gyvenimas,<br /><em>vienoje vietoje.</em></h1>
+            <h1 id="home-command-title">Vytauto Didžiojo universiteto Šakių „Žiburio“ gimnazija</h1>
             <p className="home-command-lede">Svarbiausi savaitės įvykiai, mokinių balsas ir tai, kas vyksta mūsų bendruomenėje.</p>
             <div className="home-command-actions"><button className="home-primary-button" type="button" onClick={() => document.getElementById("home-week")?.scrollIntoView({ behavior: "smooth" })}>Peržiūrėti savaitę <ArrowDown /></button><span className="home-command-note">Nauja šiandien <strong>3</strong></span></div>
           </div>
