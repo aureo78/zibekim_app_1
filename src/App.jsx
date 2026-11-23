@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import {
   AlertTriangle,
+  ArrowDown,
   ArrowUpRight,
   Bookmark,
   CheckCircle2,
@@ -321,31 +322,33 @@ function PageContent({ activePage, onOpenMessages }) {
     const galleryPath = `${import.meta.env.BASE_URL}home-gallery/`;
     return (
       <main className={`content-area content-area--home home-scroll ${homeVisible ? "home-scroll--visible" : ""}`}>
-        <section className="home-hero-scene" aria-labelledby="home-landing-title">
-          <div className="home-hero-meta"><span>ŠAKIAI / 2026</span><span>slink žemyn ↓</span></div>
-          <div className="home-hero-word" aria-hidden="true">ŽIBĖKIM</div>
-          <div className="home-hero-gallery" aria-label="Žibėkim mokyklos bendruomenė">
-            <img className="home-hero-photo home-hero-photo--main" src={`${galleryPath}main.jpg`} alt="Mokyklos bendruomenė susibūrusi lauke" />
-            <img className="home-hero-photo home-hero-photo--two" src={`${galleryPath}photo-2.jpg`} alt="Mokyklos bendruomenė renginyje" />
-            <img className="home-hero-photo home-hero-photo--three" src={`${galleryPath}photo-3.jpg`} alt="Mokyklos bendruomenė kartu" />
-            <img className="home-hero-photo home-hero-photo--four" src={`${galleryPath}photo-4.jpg`} alt="Mokyklos bendruomenės veikla" />
-            <img className="home-hero-photo home-hero-photo--five" src={`${galleryPath}photo-5.jpg`} alt="Mokinių kūrybinė veikla" />
-            <img className="home-hero-photo home-hero-photo--six" src={`${galleryPath}photo-6.jpg`} alt="Mokinių bendras darbas" />
+        <section className="home-command" aria-labelledby="home-command-title">
+          <div className="home-command-copy">
+            <p className="home-eyebrow">PIRMADIENIS · 2026 M. LAPKRIČIO 23 D.</p>
+            <h1 id="home-command-title">Mokyklos gyvenimas,<br /><em>vienoje vietoje.</em></h1>
+            <p className="home-command-lede">Svarbiausi savaitės įvykiai, mokinių balsas ir tai, kas vyksta mūsų bendruomenėje.</p>
+            <div className="home-command-actions"><button className="home-primary-button" type="button" onClick={() => document.getElementById("home-week")?.scrollIntoView({ behavior: "smooth" })}>Peržiūrėti savaitę <ArrowDown /></button><span className="home-command-note">Nauja šiandien <strong>3</strong></span></div>
           </div>
-          <div className="home-hero-copy"><h1 id="home-landing-title">Vytauto Didžiojo universiteto Šakių „Žiburio“ gimnazija</h1><span>mokyklos balsas, kuris juda</span></div>
-          <span className="home-hero-star" aria-hidden="true">✦</span>
+          <div className="home-command-visual" aria-label="Mokyklos bendruomenės nuotraukos">
+            <div className="home-command-photo home-command-photo--main"><img src={`${galleryPath}main.jpg`} alt="Mokyklos bendruomenė lauke" /></div>
+            <div className="home-command-photo home-command-photo--small home-command-photo--left"><img src={`${galleryPath}photo-2.jpg`} alt="Mokiniai mokyklos renginyje" /></div>
+            <div className="home-command-photo home-command-photo--small home-command-photo--right"><img src={`${galleryPath}photo-3.jpg`} alt="Mokyklos bendruomenė kartu" /></div>
+            <span className="home-command-mark" aria-hidden="true">✦</span>
+          </div>
         </section>
-        <section className="home-feature home-feature--summary" aria-labelledby="summary-title">
-          <div className="home-feature-index">01 / 04</div><div className="home-feature-square"><span>SAVAITĖ</span><strong>APIBENDRINIMAS</strong><em>Kas liko po šios savaitės?</em></div>
-          <div className="home-feature-copy"><p className="home-kicker">SAVAITĖS APŽVALGA</p><h2 id="summary-title">Mokykla juda kartu.</h2><p>Vietos idėjoms, sprendimams ir žmonėms, kurie kasdien kuria mokyklos gyvenimą.</p><button type="button" onClick={() => document.getElementById("home-summary-target")?.scrollIntoView({ behavior: "smooth" })}>Skaityti apibendrinimą <ArrowUpRight /></button></div>
+
+        <section id="home-week" className="home-section home-week-section" aria-labelledby="home-week-title">
+          <div className="home-section-heading"><div><p className="home-eyebrow">ŠIOS SAVAITĖS KADRAS</p><h2 id="home-week-title">Kas vyksta dabar</h2></div><span className="home-section-date">23–29 LAPKRITIS</span></div>
+          <div className="home-week-grid"><article className="home-summary-card"><div className="home-card-top"><span className="home-card-label">SAVAITĖS APIBENDRINIMAS</span><span className="home-card-icon">↗</span></div><h3>Idėjos tampa<br />veiksmais.</h3><p>Šią savaitę mokiniai siūlė, diskutavo ir rinko sprendimus, kurie gali pakeisti mūsų kasdienę mokyklą.</p><button className="home-text-button" type="button" onClick={() => document.getElementById("home-updates")?.scrollIntoView({ behavior: "smooth" })}>Skaityti apžvalgą <ArrowUpRight /></button></article><div className="home-week-notes"><article className="home-mini-card"><span className="home-card-label">VAKAR</span><strong>24</strong><p>pateiktos mokinių idėjos</p></article><article className="home-mini-card home-mini-card--accent"><span className="home-card-label">ŠIANDIEN</span><strong>3</strong><p>nauji bendruomenės skelbimai</p></article></div></div>
         </section>
-        <section id="home-summary-target" className="home-feature home-feature--announcements" aria-labelledby="announcements-title">
-          <div className="home-feature-index">02 / 04</div><div className="home-feature-copy"><p className="home-kicker">SKELBIMAI</p><h2 id="announcements-title">Kas svarbu šiandien.</h2><p>Renginiai, galimybės ir naujienos vienoje vietoje.</p><button type="button" onClick={() => onOpenMessages()}>Atverti bendruomenę <ArrowUpRight /></button></div><div className="home-feature-tile"><span>SKELBIMAS</span><strong>Atvira mokyklos erdvė</strong><small>Prisijunk prie pokalbio</small></div>
+
+        <section id="home-updates" className="home-section home-updates-section" aria-labelledby="home-updates-title">
+          <div className="home-section-heading"><div><p className="home-eyebrow">BENDRUOMENĖS SRAUTAS</p><h2 id="home-updates-title">Skelbimai ir naujienos</h2></div><button className="home-outline-button" type="button" onClick={() => onOpenMessages()}>Atverti žinutes <ArrowUpRight /></button></div>
+          <div className="home-announcement-grid"><article className="home-announcement home-announcement--featured"><div><span className="home-pill home-pill--red">RENGINYS</span><time>GRUODŽIO 12 D. · 18:00</time><h3>Žiemos vakaras mokykloje</h3><p>Susitikime bendruomenės vakare. Muzika, pokalbiai ir laikas kartu.</p></div><span className="home-announcement-arrow">↗</span></article><article className="home-announcement"><span className="home-pill home-pill--yellow">GALIMYBĖ</span><time>IKI GRUODŽIO 8 D.</time><h3>Savanorių komanda</h3><p>Padėk organizuoti pavasario iniciatyvas.</p><a href="#home-updates">Sužinoti daugiau <ArrowUpRight /></a></article><article className="home-announcement"><span className="home-pill home-pill--green">KLUBAS</span><time>TREČIADIENIAIS · 15:00</time><h3>Atvira stalo žaidimų popietė</h3><p>Prisijunk, net jei dar nepažįsti kitų dalyvių.</p><a href="#home-updates">Peržiūrėti skelbimą <ArrowUpRight /></a></article></div>
         </section>
-        <section className="home-feature home-feature--event" aria-labelledby="event-title">
-          <div className="home-feature-index">03 / 04</div><div className="home-event-date"><span>ARTIMIAUSIAS</span><strong>12</strong><small>GRUODŽIO<br />PENKTADIENIS</small></div><div className="home-feature-copy"><p className="home-kicker">RENGINYS</p><h2 id="event-title">Žiemos vakaras mokykloje.</h2><p>Susitikime bendruomenės vakare. Laukiami visi mokiniai.</p><button type="button" onClick={() => onOpenMessages()}>Sužinoti daugiau <ArrowUpRight /></button></div>
-        </section>
-        <section className="home-feature home-feature--close" aria-label="Žibėkim pabaiga"><span>ŽIBĖKIM</span><small>04 / 04</small></section>
+
+        <section className="home-section home-next-section" aria-labelledby="home-next-title"><div className="home-next-date"><span>ARTIMIAUSIAS<br />RENGINYS</span><strong>12</strong><small>GRUODŽIO<br />PENKTADIENIS</small></div><div className="home-next-copy"><p className="home-eyebrow">REZERVUOK DATĄ</p><h2 id="home-next-title">Žiemos vakaras<br /><em>mokykloje.</em></h2><p>Aktų salė · 18:00<br />Laukiami visi mokiniai.</p><button className="home-primary-button home-primary-button--dark" type="button" onClick={() => document.getElementById("home-updates")?.scrollIntoView({ behavior: "smooth" })}>Peržiūrėti skelbimą <ArrowUpRight /></button></div></section>
+        <footer className="home-footer"><strong>ŽIBĖKIM</strong><span>Studentų balsas, kuris matomas veiksme.</span></footer>
       </main>
     );
   }
