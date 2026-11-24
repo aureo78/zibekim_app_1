@@ -29,6 +29,19 @@ export const ideaStatusLabels = { ...statusLabels, review: "Svarstoma" };
 export const problemCategories = ["Pastatas", "Bendros erdvės", "Paslaugos", "Saugumas", "Kita"];
 export const ideaCategories = ["Erdvės", "Renginiai", "Mokymasis", "Aplinka", "Kita"];
 
+/** Icon name + tone for each category; rendered as coloured tiles in lists. */
+export const categoryMeta = {
+  Pastatas: { icon: "Building2", tone: "blue" },
+  "Bendros erdvės": { icon: "Sofa", tone: "amber" },
+  Paslaugos: { icon: "ConciergeBell", tone: "teal" },
+  Saugumas: { icon: "ShieldCheck", tone: "berry" },
+  Erdvės: { icon: "Sofa", tone: "amber" },
+  Renginiai: { icon: "PartyPopper", tone: "violet" },
+  Mokymasis: { icon: "BookOpen", tone: "blue" },
+  Aplinka: { icon: "Leaf", tone: "green" },
+  Kita: { icon: "Sparkles", tone: "gray" },
+};
+
 export const initialProblems = [
   {
     id: "p-light",
@@ -215,6 +228,8 @@ export const initialIdeas = [
 export const forumTopics = [
   {
     title: "Mokyklos aplinka",
+    icon: "School",
+    tone: "green",
     description: "Erdvės, kasdienybė ir tai, ką galime pagerinti mokykloje.",
     time: "prieš 1 val.",
     posts: [
@@ -224,6 +239,8 @@ export const forumTopics = [
   },
   {
     title: "Tech naujienos",
+    icon: "Cpu",
+    tone: "blue",
     description: "Įrankiai ir klausimai apie technologijas mokykloje.",
     time: "prieš 2 val.",
     posts: [
@@ -233,12 +250,16 @@ export const forumTopics = [
   },
   {
     title: "Pasaulio naujienos",
+    icon: "Globe",
+    tone: "teal",
     description: "Svarbiausios pasaulio naujienos ir mūsų požiūris į jas.",
     time: "prieš 3 val.",
     posts: [{ username: "EmilijaR", name: "Emilija R.", text: "Kurią šios savaitės pasaulio naujieną laikote svarbiausia?", time: "prieš 3 val." }],
   },
   {
     title: "Lietuvos naujienos",
+    icon: "Flag",
+    tone: "amber",
     description: "Aktualijos Lietuvoje, aptariamos pagarbiai ir atsakingai.",
     time: "prieš 4 val.",
     posts: [{ username: "MatasP", name: "Matas P.", text: "Kokie sprendimai, jūsų nuomone, labiausiai paveiks mokinius šiais metais?", time: "prieš 4 val." }],
@@ -260,7 +281,7 @@ export const messagePeople = [
 ];
 
 export const announcements = [
-  { id: "a1", tag: "Renginys", date: "Gruod. 12 d., 18:00", title: "Žiemos vakaras mokykloje", text: "Muzika, pokalbiai ir laikas kartu aktų salėje." },
-  { id: "a2", tag: "Galimybė", date: "Iki gruod. 8 d.", title: "Ieškome savanorių", text: "Padėk organizuoti pavasario iniciatyvas su mokinių taryba." },
-  { id: "a3", tag: "Būrelis", date: "Trečiadieniais, 15:00", title: "Stalo žaidimų popietė", text: "Ateik, net jei dar nepažįsti kitų dalyvių. 108 kabinetas." },
+  { id: "a1", photo: "photo-3", position: "50% 45%", tag: "Renginys", date: "Gruod. 12 d., 18:00", title: "Žiemos vakaras mokykloje", text: "Muzika, pokalbiai ir laikas kartu aktų salėje." },
+  { id: "a2", photo: "photo-6", position: "50% 70%", tag: "Galimybė", date: "Iki gruod. 8 d.", title: "Ieškome savanorių", text: "Padėk organizuoti pavasario iniciatyvas su mokinių taryba." },
+  { id: "a3", photo: "photo-4", position: "50% 55%", tag: "Būrelis", date: "Trečiadieniais, 15:00", title: "Stalo žaidimų popietė", text: "Ateik, net jei dar nepažįsti kitų dalyvių. 108 kabinetas." },
 ];

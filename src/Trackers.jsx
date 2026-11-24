@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { Check, Plus } from "lucide-react";
 import { ideaCategories, ideaStages, ideaStatusLabels, problemCategories, problemStages, statusLabels } from "./data.js";
-import { BackButton, EmptyState, Field, PageHeader, SearchField, Segmented, Sheet, StatusBadge, StatusTrack, Switch, VoteButton, plural } from "./ui.jsx";
+import { Avatar, BackButton, CategoryTile, EmptyState, Field, PhotoBanner, SearchField, Segmented, Sheet, StatusBadge, StatusTrack, Switch, VoteButton, VoteGoal, plural } from "./ui.jsx";
 
 const splitQuery = "(min-width: 1100px)";
 
@@ -43,7 +43,7 @@ function ResponseCard({ response, pendingText }) {
     <div className="response">
       <p className="response-label">Atsakymas · {response.date}</p>
       <p className="response-text">{response.text}</p>
-      <p className="response-from"><strong>{response.from}</strong> · {response.role}</p>
+      <p className="response-from"><Avatar name={response.from} size="small" /><span><strong>{response.from}</strong> · {response.role}</span></p>
     </div>
   );
 }
@@ -88,9 +88,9 @@ export function ProblemsView({ problems, setProblems, initialId }) {
 
   const list = (
     <>
-      <PageHeader title="Problemos" subtitle={`${counts.open} ${plural(counts.open, ["atvira", "atviros", "atvirų"])} · ${counts.resolved} ${plural(counts.resolved, ["išspręsta", "išspręstos", "išspręstų"])}`}>
-        <button type="button" className="btn btn--primary" onClick={() => setComposing(true)}><Plus aria-hidden="true" />Pranešti</button>
-      </PageHeader>
+      <PhotoBanner photo="photo-6" position="50% 50%" title="Problemos" subtitle={`${counts.open} ${plural(counts.open, ["atvira", "atviros", "atvirų"])} · ${counts.resolved} ${plural(counts.resolved, ["išspręsta", "išspręstos", "išspręstų"])}`}>
+        <button type="button" className="btn btn--on-photo" onClick={() => setComposing(true)}><Plus aria-hidden="true" />Pranešti</button>
+      </PhotoBanner>
       <div className="list-tools">
         <SearchField value={query} onChange={setQuery} placeholder="Ieškoti problemų" label="Ieškoti problemų" />
         <div className="list-tools-row">
@@ -103,6 +103,7 @@ export function ProblemsView({ problems, setProblems, initialId }) {
           {visible.map((item) => (
             <li key={item.id}>
               <button type="button" className={`row ${selected?.id === item.id ? "is-selected" : ""}`} aria-current={selected?.id === item.id && isSplit ? "true" : undefined} onClick={() => setSelectedId(item.id)}>
+                <CategoryTile category={item.category} />
                 <span className="row-main">
                   <span className="row-title">{item.title}</span>
                   <span className="row-meta">{item.location} · {item.updated}</span>
@@ -127,7 +128,7 @@ export function ProblemsView({ problems, setProblems, initialId }) {
     <article className="detail" aria-labelledby="problem-title">
       {!isSplit && <BackButton label="Problemos" onClick={() => setSelectedId(null)} />}
       <div className="detail-head">
-        <StatusBadge status={selected.status} labels={statusLabels} />
+        <span className="detail-kicker"><CategoryTile category={selected.category} /><StatusBadge status={selected.status} labels={statusLabels} /></span>
         <h2 id="problem-title" className="detail-title">{selected.title}</h2>
         <p className="detail-meta">{selected.category} · {selected.location}</p>
       </div>
@@ -244,9 +245,9 @@ export function IdeasView({ ideas, setIdeas, initialId }) {
 
   const list = (
     <>
-      <PageHeader title="Idėjos" subtitle={`${counts.voting} ${plural(counts.voting, ["laukia", "laukia", "laukia"])} balsų · ${counts.decided} ${plural(counts.decided, ["sprendimas", "sprendimai", "sprendimų"])}`}>
-        <button type="button" className="btn btn--primary" onClick={() => setComposing(true)}><Plus aria-hidden="true" />Siūlyti</button>
-      </PageHeader>
+      <PhotoBanner photo="photo-5" position="50% 50%" title="Idėjos" subtitle={`${counts.voting} ${plural(counts.voting, ["laukia", "laukia", "laukia"])} balsų · ${counts.decided} ${plural(counts.decided, ["sprendimas", "sprendimai", "sprendimų"])}`}>
+        <button type="button" className="btn btn--on-photo" onClick={() => setComposing(true)}><Plus aria-hidden="true" />Siūlyti</button>
+      </PhotoBanner>
       <div className="list-tools">
         <SearchField value={query} onChange={setQuery} placeholder="Ieškoti idėjų" label="Ieškoti idėjų" />
         <div className="list-tools-row">
@@ -263,8 +264,9 @@ export function IdeasView({ ideas, setIdeas, initialId }) {
                 <span className="row-main">
                   <span className="row-title">{item.title}</span>
                   <span className="row-meta">{item.category} · {item.author} · {item.updated}</span>
+                  {isVoting(item) && <VoteGoal votes={item.votes} />}
                 </span>
-                {!isVoting(item) || item.status === "review" ? <span className="row-side"><StatusBadge status={item.status} labels={ideaStatusLabels} /></span> : null}
+                {!isVoting(item) && <span className="row-side"><StatusBadge status={item.status} labels={ideaStatusLabels} /></span>}
               </button>
             </li>
           ))}
@@ -281,7 +283,7 @@ export function IdeasView({ ideas, setIdeas, initialId }) {
     <article className="detail" aria-labelledby="idea-title">
       {!isSplit && <BackButton label="Idėjos" onClick={() => setSelectedId(null)} />}
       <div className="detail-head">
-        <StatusBadge status={selected.status} labels={ideaStatusLabels} />
+        <span className="detail-kicker"><CategoryTile category={selected.category} /><StatusBadge status={selected.status} labels={ideaStatusLabels} /></span>
         <h2 id="idea-title" className="detail-title">{selected.title}</h2>
         <p className="detail-meta">{selected.category} · siūlo {selected.author}, {selected.created}</p>
       </div>
@@ -311,7 +313,7 @@ export function IdeasView({ ideas, setIdeas, initialId }) {
         {selected.comments.length ? (
           <ul className="comments">
             {selected.comments.map((item, index) => (
-              <li key={`${item.name}-${index}`}><p className="comment-head"><strong>{item.name}</strong> · {item.time}</p><p>{item.text}</p></li>
+              <li key={`${item.name}-${index}`}><Avatar name={item.name} size="small" /><div><p className="comment-head"><strong>{item.name}</strong> · {item.time}</p><p>{item.text}</p></div></li>
             ))}
           </ul>
         ) : <p className="muted">Dar niekas nekomentavo.</p>}

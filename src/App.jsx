@@ -1,8 +1,8 @@
 import { useEffect, useRef, useState } from "react";
-import { AlertTriangle, BarChart3, Bookmark, ChevronRight, Home, Lightbulb, MessageCircle, MessagesSquare, Plus, Send, Settings, ShieldQuestion } from "lucide-react";
+import { AlertTriangle, BarChart3, Bookmark, CalendarDays, ChevronRight, Home, Lightbulb, MessageCircle, MessagesSquare, Plus, Send, Settings, ShieldQuestion } from "lucide-react";
 import { announcements, currentUser, forumTopics, ideaStages, ideaStatusLabels, initialIdeas, initialProblems, messageConversations, messagePeople, problemStages, statusLabels } from "./data.js";
 import { IdeasView, ProblemsView } from "./Trackers.jsx";
-import { BackButton, EmptyState, Field, PageHeader, SearchField, Segmented, Sheet, StatusBadge, StatusTrack, Switch, VoteButton, plural } from "./ui.jsx";
+import { Avatar, BackButton, CategoryTile, EmptyState, Field, IconTile, PageHeader, Photo, PhotoBanner, SearchField, Segmented, Sheet, StatusBadge, StatusTrack, Switch, VoteButton, VoteGoal, initials, plural } from "./ui.jsx";
 import "./App.css";
 
 const navigationItems = [
@@ -23,12 +23,9 @@ function LogoMark() {
   );
 }
 
-const initials = (name) => name.split(" ").map((part) => part[0]).join("").slice(0, 2);
-
 /* ───────────────────────── Home ───────────────────────── */
 
 function HomeView({ problems, ideas, setIdeas, open }) {
-  const gallery = `${import.meta.env.BASE_URL}home-gallery/`;
   const answered = [
     ...problems.filter((item) => item.response).map((item) => ({ ...item, kind: "Problemos", stages: problemStages, labels: statusLabels })),
     ...ideas.filter((item) => item.response && item.status !== "done" && item.status !== "declined").map((item) => ({ ...item, kind: "Idėjos", stages: ideaStages, labels: ideaStatusLabels })),
@@ -37,38 +34,48 @@ function HomeView({ problems, ideas, setIdeas, open }) {
   const resolved = problems.filter((item) => item.status === "resolved").length;
   const approved = ideas.filter((item) => item.status === "approved" || item.status === "done").length;
   const toggleVote = (id) => setIdeas((current) => current.map((item) => (item.id === id ? { ...item, voted: !item.voted, votes: item.votes + (item.voted ? -1 : 1) } : item)));
+  const firstName = currentUser.name.split(" ")[0];
 
   return (
     <div className="home">
-      <header className="home-hero">
-        <div className="home-hero-text">
-          <p className="page-subtitle">Pirmadienis, lapkričio 23 d.</p>
-          <h1 className="large-title">VDU Šakių „Žiburio“ gimnazija</h1>
-          <p className="home-summary">Šį rudenį mokiniai pranešė apie {problems.length} problemas ir pasiūlė {ideas.length} idėjas. {resolved} {plural(resolved, ["problema išspręsta", "problemos išspręstos", "problemų išspręsta"])}, {approved} {plural(approved, ["idėja patvirtinta", "idėjos patvirtintos", "idėjų patvirtinta"])}.</p>
-          <div className="home-hero-actions">
-            <button type="button" className="btn btn--primary" onClick={() => open("Problemos")}>Pranešti apie problemą</button>
-            <button type="button" className="btn btn--secondary" onClick={() => open("Idėjos")}>Siūlyti idėją</button>
-          </div>
+      <header className="hero">
+        <Photo name="main" className="hero-img" position="50% 30%" sizes="(min-width: 769px) 1120px, 100vw" alt="Gimnazijos mokiniai rugsėjo 1-osios šventėje" eager />
+        <div className="hero-content">
+          <p className="hero-kicker">Pirmadienis, lapkričio 23 d.</p>
+          <h1 className="hero-title">Labas, {firstName}!</h1>
+          <p className="hero-text">Ką šiandien pakeisim mokykloje?</p>
+          <ul className="hero-stats" aria-label="Šio rudens rezultatai">
+            <li><strong>{resolved}</strong> {plural(resolved, ["problema išspręsta", "problemos išspręstos", "problemų išspręsta"])}</li>
+            <li><strong>{approved}</strong> {plural(approved, ["idėja patvirtinta", "idėjos patvirtintos", "idėjų patvirtinta"])}</li>
+          </ul>
         </div>
-        <figure className="home-photos">
-          <img className="home-photo home-photo--main" src={`${gallery}main.jpg`} alt="Gimnazijos bendruomenė prie mokyklos" />
-          <img className="home-photo" src={`${gallery}photo-2.jpg`} alt="Mokiniai mokyklos renginyje" />
-          <img className="home-photo" src={`${gallery}photo-4.jpg`} alt="Mokiniai dirba kartu klasėje" />
-        </figure>
       </header>
+
+      <div className="quick-actions">
+        <button type="button" className="quick-action quick-action--problem" onClick={() => open("Problemos")}>
+          <span className="quick-action-icon" aria-hidden="true"><AlertTriangle /></span>
+          <span className="quick-action-text"><strong>Pranešti apie problemą</strong><small>Kas neveikia ar trukdo?</small></span>
+          <ChevronRight className="quick-action-chevron" aria-hidden="true" />
+        </button>
+        <button type="button" className="quick-action quick-action--idea" onClick={() => open("Idėjos")}>
+          <span className="quick-action-icon" aria-hidden="true"><Lightbulb /></span>
+          <span className="quick-action-text"><strong>Siūlyti idėją</strong><small>Ką būtų smagu pakeisti?</small></span>
+          <ChevronRight className="quick-action-chevron" aria-hidden="true" />
+        </button>
+      </div>
 
       <section className="home-section" aria-labelledby="answered-title">
         <div className="section-head">
           <h2 id="answered-title" className="title-2">Mokykla atsakė</h2>
         </div>
-        <ul className="card-list">
+        <ul className="card-list card-list--scroll">
           {answered.map((item) => (
             <li key={item.id}>
               <button type="button" className="update-row" onClick={() => open(item.kind, item.id)}>
-                <span className="update-top"><span className="update-kind">{item.kind === "Problemos" ? "Problema" : "Idėja"}</span><StatusBadge status={item.status} labels={item.labels} /></span>
+                <span className="update-top"><CategoryTile category={item.category} /><span className="update-kind">{item.kind === "Problemos" ? "Problema" : "Idėja"}</span><StatusBadge status={item.status} labels={item.labels} /></span>
                 <span className="update-title">{item.title}</span>
                 <span className="update-quote">„{item.response.text}“</span>
-                <span className="update-from">{item.response.from} · {item.response.date}</span>
+                <span className="update-from"><Avatar name={item.response.from} size="small" />{item.response.from} · {item.response.date}</span>
                 <StatusTrack stages={item.stages} status={item.status} compact />
               </button>
             </li>
@@ -76,38 +83,41 @@ function HomeView({ problems, ideas, setIdeas, open }) {
         </ul>
       </section>
 
-      <div className="home-columns">
-        <section className="home-section" aria-labelledby="voting-title">
-          <div className="section-head">
-            <h2 id="voting-title" className="title-2">Laukia tavo balso</h2>
-            <button type="button" className="btn-link" onClick={() => open("Idėjos")}>Visos idėjos<ChevronRight aria-hidden="true" /></button>
-          </div>
-          <ul className="inset-list">
-            {voting.map((item) => (
-              <li key={item.id} className="vote-row">
-                <VoteButton voted={item.voted} votes={item.votes} title={item.title} onToggle={() => toggleVote(item.id)} size="small" />
-                <button type="button" className="vote-row-link" onClick={() => open("Idėjos", item.id)}>
-                  <span className="row-title">{item.title}</span>
-                  <span className="row-meta">{item.category} · {item.author}</span>
-                </button>
-              </li>
-            ))}
-          </ul>
-        </section>
-
-        <section className="home-section" aria-labelledby="news-title">
-          <div className="section-head"><h2 id="news-title" className="title-2">Skelbimai</h2></div>
-          <ul className="inset-list">
-            {announcements.map((item) => (
-              <li key={item.id} className="news-row">
-                <span className="news-date">{item.tag} · {item.date}</span>
+      <section className="home-section" aria-labelledby="voting-title">
+        <div className="section-head">
+          <h2 id="voting-title" className="title-2">Laukia tavo balso</h2>
+          <button type="button" className="btn-link" onClick={() => open("Idėjos")}>Visos idėjos<ChevronRight aria-hidden="true" /></button>
+        </div>
+        <ul className="inset-list">
+          {voting.map((item) => (
+            <li key={item.id} className="vote-row">
+              <VoteButton voted={item.voted} votes={item.votes} title={item.title} onToggle={() => toggleVote(item.id)} size="small" />
+              <button type="button" className="vote-row-link" onClick={() => open("Idėjos", item.id)}>
                 <span className="row-title">{item.title}</span>
-                <span className="row-meta">{item.text}</span>
-              </li>
-            ))}
-          </ul>
-        </section>
-      </div>
+                <span className="row-meta">{item.category} · {item.author}</span>
+                <VoteGoal votes={item.votes} />
+              </button>
+            </li>
+          ))}
+        </ul>
+      </section>
+
+      <section className="home-section" aria-labelledby="news-title">
+        <div className="section-head"><h2 id="news-title" className="title-2">Skelbimai</h2></div>
+        <ul className="news-grid">
+          {announcements.map((item) => (
+            <li key={item.id} className="news-card">
+              <Photo name={item.photo} position={item.position} className="news-card-img" sizes="(min-width: 769px) 360px, 80vw" />
+              <div className="news-card-body">
+                <span className="news-tag">{item.tag}</span>
+                <span className="news-title">{item.title}</span>
+                <span className="news-text">{item.text}</span>
+                <span className="news-date"><CalendarDays aria-hidden="true" />{item.date}</span>
+              </div>
+            </li>
+          ))}
+        </ul>
+      </section>
     </div>
   );
 }
@@ -129,7 +139,7 @@ function PollsView() {
 
   return (
     <div className="page-narrow">
-      <PageHeader title="Apklausos" subtitle={`${polls.length} aktyvios`} />
+      <PhotoBanner photo="photo-4" position="50% 45%" title="Apklausos" subtitle={`${polls.length} aktyvios · tavo nuomonė lemia sprendimus`} />
       <div className="stack">
         {polls.map((poll) => {
           const total = poll.options.reduce((sum, option) => sum + option.votes, 0);
@@ -212,7 +222,7 @@ function ForumsView({ onOpenMessages }) {
           <ul className="thread">
             {list.map((post, index) => (
               <li key={`${post.username}-${index}`} className="post">
-                <span className="avatar" aria-hidden="true">{initials(post.name)}</span>
+                <Avatar name={post.name} />
                 <div className="post-body">
                   <p className="post-head"><strong>{post.name}</strong> <span>@{post.username} · {post.time}</span></p>
                   <p>{post.text}</p>
@@ -237,9 +247,9 @@ function ForumsView({ onOpenMessages }) {
   const visible = topics.filter((topic) => (filter === "saved" ? saved.includes(topic.title) : true) && `${topic.title} ${topic.description}`.toLocaleLowerCase("lt").includes(query.trim().toLocaleLowerCase("lt")));
   return (
     <div className="page-narrow">
-      <PageHeader title="Forumai">
-        <button type="button" className="btn btn--primary" onClick={() => setComposing(true)}><Plus aria-hidden="true" />Nauja tema</button>
-      </PageHeader>
+      <PhotoBanner photo="photo-3" position="50% 60%" title="Forumai" subtitle="Diskusijos visai mokyklai">
+        <button type="button" className="btn btn--on-photo" onClick={() => setComposing(true)}><Plus aria-hidden="true" />Nauja tema</button>
+      </PhotoBanner>
       <div className="list-tools">
         <SearchField value={query} onChange={setQuery} placeholder="Ieškoti temų" label="Ieškoti temų" />
         <Segmented label="Rodyti" value={filter} onChange={setFilter} options={[{ value: "all", label: "Visos" }, { value: "saved", label: "Išsaugotos", count: saved.length }]} />
@@ -252,6 +262,7 @@ function ForumsView({ onOpenMessages }) {
             return (
               <li key={topic.title} className="row-with-trailing">
                 <button type="button" className="row" onClick={() => setSelectedTitle(topic.title)}>
+                  <IconTile icon={topic.icon || "Sparkles"} tone={topic.tone || "gray"} />
                   <span className="row-main">
                     <span className="row-title">{topic.title}</span>
                     <span className="row-meta">{topic.description}</span>
@@ -340,7 +351,7 @@ function MessagesView() {
     openConversation(id);
   };
 
-  const avatar = (c) => <span className={`avatar ${c.anonymous ? "avatar--anon" : ""}`} aria-hidden="true">{c.anonymous ? <ShieldQuestion /> : c.avatar}</span>;
+  const avatar = (c) => (c.anonymous ? <span className="avatar avatar--anon" aria-hidden="true"><ShieldQuestion /></span> : <Avatar name={c.name} label={c.avatar} />);
 
   return (
     <div className={`messages ${selected && !isWide ? "messages--thread" : ""}`}>
@@ -367,7 +378,7 @@ function MessagesView() {
           {people.map((p) => (
             <li key={p.id}>
               <button type="button" className="conversation" onClick={() => startWith(p)}>
-                <span className="avatar" aria-hidden="true">{initials(p.name)}</span>
+                <Avatar name={p.name} />
                 <span className="conversation-text"><span className="conversation-top"><strong>{p.name}</strong></span><span className="conversation-preview">Pradėti pokalbį · {p.detail}</span></span>
               </button>
             </li>
@@ -440,8 +451,11 @@ function SettingsView({ reducedMotion, setReducedMotion }) {
     <div className="page-narrow">
       <PageHeader title="Nustatymai" />
       <div className="settings-profile card">
-        <span className="avatar avatar--large" aria-hidden="true">{initials(currentUser.name)}</span>
-        <div><p className="title-3">{currentUser.name}</p><p className="muted">@{currentUser.username} · {currentUser.role}</p></div>
+        <Photo name="photo-5" className="settings-cover" sizes="760px" position="50% 40%" />
+        <div className="settings-profile-row">
+          <Avatar name={currentUser.name} size="large" />
+          <div><p className="title-3">{currentUser.name}</p><p className="muted">@{currentUser.username}</p><p className="muted">{currentUser.role.replace(", ", ",\u00a0")}</p></div>
+        </div>
       </div>
       <h2 className="group-title">Pranešimai</h2>
       <div className="grouped">
@@ -499,7 +513,7 @@ function App() {
       <header className="mobile-header">
         <div className="brand"><LogoMark /><span className="brand-name">Žibėkim</span></div>
         <button type="button" className="avatar-button" aria-label="Nustatymai ir profilis" aria-current={activePage === "Nustatymai" ? "page" : undefined} onClick={() => open("Nustatymai")}>
-          <span className="avatar" aria-hidden="true">{initials(currentUser.name)}</span>
+          <Avatar name={currentUser.name} />
         </button>
       </header>
 
@@ -520,7 +534,7 @@ function App() {
           ))}
         </ul>
         <button type="button" className="sidebar-profile" aria-current={activePage === "Nustatymai" ? "page" : undefined} onClick={() => open("Nustatymai")}>
-          <span className="avatar" aria-hidden="true">{initials(currentUser.name)}</span>
+          <Avatar name={currentUser.name} />
           <span className="sidebar-profile-text"><strong>{currentUser.name}</strong><small>@{currentUser.username}</small></span>
           <Settings aria-hidden="true" />
           <span className="sr-only">Nustatymai</span>

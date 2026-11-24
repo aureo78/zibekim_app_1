@@ -1,5 +1,8 @@
 import { useEffect, useId, useRef } from "react";
-import { ChevronLeft, ChevronUp, Search, X } from "lucide-react";
+import { BookOpen, Building2, ChevronLeft, ChevronUp, ConciergeBell, Cpu, Flag, Globe, Leaf, PartyPopper, School, Search, ShieldCheck, Sofa, Sparkles, X } from "lucide-react";
+import { categoryMeta } from "./data.js";
+
+const icons = { BookOpen, Building2, ConciergeBell, Cpu, Flag, Globe, Leaf, PartyPopper, School, ShieldCheck, Sofa, Sparkles };
 
 /** Lithuanian plural: plural(3, ["balsas", "balsai", "balsų"]) → "balsai" */
 // eslint-disable-next-line react-refresh/only-export-components
@@ -9,6 +12,64 @@ export function plural(n, [one, few, many]) {
   if (mod10 === 1 && mod100 !== 11) return one;
   if (mod10 >= 2 && (mod100 < 10 || mod100 >= 20)) return few;
   return many;
+}
+
+/** Responsive school photo from /public/home-gallery (720px and 1600px versions). */
+// eslint-disable-next-line react-refresh/only-export-components
+export function photoSet(name) {
+  const base = `${import.meta.env.BASE_URL}home-gallery/${name}`;
+  return { src: `${base}-l.jpg`, srcSet: `${base}-s.jpg 720w, ${base}-l.jpg 1600w` };
+}
+
+export function Photo({ name, alt = "", sizes = "100vw", className = "", position, eager = false }) {
+  return <img className={className} {...photoSet(name)} sizes={sizes} alt={alt} loading={eager ? "eager" : "lazy"} decoding="async" style={position ? { objectPosition: position } : undefined} />;
+}
+
+/** Page header on top of a school photo. Title stays readable thanks to a dark gradient. */
+export function PhotoBanner({ photo, position, title, subtitle, children }) {
+  return (
+    <header className="photo-banner">
+      <Photo name={photo} position={position} className="photo-banner-img" sizes="(min-width: 769px) 1100px, 100vw" eager />
+      <div className="photo-banner-content">
+        <div className="page-header-text">
+          <h1 className="large-title">{title}</h1>
+          {subtitle && <p className="photo-banner-subtitle">{subtitle}</p>}
+        </div>
+        {children && <div className="page-actions">{children}</div>}
+      </div>
+    </header>
+  );
+}
+
+const avatarHues = ["berry", "amber", "teal", "blue", "violet", "green"];
+// eslint-disable-next-line react-refresh/only-export-components
+export const initials = (name) => name.split(" ").map((part) => part[0]).join("").slice(0, 2).toUpperCase();
+
+export function Avatar({ name, label, size = "", children }) {
+  const hue = avatarHues[[...name].reduce((sum, char) => sum + char.charCodeAt(0), 0) % avatarHues.length];
+  return <span className={`avatar avatar--${hue} ${size ? `avatar--${size}` : ""}`} aria-hidden="true">{children || label || initials(name)}</span>;
+}
+
+/** Coloured rounded icon tile, like iOS Settings: helps scan lists by category. */
+export function IconTile({ icon, tone }) {
+  const Icon = typeof icon === "string" ? icons[icon] || Sparkles : icon;
+  return <span className={`icon-tile icon-tile--${tone}`} aria-hidden="true"><Icon /></span>;
+}
+
+export function CategoryTile({ category }) {
+  const meta = categoryMeta[category] || categoryMeta.Kita;
+  return <IconTile icon={meta.icon} tone={meta.tone} />;
+}
+
+/** Progress toward the 50-vote threshold at which the student council must discuss an idea. */
+export function VoteGoal({ votes, goal = 50 }) {
+  const reached = votes >= goal;
+  return (
+    <div className={`vote-goal ${reached ? "is-reached" : ""}`}>
+      <span className="vote-goal-bar" aria-hidden="true"><span style={{ width: `${Math.min(100, (votes / goal) * 100)}%` }} /></span>
+      <span className="vote-goal-text">{reached ? "Pasiekė tarybą" : `Dar ${goal - votes} iki tarybos`}</span>
+    </div>
+  );
 }
 
 export function PageHeader({ title, subtitle, children }) {
