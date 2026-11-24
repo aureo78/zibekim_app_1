@@ -31,92 +31,51 @@ function HomeView({ problems, ideas, setIdeas, open }) {
     ...ideas.filter((item) => item.response && item.status !== "done" && item.status !== "declined").map((item) => ({ ...item, kind: "Idėjos", stages: ideaStages, labels: ideaStatusLabels })),
   ].sort((a, b) => a.rank - b.rank).slice(0, 3);
   const voting = ideas.filter((item) => item.status === "submitted" || item.status === "review").sort((a, b) => b.votes - a.votes).slice(0, 3);
-  const resolved = problems.filter((item) => item.status === "resolved").length;
-  const approved = ideas.filter((item) => item.status === "approved" || item.status === "done").length;
   const toggleVote = (id) => setIdeas((current) => current.map((item) => (item.id === id ? { ...item, voted: !item.voted, votes: item.votes + (item.voted ? -1 : 1) } : item)));
-  const firstName = currentUser.name.split(" ")[0];
 
   return (
-    <div className="home">
-      <header className="hero">
-        <Photo name="main" className="hero-img" position="50% 30%" sizes="(min-width: 769px) 1120px, 100vw" alt="Gimnazijos mokiniai rugsėjo 1-osios šventėje" eager />
-        <div className="hero-content">
-          <p className="hero-kicker">Pirmadienis, lapkričio 23 d.</p>
-          <h1 className="hero-title">Labas, {firstName}!</h1>
-          <p className="hero-text">Ką šiandien pakeisim mokykloje?</p>
-          <ul className="hero-stats" aria-label="Šio rudens rezultatai">
-            <li><strong>{resolved}</strong> {plural(resolved, ["problema išspręsta", "problemos išspręstos", "problemų išspręsta"])}</li>
-            <li><strong>{approved}</strong> {plural(approved, ["idėja patvirtinta", "idėjos patvirtintos", "idėjų patvirtinta"])}</li>
-          </ul>
+    <div className="home home--editorial">
+      <header className="editorial-hero">
+        <div className="editorial-decor" aria-hidden="true">ŽIBĖKIM</div>
+        <div className="editorial-copy">
+          <p className="editorial-eyebrow">PIRMADIENIS · 2026 M. LAPKRIČIO 23 D.</p>
+          <h1 className="editorial-title"><span>VDU Šakių</span><em>„Žiburio“</em><span>gimnazija</span></h1>
+          <p className="editorial-description">Svarbiausi savaitės įvykiai, mokinių balsas ir tai, kas vyksta mūsų bendruomenėje.</p>
+          <div className="editorial-actions">
+            <button type="button" className="editorial-cta" onClick={() => document.getElementById("weekly-updates")?.scrollIntoView({ behavior: "smooth", block: "start" })}>Peržiūrėti savaitę <ChevronRight aria-hidden="true" /></button>
+            <button type="button" className="new-today" onClick={() => document.getElementById("weekly-updates")?.scrollIntoView({ behavior: "smooth", block: "start" })}>Nauja šiandien <strong>3</strong></button>
+          </div>
+        </div>
+        <div className="editorial-collage" aria-label="Mokyklos bendruomenės nuotraukos">
+          <div className="editorial-frame editorial-frame--main"><Photo name="main" position="50% 30%" sizes="(min-width: 1100px) 360px, 60vw" alt="Mokiniai ir mokytojai gimnazijos kieme" eager /></div>
+          <div className="editorial-frame editorial-frame--top"><Photo name="photo-2" position="50% 35%" sizes="220px" alt="Mokyklos bendruomenė lauke" /></div>
+          <div className="editorial-frame editorial-frame--bottom"><Photo name="photo-4" position="50% 50%" sizes="230px" alt="Mokiniai bendroje veikloje" /></div>
         </div>
       </header>
 
-      <div className="quick-actions">
-        <button type="button" className="quick-action quick-action--problem" onClick={() => open("Problemos")}>
-          <span className="quick-action-icon" aria-hidden="true"><AlertTriangle /></span>
-          <span className="quick-action-text"><strong>Pranešti apie problemą</strong><small>Kas neveikia ar trukdo?</small></span>
-          <ChevronRight className="quick-action-chevron" aria-hidden="true" />
-        </button>
-        <button type="button" className="quick-action quick-action--idea" onClick={() => open("Idėjos")}>
-          <span className="quick-action-icon" aria-hidden="true"><Lightbulb /></span>
-          <span className="quick-action-text"><strong>Siūlyti idėją</strong><small>Ką būtų smagu pakeisti?</small></span>
-          <ChevronRight className="quick-action-chevron" aria-hidden="true" />
-        </button>
-      </div>
-
-      <section className="home-section" aria-labelledby="answered-title">
-        <div className="section-head">
-          <h2 id="answered-title" className="title-2">Mokykla atsakė</h2>
-        </div>
+      <section className="editorial-section" id="weekly-updates" aria-labelledby="answered-title">
+        <div className="section-head"><h2 id="answered-title" className="title-2">Mokykla atsakė</h2><button type="button" className="btn-link" onClick={() => open("Problemos")}>Žiūrėti viską<ChevronRight aria-hidden="true" /></button></div>
         <ul className="card-list card-list--scroll">
           {answered.map((item) => (
-            <li key={item.id}>
-              <button type="button" className="update-row" onClick={() => open(item.kind, item.id)}>
-                <span className="update-top"><CategoryTile category={item.category} /><span className="update-kind">{item.kind === "Problemos" ? "Problema" : "Idėja"}</span><StatusBadge status={item.status} labels={item.labels} /></span>
-                <span className="update-title">{item.title}</span>
-                <span className="update-quote">„{item.response.text}“</span>
-                <span className="update-from"><Avatar name={item.response.from} size="small" />{item.response.from} · {item.response.date}</span>
-                <StatusTrack stages={item.stages} status={item.status} compact />
-              </button>
-            </li>
+            <li key={item.id}><button type="button" className="update-row" onClick={() => open(item.kind, item.id)}>
+              <span className="update-top"><CategoryTile category={item.category} /><span className="update-kind">{item.kind === "Problemos" ? "Problema" : "Idėja"}</span><StatusBadge status={item.status} labels={item.labels} /></span>
+              <span className="update-title">{item.title}</span><span className="update-quote">„{item.response.text}“</span>
+              <span className="update-from"><Avatar name={item.response.from} size="small" />{item.response.from} · {item.response.date}</span><StatusTrack stages={item.stages} status={item.status} compact />
+            </button></li>
           ))}
         </ul>
       </section>
 
-      <section className="home-section" aria-labelledby="voting-title">
-        <div className="section-head">
-          <h2 id="voting-title" className="title-2">Laukia tavo balso</h2>
-          <button type="button" className="btn-link" onClick={() => open("Idėjos")}>Visos idėjos<ChevronRight aria-hidden="true" /></button>
-        </div>
+      <section className="editorial-section" aria-labelledby="voting-title">
+        <div className="section-head"><h2 id="voting-title" className="title-2">Laukia tavo balso</h2><button type="button" className="btn-link" onClick={() => open("Idėjos")}>Visos idėjos<ChevronRight aria-hidden="true" /></button></div>
         <ul className="inset-list">
-          {voting.map((item) => (
-            <li key={item.id} className="vote-row">
-              <VoteButton voted={item.voted} votes={item.votes} title={item.title} onToggle={() => toggleVote(item.id)} size="small" />
-              <button type="button" className="vote-row-link" onClick={() => open("Idėjos", item.id)}>
-                <span className="row-title">{item.title}</span>
-                <span className="row-meta">{item.category} · {item.author}</span>
-                <VoteGoal votes={item.votes} />
-              </button>
-            </li>
-          ))}
+          {voting.map((item) => <li key={item.id} className="vote-row"><VoteButton voted={item.voted} votes={item.votes} title={item.title} onToggle={() => toggleVote(item.id)} size="small" /><button type="button" className="vote-row-link" onClick={() => open("Idėjos", item.id)}><span className="row-title">{item.title}</span><span className="row-meta">{item.category} · {item.author}</span><VoteGoal votes={item.votes} /></button></li>)}
         </ul>
       </section>
 
-      <section className="home-section" aria-labelledby="news-title">
+      <section className="editorial-section" aria-labelledby="news-title">
         <div className="section-head"><h2 id="news-title" className="title-2">Skelbimai</h2></div>
-        <ul className="news-grid">
-          {announcements.map((item) => (
-            <li key={item.id} className="news-card">
-              <Photo name={item.photo} position={item.position} className="news-card-img" sizes="(min-width: 769px) 360px, 80vw" />
-              <div className="news-card-body">
-                <span className="news-tag">{item.tag}</span>
-                <span className="news-title">{item.title}</span>
-                <span className="news-text">{item.text}</span>
-                <span className="news-date"><CalendarDays aria-hidden="true" />{item.date}</span>
-              </div>
-            </li>
-          ))}
-        </ul>
+        <ul className="news-grid">{announcements.map((item) => <li key={item.id} className="news-card"><Photo name={item.photo} position={item.position} className="news-card-img" sizes="(min-width: 769px) 360px, 80vw" /><div className="news-card-body"><span className="news-tag">{item.tag}</span><span className="news-title">{item.title}</span><span className="news-text">{item.text}</span><span className="news-date"><CalendarDays aria-hidden="true" />{item.date}</span></div></li>)}</ul>
       </section>
     </div>
   );
